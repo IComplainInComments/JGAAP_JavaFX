@@ -31,7 +31,7 @@ public class GUI_MainWindow extends Application{
         TabPane tabPane = new TabPane();
         Scene scene;
         MenuBar bar = init_MenuBar();
-        VBox docGrid;
+        VBox docPane, canPane;
 
         Tab doc = new Tab("Documents");
         Tab canon = new Tab("Canonicizers");
@@ -51,12 +51,18 @@ public class GUI_MainWindow extends Application{
         tabPane.prefHeightProperty().bind(pane.heightProperty());
         tabPane.prefWidthProperty().bind(pane.widthProperty());
         GUI_DocTab docTab = new GUI_DocTab();
+        GUI_CanTab canTab = new GUI_CanTab();
 
-        docGrid = docTab.getPane();
-        docGrid.setPadding(new Insets(5));
-        docGrid.prefHeightProperty().bind(tabPane.heightProperty());
-        docGrid.prefWidthProperty().bind(tabPane.widthProperty());
-        doc.setContent(docGrid);
+        docPane = docTab.getPane();
+        canPane = canTab.getPane();
+        docPane.setPadding(new Insets(5));
+        canPane.setPadding(new Insets(5));
+        docPane.prefHeightProperty().bind(tabPane.heightProperty());
+        docPane.prefWidthProperty().bind(tabPane.widthProperty());
+        canPane.prefHeightProperty().bind(tabPane.heightProperty());
+        canPane.prefWidthProperty().bind(tabPane.widthProperty());
+        doc.setContent(docPane);
+        canon.setContent(canPane);
         
 
         tabPane.getTabs().add(doc);
