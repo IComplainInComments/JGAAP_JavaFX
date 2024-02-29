@@ -1,17 +1,19 @@
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-//import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
 public class GUI_MainWindow extends Application{
-    private static GridPane grid;
+    private static BorderPane pane;
+
     public void start(Stage mainStage) {
         mainStage.setOnCloseRequest(e -> {
             e.consume();
@@ -29,12 +31,7 @@ public class GUI_MainWindow extends Application{
         TabPane tabPane = new TabPane();
         Scene scene;
         MenuBar bar = init_MenuBar();
-        GridPane docGrid;
-        grid = new GridPane();
-
-        //grid.setHgap(10);
-        //grid.setVgap(10);
-        //grid.setPadding(new Insets(5, 5, 5, 5));
+        VBox docGrid;
 
         Tab doc = new Tab("Documents");
         Tab canon = new Tab("Canonicizers");
@@ -48,11 +45,15 @@ public class GUI_MainWindow extends Application{
         anMeth.setClosable(false);
         review.setClosable(false);
 
-        tabPane.prefHeightProperty().bind(grid.heightProperty());
-        tabPane.prefWidthProperty().bind(grid.widthProperty());
+        pane = new BorderPane();
+        
+        //tabPane.setPadding(new Insets(5));
+        tabPane.prefHeightProperty().bind(pane.heightProperty());
+        tabPane.prefWidthProperty().bind(pane.widthProperty());
         GUI_DocTab docTab = new GUI_DocTab();
 
-        docGrid = docTab.getGridPane();
+        docGrid = docTab.getPane();
+        docGrid.setPadding(new Insets(5));
         docGrid.prefHeightProperty().bind(tabPane.heightProperty());
         docGrid.prefWidthProperty().bind(tabPane.widthProperty());
         doc.setContent(docGrid);
@@ -64,12 +65,12 @@ public class GUI_MainWindow extends Application{
         tabPane.getTabs().add(anMeth);
         tabPane.getTabs().add(review);
 
-        GridPane.setConstraints(bar, 0, 0);
-        GridPane.setConstraints(tabPane, 0, 1);
-        grid.getChildren().add(bar);
-        grid.getChildren().add(tabPane);
 
-        scene = new Scene(grid, 1000, 600);
+        pane.setTop(bar);
+        pane.setCenter(tabPane);
+
+        scene = new Scene(pane, 1000, 600);
+
 
         return scene;
     }
