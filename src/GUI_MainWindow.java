@@ -64,6 +64,7 @@ public class GUI_MainWindow extends Application{
         docPane.setPadding(new Insets(5));
         canPane.setPadding(new Insets(5));
         edPane.setPadding(new Insets(5));
+        ecPane.setPadding(new Insets(5));
         docPane.prefHeightProperty().bind(tabPane.heightProperty());
         docPane.prefWidthProperty().bind(tabPane.widthProperty());
         canPane.prefHeightProperty().bind(tabPane.heightProperty());
