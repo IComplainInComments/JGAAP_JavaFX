@@ -40,7 +40,7 @@ public class GUI_ECTab {
         VBox selBox = new VBox();
         VBox paraBoxParent = new VBox();
         VBox paraBoxChild = new VBox();
-        Label can = new Label("Canonicizers");
+        Label can = new Label("Event Culling");
         Label sel = new Label("Selected");
         Label para = new Label("Parameters");
         Button notes = new Button("Notes");
@@ -102,7 +102,7 @@ public class GUI_ECTab {
     }
     private VBox init_rowThree(){
         VBox box = new VBox();
-        Label can = new Label("Canonicizer Description");
+        Label can = new Label("Event Culling Description");
         TextArea area = new TextArea();
 
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));

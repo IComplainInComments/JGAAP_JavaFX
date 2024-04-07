@@ -60,6 +60,7 @@ public class GUI_MainWindow extends Application{
         docPane = docTab.getPane();
         canPane = canTab.getPane();
         edPane = edTab.getPane();
+        ecPane = ecTab.getPane();
         docPane.setPadding(new Insets(5));
         canPane.setPadding(new Insets(5));
         edPane.setPadding(new Insets(5));
@@ -69,9 +70,12 @@ public class GUI_MainWindow extends Application{
         canPane.prefWidthProperty().bind(tabPane.widthProperty());
         edPane.prefHeightProperty().bind(tabPane.heightProperty());
         edPane.prefWidthProperty().bind(tabPane.widthProperty());
+        ecPane.prefHeightProperty().bind(tabPane.heightProperty());
+        ecPane.prefWidthProperty().bind(tabPane.widthProperty());
         doc.setContent(docPane);
         canon.setContent(canPane);
         eve.setContent(edPane);
+        evecul.setContent(ecPane);
         
 
         tabPane.getTabs().add(doc);
