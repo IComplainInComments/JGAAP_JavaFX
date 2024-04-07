@@ -31,17 +31,19 @@ public class GUI_MainWindow extends Application{
         TabPane tabPane = new TabPane();
         Scene scene;
         MenuBar bar = init_MenuBar();
-        VBox docPane, canPane;
+        VBox docPane, canPane, edPane, ecPane;
 
         Tab doc = new Tab("Documents");
         Tab canon = new Tab("Canonicizers");
-        Tab eve = new Tab("Event Culling");
+        Tab eve = new Tab("Event Driver");
+        Tab evecul = new Tab("Event Culling");
         Tab anMeth = new Tab("Analysis Methods");
         Tab review = new Tab("Review & Process");
 
         doc.setClosable(false);
         canon.setClosable(false);
         eve.setClosable(false);
+        evecul.setClosable(false);
         anMeth.setClosable(false);
         review.setClosable(false);
 
@@ -52,22 +54,30 @@ public class GUI_MainWindow extends Application{
         tabPane.prefWidthProperty().bind(pane.widthProperty());
         GUI_DocTab docTab = new GUI_DocTab();
         GUI_CanTab canTab = new GUI_CanTab();
+        GUI_EDTab edTab = new GUI_EDTab();
+        GUI_ECTab ecTab = new GUI_ECTab();
 
         docPane = docTab.getPane();
         canPane = canTab.getPane();
+        edPane = edTab.getPane();
         docPane.setPadding(new Insets(5));
         canPane.setPadding(new Insets(5));
+        edPane.setPadding(new Insets(5));
         docPane.prefHeightProperty().bind(tabPane.heightProperty());
         docPane.prefWidthProperty().bind(tabPane.widthProperty());
         canPane.prefHeightProperty().bind(tabPane.heightProperty());
         canPane.prefWidthProperty().bind(tabPane.widthProperty());
+        edPane.prefHeightProperty().bind(tabPane.heightProperty());
+        edPane.prefWidthProperty().bind(tabPane.widthProperty());
         doc.setContent(docPane);
         canon.setContent(canPane);
+        eve.setContent(edPane);
         
 
         tabPane.getTabs().add(doc);
         tabPane.getTabs().add(canon);
         tabPane.getTabs().add(eve);
+        tabPane.getTabs().add(evecul);
         tabPane.getTabs().add(anMeth);
         tabPane.getTabs().add(review);
 
