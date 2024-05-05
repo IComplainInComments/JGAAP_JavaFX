@@ -15,6 +15,10 @@ import javafx.stage.Stage;
 public class GUI_MainWindow extends Application{
     private static BorderPane pane;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     public void start(Stage mainStage) {
         mainStage.setOnCloseRequest(e -> {
             e.consume();
@@ -24,9 +28,6 @@ public class GUI_MainWindow extends Application{
         mainStage.setTitle("JGAAP 2.0");
         mainStage.setScene(init_mainScene());
         mainStage.show();
-    }
-    public static void main(String[] args) {
-        launch(args);
     }
     private Scene init_mainScene(){
         TabPane tabPane = new TabPane();
