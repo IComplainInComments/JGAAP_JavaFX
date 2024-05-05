@@ -5,7 +5,7 @@ import javafx.scene.control.MenuItem;
 
 public class GUI_MenuItemsBatch{
 
-    List<MenuItem> items;
+    private List<MenuItem> items;
     public GUI_MenuItemsBatch(){
         this.items = new ArrayList<MenuItem>();
         genItems();
