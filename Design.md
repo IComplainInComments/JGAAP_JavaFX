@@ -6,7 +6,7 @@ classDiagram
     GUI_DocTab -- GUI_MainWindow
     GUI_ECTab -- GUI_MainWindow
     GUI_EDTab -- GUI_MainWindow
-    GUI_MenuBatchItem -- GUI_MainWindow
+    GUI_MenuItemBatch -- GUI_MainWindow
     GUI_ReviewTab -- GUI_MainWindow
 
     class GUI_CanTab{
@@ -27,7 +27,7 @@ classDiagram
     class GUI_MenuItemBatch{
 
     }
-    class GUI_Review{
+    class GUI_ReviewTab{
 
     }
 ```
