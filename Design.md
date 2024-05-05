@@ -99,3 +99,7 @@ classDiagram
         +getPane() VBox
     }
 ```
+
+## Dependencies
+
+[JavaFX](https://openjfx.io/) Version 21
