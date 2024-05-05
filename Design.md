@@ -9,7 +9,7 @@ classDiagram
     GUI_ECTab -- GUI_MainWindow
     GUI_EDTab -- GUI_MainWindow
     GUI_MenuItemBatch -- GUI_MainWindow
-    GUI_AnalysisTab
+    GUI_AnalysisTab -- GUI_MainWindow
     GUI_ReviewTab -- GUI_MainWindow
 
     class GUI_CanTab{
@@ -31,7 +31,7 @@ classDiagram
 
     }
     class GUI_AnalysisTab{
-        
+
     }
     class GUI_ReviewTab{
 
