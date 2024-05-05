@@ -32,7 +32,7 @@ public class GUI_MainWindow extends Application{
         TabPane tabPane = new TabPane();
         Scene scene;
         MenuBar bar = init_MenuBar();
-        VBox docPane, canPane, edPane, ecPane, reviewPane;
+        VBox docPane, canPane, edPane, ecPane, anPane,reviewPane;
 
         Tab doc = new Tab("Documents");
         Tab canon = new Tab("Canonicizers");
@@ -57,17 +57,20 @@ public class GUI_MainWindow extends Application{
         GUI_CanTab canTab = new GUI_CanTab();
         GUI_EDTab edTab = new GUI_EDTab();
         GUI_ECTab ecTab = new GUI_ECTab();
+        GUI_AnalysisTab anTab = new GUI_AnalysisTab();
         GUI_ReviewTab reviewTab = new GUI_ReviewTab();
 
         docPane = docTab.getPane();
         canPane = canTab.getPane();
         edPane = edTab.getPane();
         ecPane = ecTab.getPane();
+        anPane = anTab.getPane();
         reviewPane = reviewTab.getPane();
         docPane.setPadding(new Insets(5));
         canPane.setPadding(new Insets(5));
         edPane.setPadding(new Insets(5));
         ecPane.setPadding(new Insets(5));
+        anPane.setPadding(new Insets(5));
         reviewPane.setPadding(new Insets(5));
         docPane.prefHeightProperty().bind(tabPane.heightProperty());
         docPane.prefWidthProperty().bind(tabPane.widthProperty());
@@ -77,12 +80,15 @@ public class GUI_MainWindow extends Application{
         edPane.prefWidthProperty().bind(tabPane.widthProperty());
         ecPane.prefHeightProperty().bind(tabPane.heightProperty());
         ecPane.prefWidthProperty().bind(tabPane.widthProperty());
+        anPane.prefHeightProperty().bind(tabPane.heightProperty());
+        anPane.prefWidthProperty().bind(tabPane.widthProperty());
         reviewPane.prefHeightProperty().bind(tabPane.heightProperty());
         reviewPane.prefWidthProperty().bind(tabPane.widthProperty());
         doc.setContent(docPane);
         canon.setContent(canPane);
         eve.setContent(edPane);
         evecul.setContent(ecPane);
+        anMeth.setContent(anPane);
         review.setContent(reviewPane);
         
 

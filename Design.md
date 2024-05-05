@@ -11,6 +11,7 @@ classDiagram
     GUI_MenuItemBatch -- GUI_MainWindow
     GUI_AnalysisTab -- GUI_MainWindow
     GUI_ReviewTab -- GUI_MainWindow
+    GUI_NotesWindow -- GUI_MainWindow
 
     class GUI_CanTab{
         -VBox box
@@ -97,6 +98,13 @@ classDiagram
         -init_eventCullingTable() TableView~Object~
         -init_analysisTable() TableView~Object~
         +getPane() VBox
+    }
+    class GUI_NotesWindow{
+        -Scene scene
+        +GUI_NotesWindow()
+        -build_scene
+        -init_bottomButtons() HBox
+        +getScene() Scene
     }
 ```
 
