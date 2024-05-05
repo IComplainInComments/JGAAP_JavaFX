@@ -12,6 +12,11 @@ classDiagram
     GUI_AnalysisTab -- GUI_MainWindow
     GUI_ReviewTab -- GUI_MainWindow
     GUI_NotesWindow -- GUI_MainWindow
+    GUI_NotesWindow -- GUI_CanTab
+    GUI_NotesWindow -- GUI_DocTab
+    GUI_NotesWindow -- GUI_ECTab
+    GUI_NotesWindow -- GUI_EDTab
+    GUI_NotesWindow -- GUI_AnalysisTab
 
     class GUI_CanTab{
         -VBox box
