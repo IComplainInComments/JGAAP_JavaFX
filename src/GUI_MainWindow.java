@@ -22,13 +22,13 @@ public class GUI_MainWindow extends Application{
             System.exit(0);
         });
         mainStage.setTitle("JGAAP 2.0");
-        mainStage.setScene(initMainScene());
+        mainStage.setScene(init_mainScene());
         mainStage.show();
     }
     public static void main(String[] args) {
         launch(args);
     }
-    private Scene initMainScene(){
+    private Scene init_mainScene(){
         TabPane tabPane = new TabPane();
         Scene scene;
         MenuBar bar = init_MenuBar();
