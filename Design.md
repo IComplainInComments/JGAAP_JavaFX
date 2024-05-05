@@ -68,9 +68,9 @@ classDiagram
         +getPane() VBox
     }
     class GUI_MainWindow{
-        $-BorderPane pan
+        -$BorderPane pan
         +start(Stage mainstage)
-        $+main(String[] args)
+        +$main(String[] args)
         -init_mainScene Scene
         -init_menuBar MenuBar
 
