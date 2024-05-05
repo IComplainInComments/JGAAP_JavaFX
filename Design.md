@@ -102,4 +102,5 @@ classDiagram
 
 ## Dependencies
 
-[JavaFX](https://openjfx.io/) Version 21
+[JavaFX version 21](https://openjfx.io/)
+[Java version 21](https://www.oracle.com/java/technologies/downloads/#java21)
