@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
@@ -31,7 +32,7 @@ public class GUI_MainWindow extends Application{
         TabPane tabPane = new TabPane();
         Scene scene;
         MenuBar bar = init_MenuBar();
-        VBox docPane, canPane, edPane, ecPane;
+        VBox docPane, canPane, edPane, ecPane, reviewPane;
 
         Tab doc = new Tab("Documents");
         Tab canon = new Tab("Canonicizers");
@@ -56,15 +57,18 @@ public class GUI_MainWindow extends Application{
         GUI_CanTab canTab = new GUI_CanTab();
         GUI_EDTab edTab = new GUI_EDTab();
         GUI_ECTab ecTab = new GUI_ECTab();
+        GUI_ReviewTab reviewTab = new GUI_ReviewTab();
 
         docPane = docTab.getPane();
         canPane = canTab.getPane();
         edPane = edTab.getPane();
         ecPane = ecTab.getPane();
+        reviewPane = reviewTab.getPane();
         docPane.setPadding(new Insets(5));
         canPane.setPadding(new Insets(5));
         edPane.setPadding(new Insets(5));
         ecPane.setPadding(new Insets(5));
+        reviewPane.setPadding(new Insets(5));
         docPane.prefHeightProperty().bind(tabPane.heightProperty());
         docPane.prefWidthProperty().bind(tabPane.widthProperty());
         canPane.prefHeightProperty().bind(tabPane.heightProperty());
@@ -73,10 +77,13 @@ public class GUI_MainWindow extends Application{
         edPane.prefWidthProperty().bind(tabPane.widthProperty());
         ecPane.prefHeightProperty().bind(tabPane.heightProperty());
         ecPane.prefWidthProperty().bind(tabPane.widthProperty());
+        reviewPane.prefHeightProperty().bind(tabPane.heightProperty());
+        reviewPane.prefWidthProperty().bind(tabPane.widthProperty());
         doc.setContent(docPane);
         canon.setContent(canPane);
         eve.setContent(edPane);
         evecul.setContent(ecPane);
+        review.setContent(reviewPane);
         
 
         tabPane.getTabs().add(doc);
@@ -96,11 +103,18 @@ public class GUI_MainWindow extends Application{
         return scene;
     }
      private MenuBar init_MenuBar() {
-        MenuBar bar = new MenuBar();
-
         Menu file = new Menu("File");
         Menu help = new Menu("Help");
-
+        Menu batch = new Menu("Batch Documents");
+        Menu aaac = new Menu("AAAC Problems");
+        MenuItem about = new MenuItem("About");
+        MenuBar bar = new MenuBar();
+        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch();
+        
+        aaac.getItems().addAll(); //Add items when GUI_MenuItemsAAAC is made
+        batch.getItems().addAll(items.getItems());
+        file.getItems().addAll(batch,aaac);
+        help.getItems().add(about);
         bar.getMenus().add(file);
         bar.getMenus().add(help);
 
