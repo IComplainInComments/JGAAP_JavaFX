@@ -1,5 +1,7 @@
 # GUI Design
 
+## GUI Top-Level Diagram
+
 ```mermaid
 classDiagram
     GUI_CanTab -- GUI_MainWindow
@@ -7,6 +9,7 @@ classDiagram
     GUI_ECTab -- GUI_MainWindow
     GUI_EDTab -- GUI_MainWindow
     GUI_MenuItemBatch -- GUI_MainWindow
+    GUI_AnalysisTab
     GUI_ReviewTab -- GUI_MainWindow
 
     class GUI_CanTab{
@@ -26,6 +29,9 @@ classDiagram
     }
     class GUI_MenuItemBatch{
 
+    }
+    class GUI_AnalysisTab{
+        
     }
     class GUI_ReviewTab{
 
