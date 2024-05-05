@@ -10,4 +10,4 @@ After enough of a milestone is met, merges will be made to main.
 
 ## Non-JGAAP contributors
 
-Unless you work is good, and its actual code. Consider your pill request auto-closed with the tenacity of the gravity in a black hole.
+Unless your work is good, and its actual code with documentation in the code. Consider your pill request auto-closed with the tenacity of the gravity in a black hole.
