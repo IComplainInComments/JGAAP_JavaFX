@@ -28,11 +28,14 @@ public class GUI_AnalysisTab {
 
     private HBox init_rowOne(){
         HBox box = new HBox();
+        HBox noteBox = new HBox();
         VBox meth = new VBox();
         VBox sel = new VBox();
         VBox param = new VBox();
         VBox paraBoxChildOne = new VBox();
         VBox paraBoxChildTwo = new VBox();
+        Region region1 = new Region();
+        HBox.setHgrow(region1, Priority.ALWAYS);
         Button notes = new Button("Notes");
         Label an = new Label("Analysis Method");
         Label df = new Label("Distance Function");
@@ -49,23 +52,39 @@ public class GUI_AnalysisTab {
         paraBoxChildOne.setStyle("-fx-border-color: black");
         paraBoxChildTwo.setStyle("-fx-border-color: black");
 
+        paraBoxChildOne.prefHeightProperty().bind(this.box.heightProperty());
+        paraBoxChildOne.prefWidthProperty().bind(this.box.widthProperty());
+        paraBoxChildTwo.prefHeightProperty().bind(this.box.heightProperty());
+        paraBoxChildTwo.prefWidthProperty().bind(this.box.widthProperty());
+
+        paraBoxChildOne.setMinSize(400, 155);
+        paraBoxChildTwo.setMinSize(400, 155);
+
+        noteBox.getChildren().addAll(am, region1, notes);
         meth.getChildren().addAll(an, init_AnalysisMethodBox(),df, init_DistanceFunctionBox());
         sel.getChildren().addAll(se, init_SelectedBox());
-        param.getChildren().addAll(am,paraBoxChildOne,paraBoxChildTwo,dfp);
+        param.getChildren().addAll(noteBox,paraBoxChildOne,dfp,paraBoxChildTwo);
 
-        box.getChildren().addAll(meth,init_rowOneButtons(),sel,param,notes);
+        box.getChildren().addAll(meth,init_rowOneButtons(),sel,param);
 
 
         return box;
     }
     private HBox init_rowTwo(){
-        HBox box = new HBox();
-        VBox amd = new VBox();
-        VBox dfd = new VBox();
         Label an = new Label("Analysis Method Description");
         Label df = new Label("Distance Function Description");
         TextArea anArea = new TextArea();
         TextArea dfArea = new TextArea();
+        HBox box = new HBox(5);
+        VBox amd = new VBox();
+        VBox dfd = new VBox();
+
+        anArea.prefHeightProperty().bind(this.box.heightProperty());
+        anArea.prefWidthProperty().bind(this.box.widthProperty());
+        dfArea.prefHeightProperty().bind(this.box.heightProperty());
+        dfArea.prefWidthProperty().bind(this.box.widthProperty());
+        anArea.setMinSize(100, 100);
+        dfArea.setMinSize(100, 100);
 
         an.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         df.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
@@ -124,18 +143,29 @@ public class GUI_AnalysisTab {
     }
     private VBox init_rowOneButtons(){
         VBox box = new VBox();
+        Region region1 = new Region();
+        Region region2 = new Region();
         Button left = new Button("->");
         Button right = new Button("<-");
         Button clear = new Button("Clear");
         Button all = new Button("All");
 
+        box.setMinSize(50, 0);
+        box.setSpacing(5);
+
+        VBox.setVgrow(region1, Priority.ALWAYS);
+        VBox.setVgrow(region2, Priority.ALWAYS);
+
+        box.getChildren().add(region1);
         box.getChildren().add(left);
         box.getChildren().add(right);
         box.getChildren().add(all);
         box.getChildren().add(clear);
+        box.getChildren().add(region2);
         box.setAlignment(Pos.TOP_CENTER);
 
         return box;
+        
     }
      public VBox getPane(){
         return this.box;
