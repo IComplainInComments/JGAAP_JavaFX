@@ -1,3 +1,5 @@
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -5,22 +7,29 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class GUI_NotesWindow{
 
-    private Scene scene;
+    private static Stage stage;
+    private static Button notes;
 
     public GUI_NotesWindow(){
-        build_scene();
+        stage = new Stage();
+        stage.setTitle("Notes");
+        build_stage();
+        init_noteButton();
     }
-    public void build_scene(){
+    public void build_stage(){
         VBox box = new VBox();
         TextArea area = new TextArea();
+        Scene scene;
 
         box.getChildren().addAll(area,init_bottomButtons());
 
-        this.scene = new Scene(box, 600, 600);
+        scene = new Scene(box, 600, 600);
 
+        stage.setScene(scene);
     }
     private HBox init_bottomButtons(){
         HBox box = new HBox();
@@ -34,7 +43,19 @@ public class GUI_NotesWindow{
         return box;
 
     }
-    public Scene getScene(){
-        return this.scene;
+    private void init_noteButton(){
+        notes = new Button("Notes");
+        notes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                if(stage.isShowing()){
+                    stage.hide();
+                } else {
+                    stage.show();
+                }
+            }
+        });
+    }
+    public Button getButton(){
+        return notes;
     }
 }
