@@ -1,5 +1,3 @@
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -13,21 +11,44 @@ public class GUI_NotesWindow{
 
     private static Stage stage;
     private static Button notes;
+    private static TextArea area;
+    private static String text;
 
     public GUI_NotesWindow(){
         stage = new Stage();
         stage.setTitle("Notes");
+        stage.hide();
         build_stage();
-        init_noteButton();
+        stage.setOnCloseRequest(e -> {
+            area.setText(text);
+            stage.close();
+            e.consume();
+        });
     }
     public void build_stage(){
-        VBox box = new VBox();
-        TextArea area = new TextArea();
         Scene scene;
+        VBox box = new VBox();
+        area = new TextArea();
+        notes = new Button("Notes");
+        text = "";
+
+        scene = new Scene(box, 600, 600);
+
+        area.prefHeightProperty().bind(scene.heightProperty());
+        area.prefWidthProperty().bind(scene.widthProperty());
+        notes.setOnAction(e -> {
+            if(e.getTarget().toString().contains("Notes")){
+                if(!stage.isShowing()){
+                    stage.show();
+                    e.consume();
+                } else {
+                    e.consume();
+                }
+            }
+        });
 
         box.getChildren().addAll(area,init_bottomButtons());
 
-        scene = new Scene(box, 600, 600);
 
         stage.setScene(scene);
     }
@@ -38,22 +59,36 @@ public class GUI_NotesWindow{
         Region region = new Region();
         HBox.setHgrow(region, Priority.ALWAYS);
 
+        ok.setOnAction(e -> {
+            if(e.getTarget().toString().contains("OK")){
+                text = area.getText();
+                e.consume();
+            }
+        });
+        cancel.setOnAction(e -> {
+            if(e.getTarget().toString().contains("Cancel")){
+                area.setText(text);
+                stage.hide();
+                e.consume();
+            }
+        });
+
         box.getChildren().addAll(region,ok,cancel);
         
         return box;
 
     }
-    private void init_noteButton(){
-        notes = new Button("Notes");
-        notes.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-                if(stage.isShowing()){
-                    stage.hide();
-                } else {
-                    stage.show();
-                }
-            }
-        });
+    public void show(){
+        stage.show();
+    }
+    public void hide(){
+        stage.hide();
+    }
+    public void close(){
+        stage.close();
+    }
+    public String getNotes(){
+        return text;
     }
     public Button getButton(){
         return notes;

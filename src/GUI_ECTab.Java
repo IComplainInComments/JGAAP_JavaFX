@@ -15,8 +15,10 @@ import javafx.scene.text.FontWeight;
 public class GUI_ECTab {
 
     private VBox box;
+    private static GUI_NotesWindow noteBox;
     public GUI_ECTab(){
         box = new VBox();
+        noteBox = new GUI_NotesWindow();
         this.box.setSpacing(10);
         build_pane();
     }
@@ -33,7 +35,7 @@ public class GUI_ECTab {
         Label can = new Label("Event Culling");
         Label sel = new Label("Selected");
         Label para = new Label("Parameters");
-        Button notes = new Button("Notes");
+        Button notes = noteBox.getButton();
         HBox box = new HBox(10);
         HBox notesBox = new HBox();
         VBox edBox = new VBox();

@@ -16,9 +16,11 @@ import javafx.scene.text.FontWeight;
 
 public class GUI_DocTab {
     private VBox box;
+    private static GUI_NotesWindow noteBox;
     public GUI_DocTab(){
         this.box = new VBox();
         this.box.setSpacing(5);
+        noteBox = new GUI_NotesWindow();
         build_tab();
     }
 
@@ -39,7 +41,7 @@ public class GUI_DocTab {
         Label lang = new Label("Language");
         lang.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
 
-        Button notes = new Button("Notes");
+        Button notes = noteBox.getButton();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         hbox = new HBox(lang, region1, notes);

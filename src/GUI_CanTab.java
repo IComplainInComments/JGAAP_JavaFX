@@ -16,8 +16,10 @@ import javafx.scene.text.FontWeight;
 public class GUI_CanTab {
 
     private VBox box;
+    private static GUI_NotesWindow noteBox;
     public GUI_CanTab(){
         box = new VBox();
+        noteBox = new GUI_NotesWindow();
         build_pane();
     }
 
@@ -83,7 +85,7 @@ public class GUI_CanTab {
     private HBox init_bottomButtons(){
         HBox box = new HBox();
         Button finish = new Button("Finish & Review");
-        Button next = new Button("Next");
+        Button next = noteBox.getButton();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         box.getChildren().add(region1);

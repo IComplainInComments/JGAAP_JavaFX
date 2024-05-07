@@ -13,10 +13,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 public class GUI_AnalysisTab {
-        private VBox box;
+    private VBox box;
+    private static GUI_NotesWindow notesBox;
 
     public GUI_AnalysisTab(){
-        box = new VBox();
+        this.box = new VBox();
+        notesBox = new GUI_NotesWindow();
         build_pane();
     }
 
@@ -36,7 +38,7 @@ public class GUI_AnalysisTab {
         VBox paraBoxChildTwo = new VBox();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
-        Button notes = new Button("Notes");
+        Button notes = notesBox.getButton();
         Label an = new Label("Analysis Method");
         Label df = new Label("Distance Function");
         Label se = new Label("Selected");
