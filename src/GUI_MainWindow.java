@@ -117,8 +117,14 @@ public class GUI_MainWindow extends Application{
         MenuItem about = new MenuItem("About");
         MenuBar bar = new MenuBar();
         GUI_MenuItemsBatch items = new GUI_MenuItemsBatch();
+        GUI_JGAAPAboutWindow winAbout = new GUI_JGAAPAboutWindow();
+
+        about.setOnAction(e -> {
+                winAbout.show();
+                e.consume();
+        });
         
-        aaac.getItems().addAll(); //Add items when GUI_MenuItemsAAAC is made
+        aaac.getItems().addAll(items.getProblems());
         batch.getItems().addAll(items.getItems());
         file.getItems().addAll(batch,aaac);
         help.getItems().add(about);

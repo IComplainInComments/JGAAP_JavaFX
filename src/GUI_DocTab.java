@@ -19,7 +19,6 @@ public class GUI_DocTab {
     private static GUI_NotesWindow noteBox;
     public GUI_DocTab(){
         this.box = new VBox();
-        this.box.setSpacing(5);
         noteBox = new GUI_NotesWindow();
         build_tab();
     }
@@ -34,7 +33,7 @@ public class GUI_DocTab {
     }
 
      private VBox init_LangSelection(){
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         HBox hbox;
 
 
@@ -51,19 +50,18 @@ public class GUI_DocTab {
 
         box.getChildren().add(hbox);
         box.getChildren().add(langSelect);
-        box.setSpacing(3);
 
         return box;
      }
 
      private VBox init_UnknownAuth(){
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         TableView<Object> table = init_authorTable();
         Label unAuth =  new Label("Uknown Authors");
 
         unAuth.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
-        table.prefHeightProperty().bind(box.heightProperty());
-        table.prefWidthProperty().bind(box.widthProperty());
+        table.prefHeightProperty().bind(this.box.heightProperty());
+        table.prefWidthProperty().bind(this.box.widthProperty());
 
         box.getChildren().add(unAuth);
         box.getChildren().add(table);
@@ -71,16 +69,18 @@ public class GUI_DocTab {
         return box;
      }
      private VBox init_KnownAuth(){
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         Label knAuth = new Label("Known Authors");
         knAuth.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         TreeView<String> tree = init_TreeView();
+        tree.prefHeightProperty().bind(this.box.heightProperty());
+        tree.prefWidthProperty().bind(this.box.widthProperty());
         box.getChildren().add(knAuth);
         box.getChildren().add(tree);
         return box;
      }
      private HBox init_UnknownAuthButtons(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Button addDoc = new Button("Add Document");
         Button remDoc = new Button("Remove Document");
         box.getChildren().add(addDoc);
@@ -88,7 +88,7 @@ public class GUI_DocTab {
         return box;
      }
      private HBox init_KnownAuthButtons(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Button addAuth = new Button("Add Author");
         Button editAuth = new Button("Edit Author");
         Button remAuth = new Button("Remove Author");
@@ -98,7 +98,7 @@ public class GUI_DocTab {
         return box;
      }
      private HBox init_bottomButtons(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
         Button next = new Button("Next");
         Region region1 = new Region();

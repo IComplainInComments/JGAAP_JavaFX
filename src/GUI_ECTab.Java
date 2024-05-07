@@ -19,7 +19,6 @@ public class GUI_ECTab {
     public GUI_ECTab(){
         box = new VBox();
         noteBox = new GUI_NotesWindow();
-        this.box.setSpacing(10);
         build_pane();
     }
 
@@ -36,7 +35,7 @@ public class GUI_ECTab {
         Label sel = new Label("Selected");
         Label para = new Label("Parameters");
         Button notes = noteBox.getButton();
-        HBox box = new HBox(10);
+        HBox box = new HBox(5);
         HBox notesBox = new HBox();
         VBox edBox = new VBox();
         VBox selBox = new VBox();
@@ -52,7 +51,6 @@ public class GUI_ECTab {
         paraBoxChild.setStyle("-fx-border-color: black");
         paraBoxChild.prefHeightProperty().bind(this.box.heightProperty());
         paraBoxChild.prefWidthProperty().bind(this.box.widthProperty());
-        paraBoxChild.setMinSize(400, 250);
 
         notesBox.getChildren().addAll(para,region1,notes);
 
@@ -65,7 +63,7 @@ public class GUI_ECTab {
         return box;
     }
     private VBox init_rowTwo(){
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         Label can = new Label("Event Culling Description");
         TextArea area = new TextArea();
 
@@ -81,7 +79,7 @@ public class GUI_ECTab {
 
     }
     private HBox init_bottomButtons(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Region region1 = new Region();
         Button finish = new Button("Finish & Review");
         Button next = new Button("Next");
@@ -90,7 +88,6 @@ public class GUI_ECTab {
         box.getChildren().add(region1);
         box.getChildren().add(finish);
         box.getChildren().add(next);
-        box.setSpacing(10);
 
         return box;
      }
@@ -117,7 +114,7 @@ public class GUI_ECTab {
         return list;
     }
     private VBox init_rowTwoButtons(){
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         Region region1 = new Region();
         Region region2 = new Region();
         Button left = new Button("->");
@@ -126,7 +123,6 @@ public class GUI_ECTab {
         Button all = new Button("All");
 
         box.setMinSize(50, 0);
-        box.setSpacing(5);
 
         VBox.setVgrow(region1, Priority.ALWAYS);
         VBox.setVgrow(region2, Priority.ALWAYS);

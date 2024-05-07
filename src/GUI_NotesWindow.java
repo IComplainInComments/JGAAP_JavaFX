@@ -25,9 +25,9 @@ public class GUI_NotesWindow{
             e.consume();
         });
     }
-    public void build_stage(){
+    private void build_stage(){
         Scene scene;
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         area = new TextArea();
         notes = new Button("Notes");
         text = "";
@@ -53,7 +53,7 @@ public class GUI_NotesWindow{
         stage.setScene(scene);
     }
     private HBox init_bottomButtons(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Button ok = new Button("OK");
         Button cancel = new Button("Cancel");
         Region region = new Region();

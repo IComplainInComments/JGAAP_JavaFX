@@ -26,48 +26,33 @@ public class GUI_CanTab {
     private void build_pane(){
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
-        this.box.getChildren().add(init_rowThree());
         this.box.getChildren().add(init_bottomButtons());
     }
 
     private HBox init_rowOne(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
+        HBox selNotes = new HBox();
+        VBox canBox = new VBox();
+        VBox selBox = new VBox();
         Label can = new Label("Canonicizers");
         Label sel = new Label("Selected");
-        Button notes = new Button("Notes");
+        Button notes = noteBox.getButton();
         Region region1 = new Region();
-        Region region2 = new Region();
 
         HBox.setHgrow(region1, Priority.ALWAYS);
-        HBox.setHgrow(region2, Priority.ALWAYS);
+        //HBox.setHgrow(region2, Priority.ALWAYS);
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         sel.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
+        
+        selNotes.getChildren().addAll(sel, region1, notes);
+        canBox.getChildren().addAll(can, init_listBoxCan());
+        selBox.getChildren().addAll(selNotes, init_listBoxSel());
 
-        box.getChildren().add(can);
-        box.getChildren().add(region2);
-        box.getChildren().add(sel);
-        box.getChildren().add(region1);
-        box.getChildren().add(notes);
-
+        box.getChildren().addAll(canBox,init_rowTwoButtons(),selBox);
         return box;
     }
-    private HBox init_rowTwo(){
-        HBox box = new HBox();
-        VBox vboxModal = new VBox();
-        ListView<String> listLeft = init_ListBoxLeft();
-        ListView<String> listRight = init_ListBoxRight();
-        ComboBox<String> comboBox = init_rowTwoSelectionDropDown();
-
-        box.getChildren().add(listLeft);
-        vboxModal.getChildren().add(comboBox);
-        vboxModal.getChildren().add(init_rowTwoButtons());
-        box.getChildren().add(vboxModal);
-        box.getChildren().add(listRight);
-
-        return box;
-    }
-    private VBox init_rowThree(){
-        VBox box = new VBox();
+    private VBox init_rowTwo(){
+        VBox box = new VBox(5);
         Label can = new Label("Canonicizer Description");
         TextArea area = new TextArea();
 
@@ -83,9 +68,9 @@ public class GUI_CanTab {
 
     }
     private HBox init_bottomButtons(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
-        Button next = noteBox.getButton();
+        Button next = new Button("Next");
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         box.getChildren().add(region1);
@@ -94,7 +79,7 @@ public class GUI_CanTab {
         box.setSpacing(10);
         return box;
      }
-    private ListView<String> init_ListBoxLeft(){
+    private ListView<String> init_listBoxCan(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
             "Single", "Double", "Suite", "Family App");
@@ -105,7 +90,7 @@ public class GUI_CanTab {
 
         return list;
     }
-    private ListView<String> init_ListBoxRight(){
+    private ListView<String> init_listBoxSel(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
             "Single", "Double", "Suite", "Family App");
@@ -117,16 +102,17 @@ public class GUI_CanTab {
         return list;
     }
     private VBox init_rowTwoButtons(){
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         Button left = new Button("->");
         Button right = new Button("<-");
         Button clear = new Button("Clear");
+        Region region1 = new Region();
+        Region region2 = new Region();
+        VBox.setVgrow(region1, Priority.ALWAYS);
+        VBox.setVgrow(region2, Priority.ALWAYS);
 
-        box.getChildren().add(left);
-        box.getChildren().add(right);
-        box.getChildren().add(clear);
+        box.getChildren().addAll(region1,init_rowTwoSelectionDropDown(),left, right, clear, region2);
         box.setAlignment(Pos.BASELINE_CENTER);
-        box.setSpacing(3);
 
         return box;
     }
@@ -140,6 +126,7 @@ public class GUI_CanTab {
             );
 
         comboBox = new ComboBox<String>(options);
+        comboBox.setMinSize(100, 25);
 
         return comboBox;
      }

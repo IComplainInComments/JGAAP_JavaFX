@@ -13,7 +13,6 @@ public class GUI_ReviewTab{
     private VBox box;
     public GUI_ReviewTab(){
         this.box = new VBox();
-        this.box.setSpacing(5);
         build_pane();
     }
     private void build_pane(){
@@ -22,7 +21,7 @@ public class GUI_ReviewTab{
         this.box.getChildren().add(init_bottomButtons());
     }
     private HBox init_SecondRow(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         VBox edBox = new VBox();
         VBox ecBox = new VBox();
         VBox anBox = new VBox();
@@ -41,7 +40,7 @@ public class GUI_ReviewTab{
         return box;
      }
      private VBox init_canonicizersTable() {
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         Label can = new Label("Canonicizer");
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         TableView<Object> table = new TableView<Object>();
@@ -54,7 +53,7 @@ public class GUI_ReviewTab{
         return box;
      }
     private HBox init_bottomButtons(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
         Button next = new Button("Next");
         Region region1 = new Region();
@@ -62,7 +61,6 @@ public class GUI_ReviewTab{
         box.getChildren().add(region1);
         box.getChildren().add(finish);
         box.getChildren().add(next);
-        box.setSpacing(10);
         return box;
      }
      private TableView<Object> init_eventDriverTable() {

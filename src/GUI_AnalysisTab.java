@@ -29,7 +29,7 @@ public class GUI_AnalysisTab {
     }
 
     private HBox init_rowOne(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         HBox noteBox = new HBox();
         VBox meth = new VBox();
         VBox sel = new VBox();
@@ -58,9 +58,6 @@ public class GUI_AnalysisTab {
         paraBoxChildOne.prefWidthProperty().bind(this.box.widthProperty());
         paraBoxChildTwo.prefHeightProperty().bind(this.box.heightProperty());
         paraBoxChildTwo.prefWidthProperty().bind(this.box.widthProperty());
-
-        paraBoxChildOne.setMinSize(400, 155);
-        paraBoxChildTwo.setMinSize(400, 155);
 
         noteBox.getChildren().addAll(am, region1, notes);
         meth.getChildren().addAll(an, init_AnalysisMethodBox(),df, init_DistanceFunctionBox());
@@ -99,7 +96,7 @@ public class GUI_AnalysisTab {
         return box;
     }
     private HBox init_bottomButtons(){
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
         Button next = new Button("Next");
         Region region1 = new Region();
@@ -107,7 +104,6 @@ public class GUI_AnalysisTab {
         box.getChildren().add(region1);
         box.getChildren().add(finish);
         box.getChildren().add(next);
-        box.setSpacing(10);
         return box;
      }
     private ListView<String> init_SelectedBox(){
@@ -144,7 +140,7 @@ public class GUI_AnalysisTab {
         return list;
     }
     private VBox init_rowOneButtons(){
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         Region region1 = new Region();
         Region region2 = new Region();
         Button left = new Button("->");
@@ -153,7 +149,6 @@ public class GUI_AnalysisTab {
         Button all = new Button("All");
 
         box.setMinSize(50, 0);
-        box.setSpacing(5);
 
         VBox.setVgrow(region1, Priority.ALWAYS);
         VBox.setVgrow(region2, Priority.ALWAYS);
