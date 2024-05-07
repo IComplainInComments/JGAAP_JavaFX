@@ -1,3 +1,4 @@
+package GUI;
 /**
  * Menu Item Batch Class File
  */
@@ -66,18 +67,14 @@ public class GUI_MenuItemsBatch{
     }
     /**
      * Getter Function for the "File" Menu Items
-     * @return List<MenuItem>
-     * @see List
-     * @See MenuItem
+     * @return List
      */
     public List<MenuItem> getItems(){
         return this.items;
     }
     /**
      * Getter Function for the "AAAC Problem" Menu Items
-     * @return List<MenuItem>
-     * @see List
-     * @See MenuItem
+     * @return List
      */
     public List<MenuItem> getProblems(){
         return this.problems;

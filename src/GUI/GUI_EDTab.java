@@ -1,3 +1,4 @@
+package GUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -12,14 +13,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class GUI_ECTab {
+public class GUI_EDTab {
 
     private VBox box;
     private static GUI_NotesWindow noteBox;
     /**
      * Constructor for the class.
      */
-    public GUI_ECTab(){
+    public GUI_EDTab(){
         box = new VBox();
         noteBox = new GUI_NotesWindow();
         build_pane();
@@ -39,7 +40,7 @@ public class GUI_ECTab {
     private HBox init_rowOne(){
         ListView<String> listLeft = init_ListBoxLeft();
         ListView<String> listRight = init_ListBoxRight();
-        Label can = new Label("Event Culling");
+        Label can = new Label("Event Drivers");
         Label sel = new Label("Selected");
         Label para = new Label("Parameters");
         Button notes = noteBox.getButton();
@@ -71,12 +72,12 @@ public class GUI_ECTab {
         return box;
     }
     /**
-     * Method for building the 'Second level' of GUI elements.
-     * @return
-     */
+    * Method for building the 'Second level' of GUI elements.
+    * @return
+    */    
     private VBox init_rowTwo(){
         VBox box = new VBox(5);
-        Label can = new Label("Event Culling Description");
+        Label can = new Label("Event Driver Description");
         TextArea area = new TextArea();
 
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
@@ -89,13 +90,12 @@ public class GUI_ECTab {
 
         return box;
 
-    
-    }
-        /**
-        * Method for building the 'Bottom Buttons' of GUI elements.
-        * @return HBox
-        */
-        private HBox init_bottomButtons(){
+    }        
+    /**
+    * Method for building the 'Bottom Buttons' of GUI elements.
+    * @return HBox
+    */
+    private HBox init_bottomButtons(){
         HBox box = new HBox(5);
         Region region1 = new Region();
         Button finish = new Button("Finish & Review");
@@ -105,11 +105,12 @@ public class GUI_ECTab {
         box.getChildren().add(region1);
         box.getChildren().add(finish);
         box.getChildren().add(next);
+        box.setSpacing(10);
 
         return box;
      }
-     /**
-      * Method for building the Event Culling Selection Box.
+    /**
+      * Method for building the Event Driver Selection Box.
       * @return ListView<String>
       */
     private ListView<String> init_ListBoxLeft(){
@@ -124,7 +125,7 @@ public class GUI_ECTab {
         return list;
     }
     /**
-     * Method for showing the Selected Event Culling box.
+     * Method for showing the Selected Driver Culling box.
      * @return ListView<String>
      */
     private ListView<String> init_ListBoxRight(){
