@@ -83,13 +83,15 @@ classDiagram
         +main(String[] args)$
         -init_mainScene() Scene
         -init_menuBar() MenuBar
-
     }
     class GUI_MenuItemBatch{
-        -List~MenuItem~
+        -List~MenuItem~ items
+        -List~MenuItem~ problems
         +GUI_MenuItemBatch()
         -genItems()
-        +getPane() List~MenuItem~
+        -genProblems()
+        +getItems() List~MenuItem~
+        +getproblems() List~MenuItem~
     }
     class GUI_AnalysisTab{
         -VBox box;
