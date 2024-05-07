@@ -1,12 +1,13 @@
 package GUI;
-/**
- * Menu Item Batch Class File
- */
 import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.control.MenuItem;
 
+/**
+ * Menu Item Batch Class File.
+ * This class is used to generate the menu items under File/Help that appear in the menu bar.
+ */
 public class GUI_MenuItemsBatch{
 
     private List<MenuItem> items;

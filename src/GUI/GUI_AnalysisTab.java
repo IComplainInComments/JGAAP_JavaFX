@@ -12,7 +12,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
+/**
+ * Analysis Tab Class.
+ * This Class creates the scene for the Analysis Tab and it's GUI elements.
+ */
 public class GUI_AnalysisTab {
     private VBox box;
     private static GUI_NotesWindow notesBox;

@@ -9,7 +9,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
+/**
+ * Review Tab Class.
+ * This Class creates the scene for the Review Tab and it's GUI elements.
+ */
 public class GUI_ReviewTab{
     private VBox box;
     /**
@@ -75,9 +78,11 @@ public class GUI_ReviewTab{
         HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
         Button next = new Button("Next");
+        Button process = new Button("Process");
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         box.getChildren().add(region1);
+        box.getChildren().add(process);
         box.getChildren().add(finish);
         box.getChildren().add(next);
         return box;
@@ -123,7 +128,7 @@ public class GUI_ReviewTab{
      }
      /**
       * Getter for getting the built Pane.
-      * @return
+      * @return VBox
       */
      public VBox getPane(){
         return this.box;

@@ -13,7 +13,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
+/**
+ * Canonicizer Tab Class.
+ * This Class creates the scene for the Canonicizer Tab and it's GUI elements.
+ */
 public class GUI_CanTab {
 
     private VBox box;

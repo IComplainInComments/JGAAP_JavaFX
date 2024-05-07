@@ -14,7 +14,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-
+/**
+ * Document Tab Class.
+ * This Class creates the scene for the Document Tab and it's GUI elements.
+ */
 public class GUI_DocTab {
     private VBox box;
     private static GUI_NotesWindow noteBox;

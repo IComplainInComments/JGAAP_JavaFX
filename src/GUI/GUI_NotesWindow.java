@@ -7,7 +7,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
+/**
+ * Notes Window Class.
+ * This Class creates the Stage for the Notes Window and it's GUI elements.
+ */
 public class GUI_NotesWindow{
 
     private static Stage stage;
@@ -109,14 +112,14 @@ public class GUI_NotesWindow{
     }
     /**
      * Getter for getting the notes typed in the Text Area.
-     * @return
+     * @return String
      */
     public String getNotes(){
         return text;
     }
     /**
      * Getter for getting the "Notes" button for the GUI windows.
-     * @return
+     * @return Button
      */
     public Button getButton(){
         return notes;

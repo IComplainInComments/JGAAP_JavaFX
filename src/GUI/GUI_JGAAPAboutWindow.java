@@ -6,7 +6,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-
+/**
+ * About Window Class.
+ * This Class creates the Stage for the About Window and it's GUI elements.
+ */
 public class GUI_JGAAPAboutWindow {
      private static Stage stage;
      /**

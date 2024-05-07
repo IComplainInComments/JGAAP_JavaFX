@@ -11,14 +11,16 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-
+/**
+ * Main Window Class.
+ * This Class is the heart of the GUI, and controls the GUI as a whole. It is used to intertwine all the other classes.
+ */
 public class GUI_MainWindow extends Application{
     private static BorderPane pane;
 
     /**
      * Used for debugging.
-     * @param args
+     * @param args Normal Java Main Args
      */
     public static void main(String[] args) {
         launch(args);
