@@ -17,18 +17,26 @@ public class GUI_CanTab {
 
     private VBox box;
     private static GUI_NotesWindow noteBox;
+    /**
+     * Constructor for the class.
+     */
     public GUI_CanTab(){
         box = new VBox();
         noteBox = new GUI_NotesWindow();
         build_pane();
     }
-
+    /**
+     * Builds the pane row by row.
+     */
     private void build_pane(){
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
         this.box.getChildren().add(init_bottomButtons());
     }
-
+    /**
+     * Method for building the 'Top Row' of GUI elements.
+     * @return HBox
+     */
     private HBox init_rowOne(){
         HBox box = new HBox(5);
         HBox selNotes = new HBox();
@@ -51,6 +59,10 @@ public class GUI_CanTab {
         box.getChildren().addAll(canBox,init_rowTwoButtons(),selBox);
         return box;
     }
+    /**
+     * Method for building the 'Second Row' of GUI elements.
+     * @return HBox
+     */
     private VBox init_rowTwo(){
         VBox box = new VBox(5);
         Label can = new Label("Canonicizer Description");
@@ -67,6 +79,10 @@ public class GUI_CanTab {
         return box;
 
     }
+    /**
+     * Method for building the 'Bottom Buttons' of GUI elements.
+     * @return HBox
+     */
     private HBox init_bottomButtons(){
         HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
@@ -79,6 +95,10 @@ public class GUI_CanTab {
         box.setSpacing(10);
         return box;
      }
+     /**
+      * Method for generating the List Box of Canocinizers.
+      * @return ListView<String>
+      */
     private ListView<String> init_listBoxCan(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -90,6 +110,10 @@ public class GUI_CanTab {
 
         return list;
     }
+    /**
+     * Method for generating List Box of selected Canocinizers.
+     * @return ListView<String>
+     */
     private ListView<String> init_listBoxSel(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -101,6 +125,10 @@ public class GUI_CanTab {
 
         return list;
     }
+    /**
+     * Method for generating a VBox containing the buttons for de/selecting items for the Selection Box.
+     * @return VBox
+     */
     private VBox init_rowTwoButtons(){
         VBox box = new VBox(5);
         Button left = new Button("->");
@@ -116,6 +144,10 @@ public class GUI_CanTab {
 
         return box;
     }
+    /**
+     * Method for creation of the document format selection box.
+     * @return ComboBox<String>
+     */
     private ComboBox<String> init_rowTwoSelectionDropDown(){
         ComboBox<String> comboBox;
         ObservableList<String> options = 
@@ -130,6 +162,10 @@ public class GUI_CanTab {
 
         return comboBox;
      }
+     /**
+      * Returns the built Pane.
+      * @return VBox
+      */
      public VBox getPane(){
         return this.box;
     }

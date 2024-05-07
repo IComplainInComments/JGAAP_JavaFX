@@ -17,12 +17,17 @@ import javafx.scene.text.FontWeight;
 public class GUI_DocTab {
     private VBox box;
     private static GUI_NotesWindow noteBox;
+    /**
+     * Constructor for the class.
+     */
     public GUI_DocTab(){
         this.box = new VBox();
         noteBox = new GUI_NotesWindow();
         build_tab();
     }
-
+    /**
+     * Builds the window row by row.
+     */
     private void build_tab(){
         this.box.getChildren().add(init_LangSelection());
         this.box.getChildren().add(init_UnknownAuth());
@@ -31,7 +36,9 @@ public class GUI_DocTab {
         this.box.getChildren().add(init_KnownAuthButtons());
         this.box.getChildren().add(init_bottomButtons());
     }
-
+    /*
+     * Method for building the Language Selection row.
+     */
      private VBox init_LangSelection(){
         VBox box = new VBox(5);
         HBox hbox;
@@ -53,7 +60,9 @@ public class GUI_DocTab {
 
         return box;
      }
-
+     /**
+      * Method for building the Unknown Author Row.
+      */
      private VBox init_UnknownAuth(){
         VBox box = new VBox(5);
         TableView<Object> table = init_authorTable();
@@ -68,6 +77,10 @@ public class GUI_DocTab {
 
         return box;
      }
+     /**
+      * Method for building the Known Author Row.
+      * @return VBox
+      */
      private VBox init_KnownAuth(){
         VBox box = new VBox(5);
         Label knAuth = new Label("Known Authors");
@@ -79,6 +92,10 @@ public class GUI_DocTab {
         box.getChildren().add(tree);
         return box;
      }
+     /**
+      * Method for Building the Unknown Author Row Buttons.
+      * @return HBox
+      */
      private HBox init_UnknownAuthButtons(){
         HBox box = new HBox(5);
         Button addDoc = new Button("Add Document");
@@ -87,6 +104,10 @@ public class GUI_DocTab {
         box.getChildren().add(remDoc);
         return box;
      }
+     /**
+      * Method for building the Known Author Buttons.
+      * @return HBox
+      */
      private HBox init_KnownAuthButtons(){
         HBox box = new HBox(5);
         Button addAuth = new Button("Add Author");
@@ -97,6 +118,10 @@ public class GUI_DocTab {
         box.getChildren().add(remAuth);
         return box;
      }
+   /**
+     * Method for building the 'Bottom Buttons' of GUI elements.
+     * @return HBox
+     */
      private HBox init_bottomButtons(){
         HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
@@ -109,24 +134,33 @@ public class GUI_DocTab {
         box.setSpacing(10);
         return box;
      }
+     /**
+      * Method for building the Author Selection Table.
+      * @return TableView<Object>
+      */
      private TableView<Object> init_authorTable() {
         TableView<Object> table = new TableView<Object>();
         TableColumn<Object, String> column1 = new TableColumn<Object, String>("Title");
         TableColumn<Object, String> column2 = new TableColumn<Object, String>("File Path");
-        //column1.setCellValueFactory(new PropertyValueFactory<Task, String>("name"));
-        //column2.setCellValueFactory(new PropertyValueFactory<Task, String>("startPeriod"));
         column1.prefWidthProperty().bind(table.widthProperty().divide(2));
         column2.prefWidthProperty().bind(table.widthProperty().divide(2));
         table.getColumns().add(column1);
         table.getColumns().add(column2);
         return table;
      }
-
+     /**
+      * Method for building the Known Authors Table.
+      * @return TableView <String>
+      */
      private TreeView<String> init_TreeView(){
         TreeItem<String> rootItem = new TreeItem<String> ("Authors");
         TreeView<String> tree = new TreeView<String>(rootItem);
         return tree;
      }
+     /**
+      * Method for building the Language Selection Combo Box.
+      * @return ComboBox<String>
+      */
      private ComboBox<String> init_langSelectBox(){
         ComboBox<String> comboBox;
         ObservableList<String> options = 
@@ -138,7 +172,10 @@ public class GUI_DocTab {
         comboBox = new ComboBox<String>(options);
         return comboBox;
      }
-
+     /**
+      * Getter for getting the built Pane.
+      * @return VBox
+      */
     public VBox getPane(){
         return this.box;
     }

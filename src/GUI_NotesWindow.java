@@ -14,6 +14,9 @@ public class GUI_NotesWindow{
     private static TextArea area;
     private static String text;
 
+    /**
+     * Constructor for the class.
+     */
     public GUI_NotesWindow(){
         stage = new Stage();
         stage.setTitle("Notes");
@@ -25,6 +28,9 @@ public class GUI_NotesWindow{
             e.consume();
         });
     }
+    /**
+     * Builds the Window and its elements.
+     */
     private void build_stage(){
         Scene scene;
         VBox box = new VBox(5);
@@ -52,6 +58,10 @@ public class GUI_NotesWindow{
 
         stage.setScene(scene);
     }
+    /**
+     * Builds the bottom row buttons.
+     * @return HBox
+     */
     private HBox init_bottomButtons(){
         HBox box = new HBox(5);
         Button ok = new Button("OK");
@@ -78,18 +88,35 @@ public class GUI_NotesWindow{
         return box;
 
     }
+    /**
+     * Show the Window.
+     */
     public void show(){
         stage.show();
     }
+    /**
+     * Hide the Window.
+     */
     public void hide(){
         stage.hide();
     }
+    /**
+     * Close (hide) the Window.
+     */
     public void close(){
         stage.close();
     }
+    /**
+     * Getter for getting the notes typed in the Text Area.
+     * @return
+     */
     public String getNotes(){
         return text;
     }
+    /**
+     * Getter for getting the "Notes" button for the GUI windows.
+     * @return
+     */
     public Button getButton(){
         return notes;
     }

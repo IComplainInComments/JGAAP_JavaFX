@@ -16,18 +16,26 @@ public class GUI_AnalysisTab {
     private VBox box;
     private static GUI_NotesWindow notesBox;
 
+    /**
+     * Constructor for the class.
+     */
     public GUI_AnalysisTab(){
         this.box = new VBox();
         notesBox = new GUI_NotesWindow();
         build_pane();
     }
-
+    /**
+     * Builds the Pane row by row.
+     */
     private void build_pane(){
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
         this.box.getChildren().add(init_bottomButtons());
     }
-
+    /**
+     * Creates the 'Top Row' of GUI elements in the window.
+     * @return HBox
+     */
     private HBox init_rowOne(){
         HBox box = new HBox(5);
         HBox noteBox = new HBox();
@@ -69,6 +77,10 @@ public class GUI_AnalysisTab {
 
         return box;
     }
+    /**
+     * Creates the 'Second Row' of GUI elements in the window.
+     * @return HBox
+     */
     private HBox init_rowTwo(){
         Label an = new Label("Analysis Method Description");
         Label df = new Label("Distance Function Description");
@@ -95,6 +107,10 @@ public class GUI_AnalysisTab {
 
         return box;
     }
+    /**
+     * Creates the bottom buttons of GUI elements in the window.
+     * @return HBox
+     */
     private HBox init_bottomButtons(){
         HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
@@ -106,6 +122,10 @@ public class GUI_AnalysisTab {
         box.getChildren().add(next);
         return box;
      }
+     /**
+      * Method for generating the selected list view bow.
+      * @return ListView<String>
+      */
     private ListView<String> init_SelectedBox(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -117,6 +137,10 @@ public class GUI_AnalysisTab {
 
         return list;
     }
+    /**
+     * Method for generating the analysis method selection box.
+     * @return ListView<String>
+     */
     private ListView<String> init_AnalysisMethodBox(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -128,6 +152,10 @@ public class GUI_AnalysisTab {
 
         return list;
     }
+    /**
+     * Method for generating the distance function selection box.
+     * @return ListView<String>
+     */
     private ListView<String> init_DistanceFunctionBox(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -139,6 +167,10 @@ public class GUI_AnalysisTab {
 
         return list;
     }
+    /**
+     * Method for generating a VBox containing the buttons for de/selecting items for the Selection Box.
+     * @return VBox
+     */
     private VBox init_rowOneButtons(){
         VBox box = new VBox(5);
         Region region1 = new Region();
@@ -164,6 +196,10 @@ public class GUI_AnalysisTab {
         return box;
         
     }
+    /**
+     * Getter method for getting the built pane.
+     * @return VBox
+     */
      public VBox getPane(){
         return this.box;
     }

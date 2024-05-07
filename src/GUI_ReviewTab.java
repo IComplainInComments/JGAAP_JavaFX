@@ -11,16 +11,43 @@ import javafx.scene.text.FontWeight;
 
 public class GUI_ReviewTab{
     private VBox box;
+    /**
+     * Constructor for the class.
+     */
     public GUI_ReviewTab(){
         this.box = new VBox();
         build_pane();
     }
+    /**
+     * Builds the window row by row.
+     */
     private void build_pane(){
-        this.box.getChildren().add(init_canonicizersTable());
-        this.box.getChildren().add(init_SecondRow());
+        this.box.getChildren().add(init_firstRow());
+        this.box.getChildren().add(init_secondRow());
         this.box.getChildren().add(init_bottomButtons());
     }
-    private HBox init_SecondRow(){
+    /**
+     * Builds the 'Tope Row' of GUI elements.
+     * @return VBox
+     */
+    private VBox init_firstRow() {
+      VBox box = new VBox(5);
+      Label can = new Label("Canonicizer");
+      can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
+      TableView<Object> table = new TableView<Object>();
+      TableColumn<Object, String> column1 = new TableColumn<Object, String>("Title");
+      table.prefHeightProperty().bind(this.box.heightProperty());
+      table.prefWidthProperty().bind(this.box.widthProperty());
+      column1.prefWidthProperty().bind(table.widthProperty());
+      table.getColumns().add(column1);
+      box.getChildren().addAll(can,table);
+      return box;
+   }
+   /**
+    * Builds the 'Second Row' of GUI elements.
+    * @return HBox
+    */
+    private HBox init_secondRow(){
         HBox box = new HBox(5);
         VBox edBox = new VBox();
         VBox ecBox = new VBox();
@@ -39,19 +66,10 @@ public class GUI_ReviewTab{
         box.getChildren().addAll(edBox, ecBox, anBox);
         return box;
      }
-     private VBox init_canonicizersTable() {
-        VBox box = new VBox(5);
-        Label can = new Label("Canonicizer");
-        can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
-        TableView<Object> table = new TableView<Object>();
-        TableColumn<Object, String> column1 = new TableColumn<Object, String>("Title");
-        table.prefHeightProperty().bind(this.box.heightProperty());
-        table.prefWidthProperty().bind(this.box.widthProperty());
-        column1.prefWidthProperty().bind(table.widthProperty());
-        table.getColumns().add(column1);
-        box.getChildren().addAll(can,table);
-        return box;
-     }
+     /**
+      * Builds the 'Common' bottom buttons of the GUI.
+      * @return HBox
+      */
     private HBox init_bottomButtons(){
         HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");
@@ -63,6 +81,10 @@ public class GUI_ReviewTab{
         box.getChildren().add(next);
         return box;
      }
+     /**
+      * Method for generating the Selected Event Driver Table.
+      * @return TableView<Object>
+      */
      private TableView<Object> init_eventDriverTable() {
         TableView<Object> table = new TableView<Object>();
         TableColumn<Object, String> column1 = new TableColumn<Object, String>("Title");
@@ -72,6 +94,10 @@ public class GUI_ReviewTab{
         table.getColumns().add(column1);
         return table;
      }
+      /**
+      * Method for generating the Selected Event Culling Table.
+      * @return TableView<Object>
+      */
      private TableView<Object> init_eventCullingTable() {
         TableView<Object> table = new TableView<Object>();
         TableColumn<Object, String> column1 = new TableColumn<Object, String>("Title");
@@ -81,6 +107,10 @@ public class GUI_ReviewTab{
         table.getColumns().add(column1);
         return table;
      }
+      /**
+      * Method for generating the Selected Analysis Method Table.
+      * @return TableView<Object>
+      */
      private TableView<Object> init_analysisTable() {
         TableView<Object> table = new TableView<Object>();
         TableColumn<Object, String> column1 = new TableColumn<Object, String>("Title");
@@ -90,6 +120,10 @@ public class GUI_ReviewTab{
         table.getColumns().add(column1);
         return table;
      }
+     /**
+      * Getter for getting the built Pane.
+      * @return
+      */
      public VBox getPane(){
         return this.box;
      }

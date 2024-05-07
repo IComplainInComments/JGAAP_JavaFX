@@ -16,18 +16,26 @@ public class GUI_ECTab {
 
     private VBox box;
     private static GUI_NotesWindow noteBox;
+    /**
+     * Constructor for the class.
+     */
     public GUI_ECTab(){
         box = new VBox();
         noteBox = new GUI_NotesWindow();
         build_pane();
     }
-
+    /**
+     * Method for building the Window row by row.
+     */
     private void build_pane(){
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
         this.box.getChildren().add(init_bottomButtons());
     }
-
+    /**
+     * Method for building the 'Top Level' of GUI Elements.
+     * @return HBox
+     */
     private HBox init_rowOne(){
         ListView<String> listLeft = init_ListBoxLeft();
         ListView<String> listRight = init_ListBoxRight();
@@ -62,6 +70,10 @@ public class GUI_ECTab {
 
         return box;
     }
+    /**
+     * Method for building the 'Second level' of GUI elements.
+     * @return
+     */
     private VBox init_rowTwo(){
         VBox box = new VBox(5);
         Label can = new Label("Event Culling Description");
@@ -77,8 +89,13 @@ public class GUI_ECTab {
 
         return box;
 
+    
     }
-    private HBox init_bottomButtons(){
+        /**
+        * Method for building the 'Bottom Buttons' of GUI elements.
+        * @return HBox
+        */
+        private HBox init_bottomButtons(){
         HBox box = new HBox(5);
         Region region1 = new Region();
         Button finish = new Button("Finish & Review");
@@ -91,6 +108,10 @@ public class GUI_ECTab {
 
         return box;
      }
+     /**
+      * Method for building the Event Culling Selection Box.
+      * @return ListView<String>
+      */
     private ListView<String> init_ListBoxLeft(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -102,6 +123,10 @@ public class GUI_ECTab {
 
         return list;
     }
+    /**
+     * Method for showing the Selected Event Culling box.
+     * @return ListView<String>
+     */
     private ListView<String> init_ListBoxRight(){
         ListView<String> list = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList (
@@ -113,6 +138,10 @@ public class GUI_ECTab {
 
         return list;
     }
+    /**
+     * Method for generating the selection box buttons.
+     * @return VBox
+     */
     private VBox init_rowTwoButtons(){
         VBox box = new VBox(5);
         Region region1 = new Region();
@@ -137,6 +166,10 @@ public class GUI_ECTab {
 
         return box;
     }
+    /**
+     * Getter for getting the built Pane.
+     * @return
+     */
      public VBox getPane(){
         return this.box;
     }

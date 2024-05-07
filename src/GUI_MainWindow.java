@@ -15,10 +15,16 @@ import javafx.stage.Stage;
 public class GUI_MainWindow extends Application{
     private static BorderPane pane;
 
+    /**
+     * Used for debugging.
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
-
+    /**
+     * Main Method for setting up the GUI for JavaFX.
+     */
     public void start(Stage mainStage) {
         mainStage.setOnCloseRequest(e -> {
             e.consume();
@@ -29,6 +35,10 @@ public class GUI_MainWindow extends Application{
         mainStage.setScene(init_mainScene());
         mainStage.show();
     }
+    /**
+     * Method for constructing the full GUI for JGAAP.
+     * @return Scene
+     */
     private Scene init_mainScene(){
         TabPane tabPane = new TabPane();
         Scene scene;
@@ -51,7 +61,6 @@ public class GUI_MainWindow extends Application{
 
         pane = new BorderPane();
         
-        //tabPane.setPadding(new Insets(5));
         tabPane.prefHeightProperty().bind(pane.heightProperty());
         tabPane.prefWidthProperty().bind(pane.widthProperty());
         GUI_DocTab docTab = new GUI_DocTab();
@@ -109,6 +118,10 @@ public class GUI_MainWindow extends Application{
 
         return scene;
     }
+    /**
+     * Builds the Menu Bar and its containing items/functions.
+     * @return MenuBar
+     */
      private MenuBar init_MenuBar() {
         Menu file = new Menu("File");
         Menu help = new Menu("Help");

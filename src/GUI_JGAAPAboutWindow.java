@@ -8,6 +8,9 @@ import javafx.stage.Stage;
 
 public class GUI_JGAAPAboutWindow {
      private static Stage stage;
+     /**
+      * Constructor for the class.
+      */
 
     public GUI_JGAAPAboutWindow(){
         stage = new Stage();
@@ -19,6 +22,9 @@ public class GUI_JGAAPAboutWindow {
             e.consume();
         });
     }
+    /**
+     * Builds the Window.
+     */
     private void build_stage(){
         String jgaap = "JGAAP 2.0";
         Scene scene;
@@ -40,6 +46,9 @@ public class GUI_JGAAPAboutWindow {
         box.getChildren().addAll(aboutLabel);
         stage.setScene(scene);
     }
+    /**
+     * Controls showing or closing (Hiding) the window.
+     */
     public void show(){
         stage.show();
     }

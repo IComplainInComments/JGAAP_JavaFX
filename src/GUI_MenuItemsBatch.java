@@ -1,3 +1,6 @@
+/**
+ * Menu Item Batch Class File
+ */
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,12 +10,19 @@ public class GUI_MenuItemsBatch{
 
     private List<MenuItem> items;
     private List<MenuItem> problems;
+
+    /**
+     * Constructor of the Class
+     */
     public GUI_MenuItemsBatch(){
         this.items = new ArrayList<MenuItem>();
         this.problems = new ArrayList<MenuItem>();
         genItems();
         genProblems();
     }
+    /**
+     * Generates the Menu Items for the "File" Menu
+     */
     private void genItems(){
         MenuItem save = new MenuItem("Save Documents");
         MenuItem load = new MenuItem("Load Documents");
@@ -22,6 +32,9 @@ public class GUI_MenuItemsBatch{
         this.items.add(save);
         this.items.add(load);
     }
+    /**
+     * Generates the Menu Items for the "AAC Problems" Menu
+     */
     private void genProblems(){
         MenuItem pa = new MenuItem("Problem A");
         MenuItem pb = new MenuItem("Problem B");
@@ -51,9 +64,21 @@ public class GUI_MenuItemsBatch{
         this.problems.add(pm);
 
     }
+    /**
+     * Getter Function for the "File" Menu Items
+     * @return List<MenuItem>
+     * @see List
+     * @See MenuItem
+     */
     public List<MenuItem> getItems(){
         return this.items;
     }
+    /**
+     * Getter Function for the "AAAC Problem" Menu Items
+     * @return List<MenuItem>
+     * @see List
+     * @See MenuItem
+     */
     public List<MenuItem> getProblems(){
         return this.problems;
     }
