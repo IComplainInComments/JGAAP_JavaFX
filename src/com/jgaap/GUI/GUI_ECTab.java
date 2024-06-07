@@ -1,4 +1,4 @@
-package GUI;
+package com.jgaap.GUI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
