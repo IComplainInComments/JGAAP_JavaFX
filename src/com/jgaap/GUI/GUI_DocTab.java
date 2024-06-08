@@ -2,15 +2,11 @@ package com.jgaap.GUI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-
 import org.apache.log4j.Logger;
 
 import com.jgaap.backend.API;
 import com.jgaap.backend.Languages;
 import com.jgaap.generics.Language;
-import com.jgaap.ui.JGAAP_UI_MainForm;
 import com.jgaap.util.Document;
 
 import javafx.collections.FXCollections;
