@@ -1,5 +1,6 @@
 package com.jgaap.GUI;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,10 +11,12 @@ import com.jgaap.util.Document;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeTableView.TreeTableViewSelectionModel;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert;
@@ -44,6 +47,7 @@ public class GUI_DocTab {
    private static API JGAAP_API;
    private static GUI_DataStorage data;
    private TableView<Document> table;
+   private TreeView<String> tree;
 
    /**
     * Constructor for the class.
@@ -118,7 +122,7 @@ public class GUI_DocTab {
       VBox box = new VBox(5);
       Label knAuth = new Label("Known Authors");
       knAuth.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
-      TreeView<String> tree = init_TreeView();
+      this.tree = init_TreeView();
       tree.prefHeightProperty().bind(this.box.heightProperty());
       tree.prefWidthProperty().bind(this.box.widthProperty());
       box.getChildren().add(knAuth);
@@ -185,6 +189,21 @@ public class GUI_DocTab {
       Button addAuth = new Button("Add Author");
       Button editAuth = new Button("Edit Author");
       Button remAuth = new Button("Remove Author");
+      addAuth.setOnAction(e -> {
+         GUI_AddAuthor pop = new GUI_AddAuthor(data);
+         Stage stage = pop.getStage();
+         stage.show();
+      });
+      editAuth.setOnAction(e -> {
+
+      });
+      remAuth.setOnAction(e -> {
+         MultipleSelectionModel<TreeItem<String>> selected = this.tree.getSelectionModel();
+         Iterator<TreeItem<String>> iter = selected.getSelectedItems().iterator();
+         while(iter.hasNext()){
+            data.removeData("authors", iter.next().getValue());
+         }
+      });
       box.getChildren().add(addAuth);
       box.getChildren().add(editAuth);
       box.getChildren().add(remAuth);

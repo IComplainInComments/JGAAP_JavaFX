@@ -131,5 +131,8 @@ public class GUI_AddAuthor {
 
         return box;
     }
+    public Stage getStage(){
+        return this.stage;
+    }
 
 }
