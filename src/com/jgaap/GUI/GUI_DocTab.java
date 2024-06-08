@@ -1,12 +1,31 @@
 package com.jgaap.GUI;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+
+import org.apache.log4j.Logger;
+
+import com.jgaap.backend.API;
+import com.jgaap.backend.Languages;
+import com.jgaap.generics.Language;
+import com.jgaap.ui.JGAAP_UI_MainForm;
+import com.jgaap.util.Document;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -14,6 +33,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
 /**
  * Document Tab Class.
  * This Class creates the scene for the Document Tab and it's GUI elements.
@@ -21,10 +44,20 @@ import javafx.scene.text.FontWeight;
 public class GUI_DocTab {
     private VBox box;
     private static GUI_NotesWindow noteBox;
+    static Logger logger;
+      private static Stage mainStageRef;
+    private static API JGAAP_API;
+    private ArrayList<TreeItem<String>> knownAuthors;
+    private ArrayList<Document> unknownAuthors;
+    private TableView<Document> table;
     /**
      * Constructor for the class.
      */
-    public GUI_DocTab(){
+    public GUI_DocTab(Stage stage){
+      this.knownAuthors = new ArrayList<TreeItem<String>>();
+      this.unknownAuthors = new ArrayList<Document>();
+      logger = Logger.getLogger(GUI_DocTab.class);
+      mainStageRef = stage;
         this.box = new VBox();
         noteBox = new GUI_NotesWindow();
         build_tab();
@@ -69,7 +102,7 @@ public class GUI_DocTab {
       */
      private VBox init_UnknownAuth(){
         VBox box = new VBox(5);
-        TableView<Object> table = init_authorTable();
+        init_authorTable();
         Label unAuth =  new Label("Uknown Authors");
 
         unAuth.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
@@ -77,7 +110,7 @@ public class GUI_DocTab {
         table.prefWidthProperty().bind(this.box.widthProperty());
 
         box.getChildren().add(unAuth);
-        box.getChildren().add(table);
+        box.getChildren().add(this.table);
 
         return box;
      }
@@ -104,6 +137,32 @@ public class GUI_DocTab {
         HBox box = new HBox(5);
         Button addDoc = new Button("Add Document");
         Button remDoc = new Button("Remove Document");
+        addDoc.setOnAction(e -> {
+         String filepath = "";
+         FileChooser FileChoser = new FileChooser();
+         List<File> choice = FileChoser.showOpenMultipleDialog(mainStageRef);
+            for (File file : choice) {
+               try {
+                  JGAAP_API.addDocument(file.getCanonicalPath(), "", "");
+                  filepath = file.getCanonicalPath();
+               } catch (Exception ex) {
+                  logger.error("Error adding document(s)", ex);
+                if(filepath != null){
+                    ex.printStackTrace();
+                    Alert error = new Alert(AlertType.ERROR, ex.getMessage());
+                    error.showAndWait()
+                        .filter(response -> response == ButtonType.OK)
+                        .ifPresent(response -> error.close());
+                }
+               }
+               //UpdateUnknownDocumentsTable();
+            }
+        });
+        remDoc.setOnAction(e -> {
+         TableViewSelectionModel<Document> selected = this.table.getSelectionModel();
+         Document[] docs = new Document[selected.getSelectedItems().size()];
+         this.table.getItems().removeAll(docs);
+        });
         box.getChildren().add(addDoc);
         box.getChildren().add(remDoc);
         return box;
@@ -142,15 +201,17 @@ public class GUI_DocTab {
       * Method for building the Author Selection Table.
       * @return TableView<Object>
       */
-     private TableView<Object> init_authorTable() {
-        TableView<Object> table = new TableView<Object>();
-        TableColumn<Object, String> column1 = new TableColumn<Object, String>("Title");
-        TableColumn<Object, String> column2 = new TableColumn<Object, String>("File Path");
+     private void init_authorTable() {
+       this.table = new TableView<Document>();
+        TableColumn<Document, String> column1 = new TableColumn<Document, String> ("Title");
+        TableColumn<Document, String> column2 = new TableColumn<Document, String>("File Path");
+         column1.setCellValueFactory(new PropertyValueFactory<Document, String>("author"));
+        column2.setCellValueFactory(new PropertyValueFactory<Document, String>("filepath"));
         column1.prefWidthProperty().bind(table.widthProperty().divide(2));
         column2.prefWidthProperty().bind(table.widthProperty().divide(2));
-        table.getColumns().add(column1);
-        table.getColumns().add(column2);
-        return table;
+        this.table.getColumns().add(column1);
+        this.table.getColumns().add(column2);
+        this.table.setItems(FXCollections.observableArrayList(this.unknownAuthors));
      }
      /**
       * Method for building the Known Authors Table.
@@ -158,6 +219,7 @@ public class GUI_DocTab {
       */
      private TreeView<String> init_TreeView(){
         TreeItem<String> rootItem = new TreeItem<String> ("Authors");
+        rootItem.getChildren().addAll(this.knownAuthors);
         TreeView<String> tree = new TreeView<String>(rootItem);
         return tree;
      }
@@ -166,15 +228,18 @@ public class GUI_DocTab {
       * @return ComboBox<String>
       */
      private ComboBox<String> init_langSelectBox(){
-        ComboBox<String> comboBox;
-        ObservableList<String> options = 
+         ArrayList<String> LanguagesMasterList = new ArrayList<String>();
+         for (Language language : Languages.getLanguages()) {
+			   if (language.showInGUI())
+				   LanguagesMasterList.add(language.displayName());
+		   }
+         ComboBox<String> comboBox;
+         ObservableList<String> options = 
             FXCollections.observableArrayList(
-                "Option 1",
-                "Option 2",
-                "Option 3"
+               LanguagesMasterList
             );
-        comboBox = new ComboBox<String>(options);
-        return comboBox;
+         comboBox = new ComboBox<String>(options);
+         return comboBox;
      }
      /**
       * Getter for getting the built Pane.
@@ -182,5 +247,12 @@ public class GUI_DocTab {
       */
     public VBox getPane(){
         return this.box;
+    }
+    public void updateKnownAuthors(String author){
+      TreeItem<String> item = new TreeItem<String>(author);
+      this.knownAuthors.add(item);
+    }
+    public void updateUnknownAuthors(Document author){
+      this.unknownAuthors.add(author);
     }
 }

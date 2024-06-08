@@ -1,4 +1,6 @@
 package com.jgaap.GUI;
+import com.jgaap.backend.API;
+
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -17,6 +19,7 @@ import javafx.stage.Stage;
  */
 public class GUI_MainWindow extends Application{
     private static BorderPane pane;
+    private API JGAAP_API = API.getInstance();
 
     /**
      * Used for debugging.
@@ -35,17 +38,17 @@ public class GUI_MainWindow extends Application{
             System.exit(0);
         });
         mainStage.setTitle("JGAAP 2.0");
-        mainStage.setScene(init_mainScene());
+        mainStage.setScene(init_mainScene(mainStage));
         mainStage.show();
     }
     /**
      * Method for constructing the full GUI for JGAAP.
      * @return Scene
      */
-    private Scene init_mainScene(){
+    private Scene init_mainScene(Stage stage){
         TabPane tabPane = new TabPane();
         Scene scene;
-        MenuBar bar = init_MenuBar();
+        MenuBar bar = init_MenuBar(stage);
         VBox docPane, canPane, edPane, ecPane, anPane,reviewPane;
 
         Tab doc = new Tab("Documents");
@@ -66,7 +69,7 @@ public class GUI_MainWindow extends Application{
         
         tabPane.prefHeightProperty().bind(pane.heightProperty());
         tabPane.prefWidthProperty().bind(pane.widthProperty());
-        GUI_DocTab docTab = new GUI_DocTab();
+        GUI_DocTab docTab = new GUI_DocTab(stage);
         GUI_CanTab canTab = new GUI_CanTab();
         GUI_EDTab edTab = new GUI_EDTab();
         GUI_ECTab ecTab = new GUI_ECTab();
@@ -125,14 +128,14 @@ public class GUI_MainWindow extends Application{
      * Builds the Menu Bar and its containing items/functions.
      * @return MenuBar
      */
-     private MenuBar init_MenuBar() {
+     private MenuBar init_MenuBar(Stage stage) {
         Menu file = new Menu("File");
         Menu help = new Menu("Help");
         Menu batch = new Menu("Batch Documents");
         Menu aaac = new Menu("AAAC Problems");
         MenuItem about = new MenuItem("About");
         MenuBar bar = new MenuBar();
-        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch();
+        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage, this.JGAAP_API);
         GUI_JGAAPAboutWindow winAbout = new GUI_JGAAPAboutWindow();
 
         about.setOnAction(e -> {
