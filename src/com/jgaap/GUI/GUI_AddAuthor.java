@@ -36,6 +36,7 @@ public class GUI_AddAuthor {
         this.doc = new ArrayList<Document>();
         this.remDocs = new ArrayList<Document>();
         this.stage = new Stage();
+        JGAAP_API = API.getInstance();
         data = obj;
         stage.setTitle("Add Author");
         stage.setScene(init_scene());

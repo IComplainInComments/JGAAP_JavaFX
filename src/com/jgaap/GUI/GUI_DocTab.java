@@ -54,6 +54,7 @@ public class GUI_DocTab {
    public GUI_DocTab(Stage stage, GUI_DataStorage obj) {
       data = obj;
       logger = Logger.getLogger(GUI_DocTab.class);
+      JGAAP_API = API.getInstance();
       mainStageRef = stage;
       this.box = new VBox();
       noteBox = new GUI_NotesWindow();

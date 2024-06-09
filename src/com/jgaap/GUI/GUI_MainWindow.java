@@ -134,7 +134,7 @@ public class GUI_MainWindow extends Application{
         Menu help = new Menu("Help");
         Menu batch = new Menu("Batch Documents");
         Menu aaac = new Menu("AAAC Problems");
-        Menu quit = new Menu("Quit");
+        MenuItem quit = new MenuItem("Quit");
         MenuItem about = new MenuItem("About");
         MenuBar bar = new MenuBar();
         GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage, this.JGAAP_API);
