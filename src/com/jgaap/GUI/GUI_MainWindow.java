@@ -134,6 +134,7 @@ public class GUI_MainWindow extends Application{
         Menu help = new Menu("Help");
         Menu batch = new Menu("Batch Documents");
         Menu aaac = new Menu("AAAC Problems");
+        Menu quit = new Menu("Quit");
         MenuItem about = new MenuItem("About");
         MenuBar bar = new MenuBar();
         GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage, this.JGAAP_API);
@@ -143,10 +144,13 @@ public class GUI_MainWindow extends Application{
                 winAbout.show();
                 e.consume();
         });
+        quit.setOnAction(e -> {
+            System.exit(0);
+        });
         
         aaac.getItems().addAll(items.getProblems());
         batch.getItems().addAll(items.getItems());
-        file.getItems().addAll(batch,aaac);
+        file.getItems().addAll(batch,aaac,quit);
         help.getItems().add(about);
         bar.getMenus().add(file);
         bar.getMenus().add(help);

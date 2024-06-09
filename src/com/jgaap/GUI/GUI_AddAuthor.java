@@ -74,7 +74,7 @@ public class GUI_AddAuthor {
         this.table.getColumns().add(column1);
         this.table.getColumns().add(column2);
         this.table.setItems(FXCollections.observableArrayList(this.doc));
-
+        //===============================================================================
         add.setOnAction(e -> {
             FileChooser FileChoser = new FileChooser();
             List<File> choice = FileChoser.showOpenMultipleDialog(this.stage);
@@ -90,15 +90,19 @@ public class GUI_AddAuthor {
                     ex.printStackTrace();
                 }
             }
+            this.table.refresh();
         });
-
+        //===============================================================================
+        //===============================================================================
         rem.setOnAction(e -> {
             TableViewSelectionModel<Document> selected = this.table.getSelectionModel();
             List<Document> docs = new ArrayList<Document>();
             docs.addAll(selected.getSelectedItems());
             this.remDocs.addAll(docs);
             this.table.getItems().removeAll(docs);
+            this.table.refresh();
         });
+        //===============================================================================
         butBox.getChildren().addAll(add, rem);
         box.getChildren().addAll(this.table, butBox);
         return box;
@@ -109,27 +113,37 @@ public class GUI_AddAuthor {
         HBox box = new HBox();
         Button ok = new Button("OK");
         Button can = new Button("Cancel");
+        //===============================================================================
         ok.setOnAction(e -> {
             ObservableList<Document> temp = this.table.getItems();
             for (int i = 0; i < temp.size(); i++) {
                 JGAAP_API.addDocument(temp.get(i));
+                data.addData("knownDocuments", temp.get(i));
             }
             data.addData("author", this.auth.getText().trim());
-            data.addData("knownDocuments", temp);
             for (int i = 0; i < temp.size(); i++) {
-                JGAAP_API.addDocument(this.remDocs.get(i));
+                JGAAP_API.removeDocument(temp.get(i));
                 data.removeData("knownDocuments", this.remDocs.get(i));
             }
+            stage.close();
+            this.table.refresh();
         });
+        //===============================================================================
+        //===============================================================================
         can.setOnAction(e -> {
             this.doc.clear();
             this.remDocs.clear();
             this.auth.setText("");
+            stage.close();
+            this.table.refresh();
         });
-
+        //===============================================================================
         box.getChildren().addAll(ok, can);
 
         return box;
+    }
+    public String getTextFieldString(){
+        return this.auth.getText();
     }
     public Stage getStage(){
         return this.stage;
