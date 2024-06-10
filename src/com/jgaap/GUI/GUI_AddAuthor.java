@@ -8,7 +8,7 @@ import com.jgaap.backend.API;
 import com.jgaap.util.Document;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +18,8 @@ import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -40,6 +42,7 @@ public class GUI_AddAuthor {
     }
 
     public GUI_AddAuthor(String author) {
+        this.docs = new ArrayList<Document>();
         this.stage = new Stage();
         JAPI = API.getInstance();
         stage.setTitle("Add Author");
@@ -50,21 +53,23 @@ public class GUI_AddAuthor {
     private Scene init_scene() {
         VBox box = new VBox();
         box.getChildren().addAll(init_authorBox(), init_authorTable(), init_bottomButtons());
-        Scene scene = new Scene(box);
+        box.setPadding(new Insets(5));
+        Scene scene = new Scene(box,500,300);
         return scene;
 
     }
 
     private Scene init_scene(String author) {
-        VBox box = new VBox();
+        VBox box = new VBox(5);
         box.getChildren().addAll(init_authorBox(author), init_authorTable(author), init_bottomButtons());
-        Scene scene = new Scene(box);
+        box.setPadding(new Insets(5));
+        Scene scene = new Scene(box,500,300);
         return scene;
 
     }
 
     private HBox init_authorBox() {
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Label auth = new Label("Author");
         this.auth = new TextField();
         this.auth.setOnAction(e -> {
@@ -75,8 +80,8 @@ public class GUI_AddAuthor {
     }
 
     private VBox init_authorTable() {
-        VBox box = new VBox();
-        HBox butBox = new HBox();
+        VBox box = new VBox(5);
+        HBox butBox = new HBox(5);
         Button add = new Button("Add Document");
         Button rem = new Button("Remove Document");
         this.table = new TableView<Document>();
@@ -88,6 +93,8 @@ public class GUI_AddAuthor {
         column2.prefWidthProperty().bind(table.widthProperty().divide(2));
         this.table.getColumns().add(column1);
         this.table.getColumns().add(column2);
+        this.table.prefHeightProperty().bind(this.stage.heightProperty());
+        this.table.prefWidthProperty().bind(this.stage.widthProperty());
         this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(this.auth.getText().trim())));
         // ===============================================================================
         add.setOnAction(e -> {
@@ -128,7 +135,7 @@ public class GUI_AddAuthor {
     }
 
     private HBox init_authorBox(String author) {
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Label auth = new Label("Author");
         this.auth = new TextField();
         this.auth.setText(author);
@@ -137,8 +144,8 @@ public class GUI_AddAuthor {
     }
 
     private VBox init_authorTable(String author) {
-        VBox box = new VBox();
-        HBox butBox = new HBox();
+        VBox box = new VBox(5);
+        HBox butBox = new HBox(5);
         Button add = new Button("Add Document");
         Button rem = new Button("Remove Document");
         this.table = new TableView<Document>();
@@ -150,6 +157,8 @@ public class GUI_AddAuthor {
         column2.prefWidthProperty().bind(table.widthProperty().divide(2));
         this.table.getColumns().add(column1);
         this.table.getColumns().add(column2);
+        this.table.prefHeightProperty().bind(this.stage.heightProperty());
+        this.table.prefWidthProperty().bind(this.stage.widthProperty());
         this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(author)));
         this.table.refresh();
         // ===============================================================================
@@ -192,9 +201,11 @@ public class GUI_AddAuthor {
     }
 
     private HBox init_bottomButtons() {
-        HBox box = new HBox();
+        HBox box = new HBox(5);
         Button ok = new Button("OK");
         Button can = new Button("Cancel");
+        Region region1 = new Region();
+        HBox.setHgrow(region1, Priority.ALWAYS);
         // ===============================================================================
         ok.setOnAction(e -> {
             if (!this.docs.isEmpty()) {
@@ -211,7 +222,7 @@ public class GUI_AddAuthor {
             stage.close();
         });
         // ===============================================================================
-        box.getChildren().addAll(ok, can);
+        box.getChildren().addAll(region1,ok, can);
 
         return box;
     }
