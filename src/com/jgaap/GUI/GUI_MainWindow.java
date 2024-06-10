@@ -46,7 +46,6 @@ public class GUI_MainWindow extends Application{
      * @return Scene
      */
     private Scene init_mainScene(Stage stage){
-        GUI_DataStorage data = new GUI_DataStorage();
         TabPane tabPane = new TabPane();
         Scene scene;
         MenuBar bar = init_MenuBar(stage);
@@ -70,7 +69,7 @@ public class GUI_MainWindow extends Application{
         
         tabPane.prefHeightProperty().bind(pane.heightProperty());
         tabPane.prefWidthProperty().bind(pane.widthProperty());
-        GUI_DocTab docTab = new GUI_DocTab(stage, data);
+        GUI_DocTab docTab = new GUI_DocTab(stage);
         GUI_CanTab canTab = new GUI_CanTab();
         GUI_EDTab edTab = new GUI_EDTab();
         GUI_ECTab ecTab = new GUI_ECTab();
