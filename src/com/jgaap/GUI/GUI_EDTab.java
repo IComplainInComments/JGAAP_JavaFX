@@ -26,7 +26,7 @@ public class GUI_EDTab {
 
     private ArrayList<String> edName;
     private ArrayList<String> edSelect;
-    private ArrayList<EventDriver> canMethSel;
+    private ArrayList<EventDriver> edSel;
     private ArrayList<EventDriver> EventDriverMasterList;
     private ObservableList<String> selItems;
     private ObservableList<String> items;
@@ -137,7 +137,7 @@ public class GUI_EDTab {
     private ListView<String> init_ListBoxLeft(){
         this.edName = new ArrayList<String>();
         this.edSelect = new ArrayList<String>();
-        this.canMethSel = new ArrayList<EventDriver>();
+        this.edSel = new ArrayList<EventDriver>();
         this.edList = new ListView<String>();
         this.edList = new ListView<String>();
         for (EventDriver i : this.EventDriverMasterList) {
@@ -175,7 +175,7 @@ public class GUI_EDTab {
         this.selList.prefWidthProperty().bind(this.box.widthProperty());
         this.selList.setOnMouseClicked(e -> {
             String sel = this.selList.getSelectionModel().getSelectedItem();
-            Iterator<EventDriver> iter = this.canMethSel.iterator();
+            Iterator<EventDriver> iter = this.edSel.iterator();
             while(iter.hasNext()){
                 EventDriver temp = iter.next();
                 if(sel.equalsIgnoreCase(temp.displayName())){
@@ -205,12 +205,12 @@ public class GUI_EDTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            canonDeselected(this.selList.getSelectionModel().getSelectedItem().trim());
+            edDeselected(this.selList.getSelectionModel().getSelectedItem().trim());
             this.selList.refresh();
             this.edList.refresh();
         });
         right.setOnAction(e -> {
-            canonSelected(this.edList.getSelectionModel().getSelectedItem().trim());
+            edSelected(this.edList.getSelectionModel().getSelectedItem().trim());
             this.selList.refresh();
             this.edList.refresh();
         });
@@ -218,7 +218,7 @@ public class GUI_EDTab {
             this.EventDriverMasterList.clear();
             this.edName.clear();
             this.edSelect.clear();
-            this.canMethSel.clear();
+            this.edSel.clear();
             init_EventDrivers();
             for (EventDriver i : this.EventDriverMasterList) {
                 this.edName.add(i.displayName());
@@ -247,7 +247,7 @@ public class GUI_EDTab {
 
         return box;
     }
-        private void canonSelected(String method) {
+        private void edSelected(String method) {
         this.edSelect.add(method);
         this.edName.remove(method);
         Iterator<EventDriver> master = this.EventDriverMasterList.iterator();
@@ -255,12 +255,12 @@ public class GUI_EDTab {
             EventDriver temp = master.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
                 try {
-                    this.canMethSel.add(JAPI.addEventDriver(temp.displayName()));
+                    this.edSel.add(JAPI.addEventDriver(temp.displayName()));
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                this.canMethSel.add(temp);
+                this.edSel.add(temp);
                 master.remove();
             }
         }
@@ -276,7 +276,7 @@ public class GUI_EDTab {
         while(master.hasNext()) {
             EventDriver temp = master.next();
                 try {
-                    this.canMethSel.add(JAPI.addEventDriver(temp.displayName()));
+                    this.edSel.add(JAPI.addEventDriver(temp.displayName()));
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -288,10 +288,10 @@ public class GUI_EDTab {
         this.edList.setItems(this.items);
         this.selList.setItems(this.selItems);
     }
-    private void canonDeselected(String method) {
+    private void edDeselected(String method) {
         this.edSelect.remove(method);
         this.edName.add(method);
-        Iterator<EventDriver> canMeth = this.canMethSel.iterator();
+        Iterator<EventDriver> canMeth = this.edSel.iterator();
         while(canMeth.hasNext()) {
             EventDriver temp = canMeth.next();
             if (temp.displayName().equalsIgnoreCase(method)) {

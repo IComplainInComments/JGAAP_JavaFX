@@ -8,7 +8,6 @@ import com.jgaap.backend.API;
 import com.jgaap.backend.Canonicizers;
 import com.jgaap.generics.Canonicizer;
 import com.jgaap.util.Document;
-import com.jgaap.util.Document.Type;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

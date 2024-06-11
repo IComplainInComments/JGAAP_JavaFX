@@ -26,7 +26,7 @@ public class GUI_ECTab {
     
     private ArrayList<String> ecName;
     private ArrayList<String> ecSelect;
-    private ArrayList<EventCuller> canMethSel;
+    private ArrayList<EventCuller> ecSel;
     private ArrayList<EventCuller> EventCullersMasterList;
     private ObservableList<String> selItems;
     private ObservableList<String> items;
@@ -137,7 +137,7 @@ public class GUI_ECTab {
     private ListView<String> init_ListBoxLeft(){
         this.ecName = new ArrayList<String>();
         this.ecSelect = new ArrayList<String>();
-        this.canMethSel = new ArrayList<EventCuller>();
+        this.ecSel = new ArrayList<EventCuller>();
         this.listLeft = new ListView<String>();
         this.listRight = new ListView<String>();
         for (EventCuller i : this.EventCullersMasterList) {
@@ -169,7 +169,7 @@ public class GUI_ECTab {
         this.selItems = FXCollections.observableArrayList (this.ecSelect);
         this.listRight.setOnMouseClicked(e -> {
             String sel = this.listRight.getSelectionModel().getSelectedItem();
-            Iterator<EventCuller> iter = this.canMethSel.iterator();
+            Iterator<EventCuller> iter = this.ecSel.iterator();
             while(iter.hasNext()){
                 EventCuller temp = iter.next();
                 if(sel.equalsIgnoreCase(temp.displayName())){
@@ -203,12 +203,12 @@ public class GUI_ECTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            canonDeselected(this.listRight.getSelectionModel().getSelectedItem().trim());
+            ecDeselected(this.listRight.getSelectionModel().getSelectedItem().trim());
             this.listLeft.refresh();
             this.listRight.refresh();
         });
         right.setOnAction(e -> {
-            canonSelected(this.listLeft.getSelectionModel().getSelectedItem().trim());
+            ecSelected(this.listLeft.getSelectionModel().getSelectedItem().trim());
             this.listLeft.refresh();
             this.listRight.refresh();
         });
@@ -216,7 +216,7 @@ public class GUI_ECTab {
             this.EventCullersMasterList.clear();
             this.ecName.clear();
             this.ecSelect.clear();
-            this.canMethSel.clear();
+            this.ecSel.clear();
             init_eventCullers();
             for (EventCuller i : this.EventCullersMasterList) {
                 this.ecName.add(i.displayName());
@@ -245,7 +245,7 @@ public class GUI_ECTab {
 
         return box;
     }
-    private void canonSelected(String method) {
+    private void ecSelected(String method) {
         this.ecSelect.add(method);
         this.ecName.remove(method);
         Iterator<EventCuller> master = this.EventCullersMasterList.iterator();
@@ -253,12 +253,12 @@ public class GUI_ECTab {
             EventCuller temp = master.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
                 try {
-                    this.canMethSel.add(JAPI.addEventCuller(temp.displayName()));
+                    this.ecSel.add(JAPI.addEventCuller(temp.displayName()));
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                this.canMethSel.add(temp);
+                this.ecSel.add(temp);
                 master.remove();
             }
         }
@@ -274,7 +274,7 @@ public class GUI_ECTab {
         while(master.hasNext()) {
             EventCuller temp = master.next();
                 try {
-                    this.canMethSel.add(JAPI.addEventCuller(temp.displayName()));
+                    this.ecSel.add(JAPI.addEventCuller(temp.displayName()));
                 } catch (Exception e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -286,10 +286,10 @@ public class GUI_ECTab {
         this.listLeft.setItems(this.items);
         this.listRight.setItems(this.selItems);
     }
-    private void canonDeselected(String method) {
+    private void ecDeselected(String method) {
         this.ecSelect.remove(method);
         this.ecName.add(method);
-        Iterator<EventCuller> canMeth = this.canMethSel.iterator();
+        Iterator<EventCuller> canMeth = this.ecSel.iterator();
         while(canMeth.hasNext()) {
             EventCuller temp = canMeth.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
