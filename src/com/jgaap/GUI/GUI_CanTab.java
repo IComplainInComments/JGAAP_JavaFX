@@ -42,6 +42,7 @@ public class GUI_CanTab {
     private ListView<String> canList;
     private ListView<String> selList;
     private List<Object> docTypesList;
+    private TextArea area;
     private static API JAPI;
     private static GUI_NotesWindow noteBox;
 
@@ -103,15 +104,16 @@ public class GUI_CanTab {
     private VBox init_rowTwo() {
         VBox box = new VBox(5);
         Label can = new Label("Canonicizer Description");
-        TextArea area = new TextArea();
+        this.area = new TextArea();
 
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
 
-        area.setText("Enter your description here");
-        area.prefHeightProperty().bind(this.box.heightProperty());
-        area.prefWidthProperty().bind(this.box.widthProperty());
+        this.area.setText("Enter your description here");
+        this.area.setWrapText(true);
+        this.area.prefHeightProperty().bind(this.box.heightProperty());
+        this.area.prefWidthProperty().bind(this.box.widthProperty());
         box.getChildren().add(can);
-        box.getChildren().add(area);
+        box.getChildren().add(this.area);
 
         return box;
 
@@ -128,6 +130,12 @@ public class GUI_CanTab {
         Button next = new Button("Next");
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
+        finish.setOnAction(e -> {
+
+        });
+        next.setOnAction(e -> {
+            
+        });
         box.getChildren().add(region1);
         box.getChildren().add(finish);
         box.getChildren().add(next);
@@ -153,6 +161,16 @@ public class GUI_CanTab {
         this.canList.setItems(this.items);
         this.canList.prefHeightProperty().bind(this.box.heightProperty());
         this.canList.prefWidthProperty().bind(this.box.widthProperty());
+        this.canList.setOnMouseClicked(e -> {
+            String sel = this.canList.getSelectionModel().getSelectedItem();
+            Iterator<Canonicizer> iter = this.CanonicizerMasterList.iterator();
+            while(iter.hasNext()){
+                Canonicizer temp = iter.next();
+                if(sel.equalsIgnoreCase(temp.displayName())){
+                    this.area.setText(temp.longDescription());
+                }
+            }
+        });
 
         return this.canList;
     }
@@ -169,6 +187,16 @@ public class GUI_CanTab {
         this.selList.setItems(this.selItems);
         this.selList.prefHeightProperty().bind(this.box.heightProperty());
         this.selList.prefWidthProperty().bind(this.box.widthProperty());
+        this.selList.setOnMouseClicked(e -> {
+            String sel = this.selList.getSelectionModel().getSelectedItem();
+            Iterator<Canonicizer> iter = this.canMethSel.iterator();
+            while(iter.hasNext()){
+                Canonicizer temp = iter.next();
+                if(sel.equalsIgnoreCase(temp.displayName())){
+                    this.area.setText(temp.longDescription());
+                }
+            }
+        });
 
         return this.selList;
     }
@@ -190,10 +218,14 @@ public class GUI_CanTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            canonDeselected(this.selList.getSelectionModel().getSelectedItem());
+            canonDeselected(this.selList.getSelectionModel().getSelectedItem().trim());
+            this.selList.refresh();
+            this.canList.refresh();
         });
         right.setOnAction(e -> {
-            canonSelected(this.canList.getSelectionModel().getSelectedItem());
+            canonSelected(this.canList.getSelectionModel().getSelectedItem().trim());
+            this.selList.refresh();
+            this.canList.refresh();
         
         });
         clear.setOnAction(e -> {
@@ -202,6 +234,15 @@ public class GUI_CanTab {
             this.canonSelect.clear();
             this.canMethSel.clear();
             init_canonicizers();
+            for (Canonicizer i : this.CanonicizerMasterList) {
+                this.canonName.add(i.displayName());
+            }
+            this.items = FXCollections.observableArrayList(this.canonName);
+            this.selItems = FXCollections.observableArrayList(this.canonSelect);
+            this.canList.setItems(this.items);
+            this.selList.setItems(this.selItems);
+            this.selList.refresh();
+            this.canList.refresh();
         });
 
         box.getChildren().addAll(region1, init_rowTwoSelectionDropDown(), left, right, clear, region2);
@@ -247,12 +288,19 @@ public class GUI_CanTab {
         while(master.hasNext()) {
             Canonicizer temp = master.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
-                this.canMethSel.add(temp);
+                try {
+                    this.canMethSel.add(JAPI.addCanonicizer(temp.displayName()));
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 master.remove();
             }
         }
         this.items = FXCollections.observableArrayList(this.canonName);
         this.selItems = FXCollections.observableArrayList(this.canonSelect);
+        this.canList.setItems(this.items);
+        this.selList.setItems(this.selItems);
     }
 
     private void canonDeselected(String method) {
@@ -262,12 +310,15 @@ public class GUI_CanTab {
         while(canMeth.hasNext()) {
             Canonicizer temp = canMeth.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
+                JAPI.removeCanonicizer(temp);
                 canMeth.remove();
                 this.CanonicizerMasterList.add(temp);
             }
         }
         this.items = FXCollections.observableArrayList(this.canonName);
         this.selItems = FXCollections.observableArrayList(this.canonSelect);
+        this.canList.setItems(this.items);
+        this.selList.setItems(this.selItems);
     }
     private void UpdateCanonicizerDocTypeComboBox() {
         this.CanonicizerComboBoxModel.clear();
