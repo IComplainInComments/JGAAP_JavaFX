@@ -157,7 +157,6 @@ public class GUI_EDTab {
                     this.area.setText(temp.longDescription());
                 }
             }
-
         });
 
         return this.edList;
