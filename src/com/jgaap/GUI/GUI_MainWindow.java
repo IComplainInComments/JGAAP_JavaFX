@@ -57,6 +57,13 @@ public class GUI_MainWindow extends Application{
         Tab evecul = new Tab("Event Culling");
         Tab anMeth = new Tab("Analysis Methods");
         Tab review = new Tab("Review & Process");
+        
+        doc.setId("Documents");
+        canon.setId("Canonicizers");
+        eve.setId("Event Driver");
+        evecul.setId("Event Culling");
+        anMeth.setId("Analysis Methods");
+        review.setId("Review & Process");
 
         doc.setClosable(false);
         canon.setClosable(false);
@@ -114,6 +121,12 @@ public class GUI_MainWindow extends Application{
         tabPane.getTabs().add(evecul);
         tabPane.getTabs().add(anMeth);
         tabPane.getTabs().add(review);
+
+        tabPane.getSelectionModel().selectedItemProperty().addListener(e -> {
+            if(tabPane.getSelectionModel().getSelectedItem().getId().equalsIgnoreCase("Review & Process")){
+                reviewTab.refreshView();
+            }
+        });
 
 
         pane.setTop(bar);
