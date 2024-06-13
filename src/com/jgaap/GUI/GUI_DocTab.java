@@ -48,6 +48,7 @@ public class GUI_DocTab {
    static Logger logger;
    private static Stage mainStageRef;
    private static API JAPI;
+   private HBox bottomButtons;
    private TableView<Document> table;
    private TreeItem<String> rootNode;
    private TreeView<String> tree;
@@ -63,7 +64,6 @@ public class GUI_DocTab {
       this.rootNode = new TreeItem<String>("Authors");
       this.tree = new TreeView<String>(this.rootNode);
       noteBox = new GUI_NotesWindow();
-      build_tab();
    }
 
    /**
@@ -75,7 +75,7 @@ public class GUI_DocTab {
       this.box.getChildren().add(init_UnknownAuthButtons());
       this.box.getChildren().add(init_KnownAuth());
       this.box.getChildren().add(init_KnownAuthButtons());
-      this.box.getChildren().add(init_bottomButtons());
+      this.box.getChildren().add(this.bottomButtons);
    }
 
    /*
@@ -164,6 +164,7 @@ public class GUI_DocTab {
             }
             updateUnknownDocumentsTable();
          }
+         e.consume();
       });
       //===============================================================================
       //===============================================================================
@@ -175,6 +176,7 @@ public class GUI_DocTab {
          }
          this.table.getItems().removeAll(docs);
          updateUnknownDocumentsTable();
+         e.consume();
       });
       //===============================================================================
       box.getChildren().add(addDoc);
@@ -198,6 +200,7 @@ public class GUI_DocTab {
          Stage stage = pop.getStage();
          stage.showAndWait();
          updateAuthorTree();
+         e.consume();
       });
       //===============================================================================
       //===============================================================================
@@ -207,6 +210,7 @@ public class GUI_DocTab {
          Stage stage = pop.getStage();
          stage.showAndWait();
          updateAuthorTree();
+         e.consume();
       });
       //===============================================================================
       //===============================================================================
@@ -220,6 +224,7 @@ public class GUI_DocTab {
             }
          }
          updateAuthorTree();
+         e.consume();
       });
       //===============================================================================
       box.getChildren().add(addAuth);
@@ -228,23 +233,6 @@ public class GUI_DocTab {
       return box;
    }
 
-   /**
-    * Method for building the 'Bottom Buttons' of GUI elements.
-    * 
-    * @return HBox
-    */
-   private HBox init_bottomButtons() {
-      HBox box = new HBox(5);
-      Button finish = new Button("Finish & Review");
-      Button next = new Button("Next");
-      Region region1 = new Region();
-      HBox.setHgrow(region1, Priority.ALWAYS);
-      box.getChildren().add(region1);
-      box.getChildren().add(finish);
-      box.getChildren().add(next);
-      box.setSpacing(10);
-      return box;
-   }
 
    /**
     * Method for building the Author Selection Table.
@@ -279,17 +267,18 @@ public class GUI_DocTab {
          try {
             JAPI.setLanguage(comboBox.getSelectionModel().getSelectedItem());
          } catch (Exception e1) {
-            // TODO Auto-generated catch block
+            logger.error(e1.getCause(), e1);
             e1.printStackTrace();
          }
+         e.consume();
       });
       return comboBox;
    }
-   private void updateUnknownDocumentsTable(){
+   public void updateUnknownDocumentsTable(){
       this.table.setItems(FXCollections.observableArrayList(JAPI.getUnknownDocuments()));
       this.table.refresh();
    }
-   private void updateAuthorTree(){
+   public void updateAuthorTree(){
       List<String> authors = JAPI.getAuthors();
       List<TreeItem<String>> authNode = new ArrayList<TreeItem<String>>();
       for(String i : authors){
@@ -323,6 +312,13 @@ public class GUI_DocTab {
     * @return VBox
     */
    public VBox getPane() {
+      build_tab();
       return this.box;
    }
+   public void setBottomButtons(HBox box){
+      this.bottomButtons = box;
+  }
+  public GUI_DocTab getInstance(){
+   return this;
+  }
 }

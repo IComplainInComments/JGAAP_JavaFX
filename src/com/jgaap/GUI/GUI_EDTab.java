@@ -1,11 +1,15 @@
 package com.jgaap.GUI;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -34,17 +38,19 @@ public class GUI_EDTab {
     private ListView<String> selList;
     private TextArea area;
     private VBox box;
+    private HBox bottomButtons;
     private static API JAPI;
+    private static Logger logger;
     private static GUI_NotesWindow noteBox;
     /**
      * Constructor for the class.
      */
     public GUI_EDTab(){
+        logger = Logger.getLogger(GUI_EDTab.class);
         JAPI = API.getInstance();
         init_EventDrivers();
         box = new VBox();
         noteBox = new GUI_NotesWindow();
-        build_pane();
     }
     /**
      * Method for building the Window row by row.
@@ -52,7 +58,7 @@ public class GUI_EDTab {
     private void build_pane(){
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
-        this.box.getChildren().add(init_bottomButtons());
+        this.box.getChildren().add(this.bottomButtons);
     }
     /**
      * Method for building the 'Top Level' of GUI Elements.
@@ -113,24 +119,6 @@ public class GUI_EDTab {
 
     }        
     /**
-    * Method for building the 'Bottom Buttons' of GUI elements.
-    * @return HBox
-    */
-    private HBox init_bottomButtons(){
-        HBox box = new HBox(5);
-        Region region1 = new Region();
-        Button finish = new Button("Finish & Review");
-        Button next = new Button("Next");
-        HBox.setHgrow(region1, Priority.ALWAYS);
-
-        box.getChildren().add(region1);
-        box.getChildren().add(finish);
-        box.getChildren().add(next);
-        box.setSpacing(10);
-
-        return box;
-     }
-    /**
       * Method for building the Event Driver Selection Box.
       * @return ListView<String>
       */
@@ -157,6 +145,7 @@ public class GUI_EDTab {
                     this.area.setText(temp.longDescription());
                 }
             }
+            e.consume();
         });
 
         return this.edList;
@@ -181,6 +170,7 @@ public class GUI_EDTab {
                     this.area.setText(temp.longDescription());
                 }
             }
+            e.consume();
         });
 
         return selList;
@@ -207,11 +197,13 @@ public class GUI_EDTab {
             edDeselected(this.selList.getSelectionModel().getSelectedItem().trim());
             this.selList.refresh();
             this.edList.refresh();
+            e.consume();
         });
         right.setOnAction(e -> {
             edSelected(this.edList.getSelectionModel().getSelectedItem().trim());
             this.selList.refresh();
             this.edList.refresh();
+            e.consume();
         });
         clear.setOnAction(e -> {
             this.EventDriverMasterList.clear();
@@ -229,11 +221,13 @@ public class GUI_EDTab {
             this.selList.setItems(this.selItems);
             this.selList.refresh();
             this.edList.refresh();
+            e.consume();
         });
         all.setOnAction(e -> {
             allSelected();
             this.selList.refresh();
             this.edList.refresh();
+            e.consume();
         });
 
         box.getChildren().add(region1);
@@ -246,6 +240,17 @@ public class GUI_EDTab {
 
         return box;
     }
+    private ComboBox<String> buildParaComboBox(String var){
+        Iterator<EventDriver> drivers = this.edSel.iterator();
+        ObservableList<String> options = FXCollections.observableArrayList();
+        while(drivers.hasNext()){
+            EventDriver temp = drivers.next();
+            if(temp.displayName().equalsIgnoreCase(this.selList.getSelectionModel().getSelectedItem())){
+                options.add(temp.getParamGUI());
+            }
+        }
+        ComboBox<String> box = new ComboBox<String>(options);
+    }
         private void edSelected(String method) {
         this.edSelect.add(method);
         this.edName.remove(method);
@@ -256,7 +261,7 @@ public class GUI_EDTab {
                 try {
                     this.edSel.add(JAPI.addEventDriver(temp.displayName()));
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
                 this.edSel.add(temp);
@@ -277,7 +282,7 @@ public class GUI_EDTab {
                 try {
                     this.edSel.add(JAPI.addEventDriver(temp.displayName()));
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
                 master.remove();
@@ -318,7 +323,11 @@ public class GUI_EDTab {
      * @return VBox
      */
      public VBox getPane(){
+        build_pane();
         return this.box;
+    }
+    public void setBottomButtons(HBox box){
+        this.bottomButtons = box;
     }
     
 }

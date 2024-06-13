@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.jgaap.backend.API;
 import com.jgaap.backend.Canonicizers;
 import com.jgaap.generics.Canonicizer;
@@ -42,6 +44,8 @@ public class GUI_CanTab {
     private ListView<String> selList;
     private List<Object> docTypesList;
     private TextArea area;
+    private HBox bottomButtons;
+    private static Logger logger;
     private static API JAPI;
     private static GUI_NotesWindow noteBox;
 
@@ -49,13 +53,13 @@ public class GUI_CanTab {
      * Constructor for the class.
      */
     public GUI_CanTab() {
+        logger = Logger.getLogger(GUI_CanTab.class);
         this.docTypesList = new ArrayList<Object>();
         this.CanonicizerComboBoxModel = new ArrayList<String>();
         box = new VBox();
         noteBox = new GUI_NotesWindow();
         JAPI = API.getInstance();
         init_canonicizers();
-        build_pane();
     }
 
     /**
@@ -64,7 +68,7 @@ public class GUI_CanTab {
     private void build_pane() {
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
-        this.box.getChildren().add(init_bottomButtons());
+        this.box.getChildren().add(this.bottomButtons);
     }
 
     /**
@@ -123,24 +127,6 @@ public class GUI_CanTab {
      * 
      * @return HBox
      */
-    private HBox init_bottomButtons() {
-        HBox box = new HBox(5);
-        Button finish = new Button("Finish & Review");
-        Button next = new Button("Next");
-        Region region1 = new Region();
-        HBox.setHgrow(region1, Priority.ALWAYS);
-        finish.setOnAction(e -> {
-
-        });
-        next.setOnAction(e -> {
-            
-        });
-        box.getChildren().add(region1);
-        box.getChildren().add(finish);
-        box.getChildren().add(next);
-        box.setSpacing(10);
-        return box;
-    }
 
     /**
      * Method for generating the List Box of Canocinizers.
@@ -169,6 +155,7 @@ public class GUI_CanTab {
                     this.area.setText(temp.longDescription());
                 }
             }
+            e.consume();
         });
 
         return this.canList;
@@ -195,6 +182,7 @@ public class GUI_CanTab {
                     this.area.setText(temp.longDescription());
                 }
             }
+            e.consume();
         });
 
         return this.selList;
@@ -220,12 +208,13 @@ public class GUI_CanTab {
             canonDeselected(this.selList.getSelectionModel().getSelectedItem().trim());
             this.selList.refresh();
             this.canList.refresh();
+            e.consume();
         });
         right.setOnAction(e -> {
             canonSelected(this.canList.getSelectionModel().getSelectedItem().trim());
             this.selList.refresh();
             this.canList.refresh();
-        
+            e.consume();
         });
         clear.setOnAction(e -> {
             this.CanonicizerMasterList.clear();
@@ -242,6 +231,7 @@ public class GUI_CanTab {
             this.selList.setItems(this.selItems);
             this.selList.refresh();
             this.canList.refresh();
+            e.consume();
         });
 
         box.getChildren().addAll(region1, init_rowTwoSelectionDropDown(), left, right, clear, region2);
@@ -290,7 +280,7 @@ public class GUI_CanTab {
                 try {
                     this.canMethSel.add(JAPI.addCanonicizer(temp.displayName()));
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
                 master.remove();
@@ -341,7 +331,11 @@ public class GUI_CanTab {
      * @return VBox
      */
     public VBox getPane() {
+        build_pane();
         return this.box;
+    }
+    public void setBottomButtons(HBox box){
+        this.bottomButtons = box;
     }
 
 }

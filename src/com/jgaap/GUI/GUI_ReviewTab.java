@@ -5,8 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -16,6 +14,8 @@ import javafx.scene.text.FontWeight;
 
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 
@@ -48,18 +48,27 @@ public class GUI_ReviewTab {
    private List<Pair<Canonicizer, Object>> SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
    private GUI_ResultsWindow res;
    private VBox box;
+   private HBox bottomButtons;
+   private static Logger logger;
    private static API JAPI;
 
    /**
     * Constructor for the class.
     */
    public GUI_ReviewTab() {
+      logger = Logger.getLogger(GUI_ReviewTab.class);
       this.box = new VBox();
       this.res = new GUI_ResultsWindow();
       this.res.hideStage();
       this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
       JAPI = API.getInstance();
-      build_pane();
+   }
+   public GUI_ReviewTab(GUI_ResultsWindow grw) {
+      logger = Logger.getLogger(GUI_ReviewTab.class);
+      this.box = new VBox();
+      this.res = grw;
+      this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
+      JAPI = API.getInstance();
    }
 
    /**
@@ -117,8 +126,6 @@ public class GUI_ReviewTab {
     */
    private HBox init_bottomButtons() {
       HBox box = new HBox(5);
-      Button finish = new Button("Finish & Review");
-      Button next = new Button("Next");
       Button process = new Button("Process");
       Region region1 = new Region();
       HBox.setHgrow(region1, Priority.ALWAYS);
@@ -144,18 +151,18 @@ public class GUI_ReviewTab {
                String result = document.getResult();
                buffer.append(result);
             }
+            buffer.append("dicks");
             this.res.build_resultTab(buffer.toString());
             this.res.showStage();
 
          } catch (Exception e1) {
-            // TODO Auto-generated catch block
+            logger.error(e1.getCause(), e1);
             e1.printStackTrace();
          }
+         e.consume();
       });
       box.getChildren().add(region1);
       box.getChildren().add(process);
-      box.getChildren().add(finish);
-      box.getChildren().add(next);
       return box;
    }
 
@@ -302,6 +309,10 @@ public class GUI_ReviewTab {
     * @return VBox
     */
    public VBox getPane() {
+      build_pane();
       return this.box;
    }
+   public void setBottomButtons(HBox box){
+      this.bottomButtons = box;
+  }
 }

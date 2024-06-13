@@ -39,14 +39,16 @@ public class GUI_MenuItemsBatch {
     private static Stage mainStageRef;
     private static API JGAAP_API;
     private File filepath;
+    private GUI_DocTab tab;
 
     /**
      * Constructor of the Class
      */
-    public GUI_MenuItemsBatch(Stage stage, API JAPI) {
+    public GUI_MenuItemsBatch(Stage stage, API JAPI, GUI_DocTab tab) {
         this.items = new ArrayList<MenuItem>();
         this.problems = new ArrayList<MenuItem>();
         this.docTypes = new ArrayList<String>();
+        this.tab = tab;
         logger = Logger.getLogger(GUI_MenuItemsBatch.class);
         JGAAP_API = JAPI;
         mainStageRef = stage;
@@ -77,12 +79,14 @@ public class GUI_MenuItemsBatch {
 			} catch (Exception ex) {
                 if(this.filepath != null){
                     ex.printStackTrace();
+                    logger.error(ex.getCause(), ex);
                     Alert error = new Alert(AlertType.ERROR, ex.getMessage());
                     error.showAndWait()
                         .filter(response -> response == ButtonType.OK)
                         .ifPresent(response -> error.close());
                 }
             }
+            e.consume();
         });
         load.setOnAction(e -> {
             ExtensionFilter filter = new ExtensionFilter("Text Documents", this.docTypes);
@@ -101,10 +105,11 @@ public class GUI_MenuItemsBatch {
                                         : null));
                     }
 				}
-				    //UpdateKnownDocumentsTree();
-				    //UpdateUnknownDocumentsTable();
+                this.tab.updateUnknownDocumentsTable();
+                this.tab.updateAuthorTree();
 			    }catch (Exception ex) {
                     if(this.filepath != null){
+                        logger.error(ex.getCause(), ex);
                         ex.printStackTrace();
                         Alert error = new Alert(AlertType.ERROR, ex.getMessage());
                         error.showAndWait()
@@ -112,6 +117,7 @@ public class GUI_MenuItemsBatch {
                             .ifPresent(response -> error.close());
                     }
 			    }
+                e.consume();
 		});
         /*
          * Insert code for the menu items to do something here at a later date.
@@ -201,8 +207,8 @@ public class GUI_MenuItemsBatch {
         for (Document document : documents) {
             JGAAP_API.addDocument(document);
         }
-        // UpdateKnownDocumentsTree();
-        // UpdateUnknownDocumentsTable();
+        this.tab.updateUnknownDocumentsTable();
+        this.tab.updateAuthorTree();
     }
 
     /**

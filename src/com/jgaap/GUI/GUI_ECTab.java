@@ -2,6 +2,8 @@ package com.jgaap.GUI;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -34,17 +36,19 @@ public class GUI_ECTab {
     private ListView<String> listRight;
     private TextArea area;
     private VBox box;
+    private HBox bottomButtons;
+    private static Logger logger;
     private static API JAPI;
     private static GUI_NotesWindow noteBox;
     /**
      * Constructor for the class.
      */
     public GUI_ECTab(){
+        logger = Logger.getLogger(GUI_ECTab.class);
         JAPI = API.getInstance();
         init_eventCullers();
         box = new VBox();
         noteBox = new GUI_NotesWindow();
-        build_pane();
     }
     /**
      * Method for building the Window row by row.
@@ -52,7 +56,7 @@ public class GUI_ECTab {
     private void build_pane(){
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
-        this.box.getChildren().add(init_bottomButtons());
+        this.box.getChildren().add(this.bottomButtons);
     }
     /**
      * Method for building the 'Top Level' of GUI Elements.
@@ -113,23 +117,6 @@ public class GUI_ECTab {
 
     
     }
-        /**
-        * Method for building the 'Bottom Buttons' of GUI elements.
-        * @return HBox
-        */
-        private HBox init_bottomButtons(){
-        HBox box = new HBox(5);
-        Region region1 = new Region();
-        Button finish = new Button("Finish & Review");
-        Button next = new Button("Next");
-        HBox.setHgrow(region1, Priority.ALWAYS);
-
-        box.getChildren().add(region1);
-        box.getChildren().add(finish);
-        box.getChildren().add(next);
-
-        return box;
-     }
      /**
       * Method for building the Event Culling Selection Box.
       * @return ListView<String>
@@ -153,6 +140,7 @@ public class GUI_ECTab {
                     this.area.setText(temp.longDescription());
                 }
             }
+            e.consume();
         });
 
         this.listLeft.setItems(this.items);
@@ -176,6 +164,7 @@ public class GUI_ECTab {
                     this.area.setText(temp.longDescription());
                 }
             }
+            e.consume();
         });
 
         this.listRight.setItems(this.selItems);
@@ -206,11 +195,13 @@ public class GUI_ECTab {
             ecDeselected(this.listRight.getSelectionModel().getSelectedItem().trim());
             this.listLeft.refresh();
             this.listRight.refresh();
+            e.consume();
         });
         right.setOnAction(e -> {
             ecSelected(this.listLeft.getSelectionModel().getSelectedItem().trim());
             this.listLeft.refresh();
             this.listRight.refresh();
+            e.consume();
         });
         clear.setOnAction(e -> {
             this.EventCullersMasterList.clear();
@@ -228,11 +219,13 @@ public class GUI_ECTab {
             this.listRight.setItems(this.selItems);
             this.listLeft.refresh();
             this.listRight.refresh();
+            e.consume();
         });
         all.setOnAction(e -> {
             allSelected();
             this.listLeft.refresh();
             this.listRight.refresh();
+            e.consume();
         });
 
         box.getChildren().add(region1);
@@ -255,7 +248,7 @@ public class GUI_ECTab {
                 try {
                     this.ecSel.add(JAPI.addEventCuller(temp.displayName()));
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
                 this.ecSel.add(temp);
@@ -276,7 +269,7 @@ public class GUI_ECTab {
                 try {
                     this.ecSel.add(JAPI.addEventCuller(temp.displayName()));
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
                 master.remove();
@@ -317,7 +310,11 @@ public class GUI_ECTab {
      * @return VBox
      */
      public VBox getPane(){
+        build_pane();
         return this.box;
+    }
+    public void setBottomButtons(HBox box){
+        this.bottomButtons = box;
     }
     
 }

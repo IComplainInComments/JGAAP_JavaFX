@@ -20,6 +20,8 @@ import com.jgaap.generics.DistanceFunction;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import com.jgaap.backend.API;
 /**
  * Analysis Tab Class.
@@ -43,6 +45,8 @@ public class GUI_AnalysisTab {
     private TextArea anArea;
     private TextArea dfArea;
     private static API JAPI;
+    private static Logger logger;
+    private HBox bottomButtons;
     private VBox box;
     private static GUI_NotesWindow notesBox;
 
@@ -50,12 +54,12 @@ public class GUI_AnalysisTab {
      * Constructor for the class.
      */
     public GUI_AnalysisTab(){
+        logger = Logger.getLogger(GUI_AnalysisTab.class);
         JAPI = API.getInstance();
         this.box = new VBox();
         notesBox = new GUI_NotesWindow();
         init_analysisDrivers();
         init_distanceFunctions();
-        build_pane();
     }
     /**
      * Builds the Pane row by row.
@@ -63,7 +67,7 @@ public class GUI_AnalysisTab {
     private void build_pane(){
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
-        this.box.getChildren().add(init_bottomButtons());
+        this.box.getChildren().add(this.bottomButtons);
     }
     /**
      * Creates the 'Top Row' of GUI elements in the window.
@@ -140,21 +144,6 @@ public class GUI_AnalysisTab {
 
         return box;
     }
-    /**
-     * Creates the bottom buttons of GUI elements in the window.
-     * @return HBox
-     */
-    private HBox init_bottomButtons(){
-        HBox box = new HBox(5);
-        Button finish = new Button("Finish & Review");
-        Button next = new Button("Next");
-        Region region1 = new Region();
-        HBox.setHgrow(region1, Priority.ALWAYS);
-        box.getChildren().add(region1);
-        box.getChildren().add(finish);
-        box.getChildren().add(next);
-        return box;
-     }
      /**
       * Method for generating the selected list view bow.
       * @return ListView<String>
@@ -197,6 +186,7 @@ public class GUI_AnalysisTab {
                     this.anArea.setText(temp.longDescription());
                 }
             }
+            e.consume();
         });
 
         return this.anList;
@@ -224,6 +214,7 @@ public class GUI_AnalysisTab {
                     this.dfArea.setText(temp.longDescription());
                 }
             }
+            e.consume();
         });
 
         return this.dfList;
@@ -250,6 +241,7 @@ public class GUI_AnalysisTab {
             this.selItems = FXCollections.observableArrayList(this.selName);
             this.selList.setItems(this.selItems);
             this.selList.refresh();
+            e.consume();
         });
         right.setOnAction(e -> {
             if(this.dfList.getSelectionModel().isEmpty()){
@@ -266,6 +258,7 @@ public class GUI_AnalysisTab {
             this.selItems = FXCollections.observableArrayList(this.selName);
             this.selList.setItems(this.selItems);
             this.selList.refresh();
+            e.consume();
         });
         clear.setOnAction(e -> {
             JAPI.removeAllAnalysisDrivers();
@@ -283,10 +276,11 @@ public class GUI_AnalysisTab {
             this.selItems = FXCollections.observableArrayList(this.selName);
             this.selList.setItems(this.selItems);
             this.selList.refresh();
+            e.consume();
             
         });
         all.setOnAction(e -> {
-            
+            e.consume();
         });
 
         box.getChildren().add(region1);
@@ -334,7 +328,7 @@ public class GUI_AnalysisTab {
                 try {
                     this.dfSel.add(JAPI.addDistanceFunction(method, ad));
                 } catch (Exception e) {
-                    // TODO Auto-generated catch block
+                    logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
                 break;
@@ -387,6 +381,10 @@ public class GUI_AnalysisTab {
      * @return VBox
      */
      public VBox getPane(){
+        build_pane();
         return this.box;
+    }
+    public void setBottomButtons(HBox box){
+        this.bottomButtons = box;
     }
 }

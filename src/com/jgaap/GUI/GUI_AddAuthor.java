@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.jgaap.backend.API;
 import com.jgaap.util.Document;
 
@@ -28,11 +30,13 @@ public class GUI_AddAuthor {
 
     private TableView<Document> table;
     private ArrayList<Document> docs;
+    private static Logger logger;
     private static API JAPI;
     private TextField auth;
     private Stage stage;
 
     public GUI_AddAuthor() {
+        logger = Logger.getLogger(GUI_AddAuthor.class);
         this.docs = new ArrayList<Document>();
         this.stage = new Stage();
         JAPI = API.getInstance();
@@ -42,6 +46,7 @@ public class GUI_AddAuthor {
     }
 
     public GUI_AddAuthor(String author) {
+        logger = Logger.getLogger(GUI_AddAuthor.class);
         this.docs = new ArrayList<Document>();
         this.stage = new Stage();
         JAPI = API.getInstance();
@@ -74,6 +79,7 @@ public class GUI_AddAuthor {
         this.auth = new TextField();
         this.auth.setOnAction(e -> {
             updateItemView();
+            e.consume();
         });
         box.getChildren().addAll(auth, this.auth);
         return box;
@@ -111,9 +117,11 @@ public class GUI_AddAuthor {
                     this.table.setItems(FXCollections.observableArrayList(this.docs));
                     this.table.refresh();
                 } catch (Exception ex) {
+                    logger.error(ex.getCause(), ex);
                     ex.printStackTrace();
                 }
             }
+            e.consume();
         });
         // ===============================================================================
         // ===============================================================================
@@ -126,6 +134,7 @@ public class GUI_AddAuthor {
             }
             this.table.setItems(FXCollections.observableArrayList(this.docs));
             this.table.refresh();
+            e.consume();
         });
         // ===============================================================================
         butBox.getChildren().addAll(add, rem);
@@ -175,11 +184,13 @@ public class GUI_AddAuthor {
                     this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(author)));
                     this.table.refresh();
                 } catch (Exception ex) {
+                    logger.error(ex.getCause(), ex);
                     ex.printStackTrace();
                 }
             }
             this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(author)));
             this.table.refresh();
+            e.consume();
         });
         // ===============================================================================
         // ===============================================================================
@@ -192,6 +203,7 @@ public class GUI_AddAuthor {
             }
             this.table.setItems(FXCollections.observableArrayList(this.docs));
             this.table.refresh();
+            e.consume();
         });
         // ===============================================================================
         butBox.getChildren().addAll(add, rem);
@@ -214,12 +226,14 @@ public class GUI_AddAuthor {
                 }
             }
             stage.close();
+            e.consume();
         });
         // ===============================================================================
         // ===============================================================================
         can.setOnAction(e -> {
             this.auth.setText("");
             stage.close();
+            e.consume();
         });
         // ===============================================================================
         box.getChildren().addAll(region1,ok, can);

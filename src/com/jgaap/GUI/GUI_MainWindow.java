@@ -1,16 +1,22 @@
 package com.jgaap.GUI;
+import org.apache.log4j.Logger;
+
 import com.jgaap.backend.API;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 /**
@@ -18,7 +24,11 @@ import javafx.stage.Stage;
  * This Class is the heart of the GUI, and controls the GUI as a whole. It is used to intertwine all the other classes.
  */
 public class GUI_MainWindow extends Application{
+
+    private static Logger logger;
     private static BorderPane pane;
+    private static GUI_ResultsWindow grw;
+    private static TabPane tabPane;
     private API JGAAP_API = API.getInstance();
 
     /**
@@ -32,6 +42,7 @@ public class GUI_MainWindow extends Application{
      * Main Method for setting up the GUI for JavaFX.
      */
     public void start(Stage mainStage) {
+        logger = Logger.getLogger(GUI_MainWindow.class);
         mainStage.setOnCloseRequest(e -> {
             e.consume();
             Platform.exit();
@@ -46,9 +57,9 @@ public class GUI_MainWindow extends Application{
      * @return Scene
      */
     private Scene init_mainScene(Stage stage){
-        TabPane tabPane = new TabPane();
+        logger.info("Building Main Window");
+        tabPane = new TabPane();
         Scene scene;
-        MenuBar bar = init_MenuBar(stage);
         VBox docPane, canPane, edPane, ecPane, anPane,reviewPane;
 
         Tab doc = new Tab("Documents");
@@ -73,6 +84,7 @@ public class GUI_MainWindow extends Application{
         review.setClosable(false);
 
         pane = new BorderPane();
+        grw = new GUI_ResultsWindow();
         
         tabPane.prefHeightProperty().bind(pane.heightProperty());
         tabPane.prefWidthProperty().bind(pane.widthProperty());
@@ -81,7 +93,15 @@ public class GUI_MainWindow extends Application{
         GUI_EDTab edTab = new GUI_EDTab();
         GUI_ECTab ecTab = new GUI_ECTab();
         GUI_AnalysisTab anTab = new GUI_AnalysisTab();
-        GUI_ReviewTab reviewTab = new GUI_ReviewTab();
+        GUI_ReviewTab reviewTab = new GUI_ReviewTab(grw);
+
+        docTab.setBottomButtons(init_bottomButtons());
+        canTab.setBottomButtons(init_bottomButtons());
+        edTab.setBottomButtons(init_bottomButtons());
+        ecTab.setBottomButtons(init_bottomButtons());
+        anTab.setBottomButtons(init_bottomButtons());
+
+        MenuBar bar = init_MenuBar(stage, docTab);
 
         docPane = docTab.getPane();
         canPane = canTab.getPane();
@@ -141,32 +161,61 @@ public class GUI_MainWindow extends Application{
      * Builds the Menu Bar and its containing items/functions.
      * @return MenuBar
      */
-     private MenuBar init_MenuBar(Stage stage) {
+     private MenuBar init_MenuBar(Stage stage, GUI_DocTab tab) {
         Menu file = new Menu("File");
         Menu help = new Menu("Help");
+        Menu windows = new Menu("View");
         Menu batch = new Menu("Batch Documents");
         Menu aaac = new Menu("AAAC Problems");
         MenuItem quit = new MenuItem("Quit");
         MenuItem about = new MenuItem("About");
+        MenuItem show = new MenuItem("Show Results Window");
         MenuBar bar = new MenuBar();
-        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage, this.JGAAP_API);
+        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage, this.JGAAP_API, tab);
         GUI_JGAAPAboutWindow winAbout = new GUI_JGAAPAboutWindow();
 
         about.setOnAction(e -> {
-                winAbout.show();
-                e.consume();
+            e.consume();
+            winAbout.show();
         });
         quit.setOnAction(e -> {
+            e.consume();
             System.exit(0);
+        });
+        show.setOnAction(e -> {
+            e.consume();
+            grw.showStage();
         });
         
         aaac.getItems().addAll(items.getProblems());
         batch.getItems().addAll(items.getItems());
         file.getItems().addAll(batch,aaac,quit);
         help.getItems().add(about);
+        windows.getItems().add(show);
         bar.getMenus().add(file);
+        bar.getMenus().add(windows);
         bar.getMenus().add(help);
 
         return bar;
      }
+    private HBox init_bottomButtons() {
+        HBox box = new HBox(5);
+        Button finish = new Button("Finish & Review");
+        Button next = new Button("Next");
+        Region region1 = new Region();
+        HBox.setHgrow(region1, Priority.ALWAYS);
+        finish.setOnAction(e -> {
+            tabPane.getSelectionModel().selectLast();
+            e.consume();
+        });
+        next.setOnAction(e -> {
+            tabPane.getSelectionModel().selectNext();
+            e.consume();
+        });
+        box.getChildren().add(region1);
+        box.getChildren().add(finish);
+        box.getChildren().add(next);
+        box.setSpacing(10);
+        return box;
+    }
 }
