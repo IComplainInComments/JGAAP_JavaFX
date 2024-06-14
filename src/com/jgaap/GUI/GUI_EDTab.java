@@ -238,6 +238,8 @@ public class GUI_EDTab {
             this.selList.setItems(this.selItems);
             this.selList.refresh();
             this.edList.refresh();
+            this.paraBox.getChildren().removeLast();
+            this.paraBox.getChildren().add(this.paraBoxChild);
             e.consume();
         });
         all.setOnAction(e -> {
