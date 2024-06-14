@@ -1,15 +1,15 @@
 package com.jgaap.GUI;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.SetChangeListener.Change;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -20,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import com.jgaap.generics.EventDriver;
+import com.jgaap.generics.Parameterizable;
 import com.jgaap.backend.EventDrivers;
 import com.jgaap.backend.API;
 /**
@@ -39,6 +40,10 @@ public class GUI_EDTab {
     private TextArea area;
     private VBox box;
     private HBox bottomButtons;
+    private VBox paraBoxChild;
+    private VBox paraBox;
+    private HBox notesBox;
+    private GUI_ParamBuilder<EventDriver> params;
     private static API JAPI;
     private static Logger logger;
     private static GUI_NotesWindow noteBox;
@@ -72,11 +77,10 @@ public class GUI_EDTab {
         Label para = new Label("Parameters");
         Button notes = noteBox.getButton();
         HBox box = new HBox(5);
-        HBox notesBox = new HBox();
+        this.notesBox = new HBox();
         VBox edBox = new VBox();
         VBox selBox = new VBox();
-        VBox paraBox = new VBox();
-        VBox paraBoxChild = new VBox();
+        this.paraBox = new VBox();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
@@ -84,15 +88,16 @@ public class GUI_EDTab {
         para.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
 
 
+        paraBoxChild = new VBox();
         paraBoxChild.setStyle("-fx-border-color: black");
         paraBoxChild.prefHeightProperty().bind(this.box.heightProperty());
         paraBoxChild.prefWidthProperty().bind(this.box.widthProperty());
 
-        notesBox.getChildren().addAll(para,region1,notes);
+        this.notesBox.getChildren().addAll(para,region1,notes);
 
         edBox.getChildren().addAll(can, listLeft);
         selBox.getChildren().addAll(sel,listRight);
-        paraBox.getChildren().addAll(notesBox, paraBoxChild);
+        paraBox.getChildren().addAll(this.notesBox, paraBoxChild);
 
         box.getChildren().addAll(edBox, init_rowTwoButtons(), selBox, paraBox);
 
@@ -157,7 +162,6 @@ public class GUI_EDTab {
     private ListView<String> init_ListBoxRight(){
         this.selList = new ListView<String>();
         this.selItems = FXCollections.observableArrayList (this.edSelect);
-
         this.selList.setItems(this.selItems);
         this.selList.prefHeightProperty().bind(this.box.heightProperty());
         this.selList.prefWidthProperty().bind(this.box.widthProperty());
@@ -167,6 +171,19 @@ public class GUI_EDTab {
             while(iter.hasNext()){
                 EventDriver temp = iter.next();
                 if(sel.equalsIgnoreCase(temp.displayName())){
+                    this.params = new GUI_ParamBuilder<EventDriver>(temp);
+                    VBox para = this.params.getPanel();
+                    if(this.paraBox.getChildren().contains(this.paraBoxChild)){
+                        para.prefHeightProperty().bind(this.box.heightProperty());
+                        para.prefWidthProperty().bind(this.box.widthProperty());
+                        this.paraBox.getChildren().removeAll(this.paraBoxChild);
+                        this.paraBox.getChildren().add(para);
+                    } else if(!this.paraBox.getChildren().contains(para)){
+                        para.prefHeightProperty().bind(this.box.heightProperty());
+                        para.prefWidthProperty().bind(this.box.widthProperty());
+                        this.paraBox.getChildren().removeLast();
+                        this.paraBox.getChildren().add(para);
+                    }
                     this.area.setText(temp.longDescription());
                 }
             }
@@ -240,17 +257,6 @@ public class GUI_EDTab {
 
         return box;
     }
-    private ComboBox<String> buildParaComboBox(String var){
-        Iterator<EventDriver> drivers = this.edSel.iterator();
-        ObservableList<String> options = FXCollections.observableArrayList();
-        while(drivers.hasNext()){
-            EventDriver temp = drivers.next();
-            if(temp.displayName().equalsIgnoreCase(this.selList.getSelectionModel().getSelectedItem())){
-                options.add(temp.getParamGUI());
-            }
-        }
-        ComboBox<String> box = new ComboBox<String>(options);
-    }
         private void edSelected(String method) {
         this.edSelect.add(method);
         this.edName.remove(method);
@@ -264,7 +270,37 @@ public class GUI_EDTab {
                     logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
-                this.edSel.add(temp);
+                //this.edSel.add(temp);
+                master.remove();
+            }
+        }
+        this.items = FXCollections.observableArrayList(this.edName);
+        this.selItems = FXCollections.observableArrayList(this.edSelect);
+        this.edList.setItems(this.items);
+        this.selList.setItems(this.selItems);
+    }
+    private void edSelected(String method, Parameterizable options) {
+        this.edSelect.add(method);
+        this.edName.remove(method);
+        Iterator<EventDriver> master = this.EventDriverMasterList.iterator();
+        while(master.hasNext()) {
+            EventDriver temp = master.next();
+            if (temp.displayName().equalsIgnoreCase(method)) {
+                try {
+                    String i = temp.getParameters().replaceAll("\\s", "");
+                    String[] items = i.split("[\\s\\:]");
+                    if(items.length == 2){
+                        temp.setParameter(items[0], items[1]);
+                    } else if(items.length == 4){
+                        temp.setParameter(items[0], items[1]);
+                        temp.setParameter(items[2], items[3]);
+                    }
+                    this.edSel.add(JAPI.addEventDriver(temp.displayName()));
+                } catch (Exception e) {
+                    logger.error(e.getCause(), e);
+                    e.printStackTrace();
+                }
+                //this.edSel.add(temp);
                 master.remove();
             }
         }
