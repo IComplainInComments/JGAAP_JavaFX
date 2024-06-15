@@ -25,6 +25,10 @@ import com.jgaap.generics.EventCuller;
 import com.jgaap.generics.EventDriver;
 import com.jgaap.util.Document;
 import com.jgaap.util.Pair;
+import com.jgaap.util.Document.Type;
+
+import edu.stanford.nlp.process.DocumentPreprocessor.DocType;
+
 import com.jgaap.generics.Canonicizer;
 
 /**
@@ -169,18 +173,7 @@ public class GUI_ReviewTab {
 
    private ListView<String> init_canonicizerTable() {
       this.canList = new ListView<String>();
-      Iterator<Document> iter = JAPI.getDocuments().iterator();
       this.canVals = new ArrayList<String>();
-      while (iter.hasNext()) {
-         Document docItem = iter.next();
-         Iterator<Canonicizer> iter2 = docItem.getCanonicizers().iterator();
-         while (iter2.hasNext()) {
-            Canonicizer temp = iter2.next();
-            Pair<Canonicizer, Object> thing = new Pair<Canonicizer,Object>(temp, docItem);
-            this.canVals.add(temp.displayName());
-            this.SelectedCanonicizerList.add(thing);
-         }
-      }
       this.canItems = FXCollections.observableArrayList(this.canVals);
       this.canList.setItems(this.canItems);
       this.canList.prefHeightProperty().bind(this.box.prefHeightProperty());
@@ -250,13 +243,11 @@ public class GUI_ReviewTab {
    }
 
    public void refresh_canList() {
-      Iterator<Document> iter = JAPI.getDocuments().iterator();
+      Iterator<Pair<Canonicizer,Object>> iter = GUI_CanTab.getSelectedCanList().iterator();
       this.canVals.clear();
       while (iter.hasNext()) {
-         Iterator<Canonicizer> iter2 = iter.next().getCanonicizers().iterator();
-         while (iter2.hasNext()) {
-            this.canVals.add(iter2.next().displayName());
-         }
+         Pair<Canonicizer,Object> item = iter.next();
+            this.canVals.add(item.getFirst().displayName()+" + "+(item.getSecond().toString()));
       }
       this.canItems = FXCollections.observableArrayList(this.canVals);
       this.canList.setItems(this.canItems);

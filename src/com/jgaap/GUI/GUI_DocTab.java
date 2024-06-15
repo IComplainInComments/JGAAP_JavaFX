@@ -37,6 +37,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Document Tab Class.
@@ -285,16 +286,16 @@ public class GUI_DocTab {
    public void updateAuthorTree(){
       List<String> authors = JAPI.getAuthors();
       List<TreeItem<String>> authNode = new ArrayList<TreeItem<String>>();
+      TreeItem<String> node = new TreeItem<String>();
+      List<Document> docs = Collections.emptyList();
       for(String i : authors){
-         TreeItem<String> node = new TreeItem<String>(i);
-         authNode.add(node);
-         for(TreeItem<String> j : authNode){ //Adding documents doubled here or bellow
-            List<Document> docs = JAPI.getDocumentsByAuthor(j.getValue());
-            for(Document k : docs){
-               TreeItem<String> temp = new TreeItem<String>(k.getFilePath());
-               j.getChildren().add(temp);
-            }
+         node = new TreeItem<String>(i); //Adding documents doubled here or bellow
+         docs = JAPI.getDocumentsByAuthor(i);
+         for(Document k : docs){
+            TreeItem<String> temp = new TreeItem<String>(k.getFilePath());
+            node.getChildren().add(temp);
          }
+         authNode.add(node);
       }
       this.rootNode.getChildren().addAll(authNode);
       this.tree.refresh();

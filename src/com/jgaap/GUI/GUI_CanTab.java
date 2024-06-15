@@ -273,8 +273,8 @@ public class GUI_CanTab {
         }
     }
 
+    //TODO: Update function to apply Canonicinizer to All selected documents in comboBox
     private void canonSelected(String method) {
-        this.canonSelect.add(method);
         this.canonName.remove(method);
         Iterator<Canonicizer> master = this.CanonicizerMasterList.iterator();
         while(master.hasNext()) {
@@ -283,7 +283,8 @@ public class GUI_CanTab {
                 try {
                     SelectedCanonicizerList.add(new Pair<Canonicizer, Object>(temp,
 					docTypesList.get(comboBox.getSelectionModel().getSelectedIndex())));
-                    this.canMethSel.add(JAPI.addCanonicizer(temp.displayName()));
+                    this.canMethSel.add(temp);
+                    canonSelect.add(temp.displayName()+" ["+comboBox.getSelectionModel().getSelectedItem()+"]");
                 } catch (Exception e) {
                     logger.error(e.getCause(), e);
                     e.printStackTrace();
@@ -296,8 +297,8 @@ public class GUI_CanTab {
         this.canList.setItems(this.items);
         this.selList.setItems(this.selItems);
     }
-
-    private void canonDeselected(String method) {
+    //TODO: Update to removd from SelectedCanonicizerList
+  private void canonDeselected(String method) {
         this.canonSelect.remove(method);
         this.canonName.add(method);
         Iterator<Canonicizer> canMeth = this.canMethSel.iterator();
