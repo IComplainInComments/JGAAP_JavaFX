@@ -26,10 +26,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Arrays;
 
 import javax.swing.GroupLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+
+import javafx.collections.FXCollections;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
+
 import javax.swing.JPanel;
 
 import com.jgaap.util.Pair;
@@ -48,18 +57,22 @@ public class Parameterizable {
 
     /** Store parameter GUI settings representations (label, dropdown box pair) */
 	private List<Pair<JLabel, JComboBox>> paramGUI;
+    
+    /** Store parameter GUI settings representations (label, dropdown box pair) */
+	private List<Pair<Label, ComboBox>> newParamGUI;
 
     /** Construct new Parameterizable with empty set */
     public Parameterizable() {
         Parameters = new HashMap<String, String>();
         paramGUI = new ArrayList<Pair<JLabel, JComboBox>>();
+        newParamGUI = new ArrayList<Pair<Label, ComboBox>>();
     }
     
     private Parameterizable(Map<String, String> parameters) {
         Parameters = parameters;
         paramGUI = Collections.emptyList();
+        newParamGUI = Collections.emptyList();
     }
-
     /** Removes all label and their associated values */
     public void clearParameterSet() {
         Parameters.clear();
@@ -236,11 +249,15 @@ public class Parameterizable {
     public void addParams(String paramName, String displayName, String defaultValue, String[] possibleValues, boolean editable) {
         JLabel label = new JLabel();
         JComboBox box = new JComboBox();
+        Label fxLabel = new Label();
+        ComboBox<String> fxBox = new ComboBox<String>();
 
         setParameter(paramName, defaultValue);
 
         label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         label.setText(displayName);
+
+        fxLabel.setText(displayName);
 
         box.setModel(new javax.swing.DefaultComboBoxModel(possibleValues));
         box.setEditable(editable);
@@ -252,7 +269,15 @@ public class Parameterizable {
             }
         });
 
+        fxBox.setItems(FXCollections.observableList(Arrays.asList(possibleValues)));
+        fxBox.setEditable(editable);
+        fxBox.setId(defaultValue);
+        fxBox.setOnAction(e -> {
+            changeParam(e);
+        });
+
         paramGUI.add(new Pair<JLabel, JComboBox>(label, box));
+        newParamGUI.add(new Pair<Label, ComboBox>(fxLabel,fxBox));
     }
 
     public GroupLayout getGUILayout(JPanel panel){
@@ -280,11 +305,34 @@ public class Parameterizable {
 
         return layout;
     }
+    public VBox getNewGUILayout(){
+
+        VBox box = new VBox(5);
+        Region region1 = new Region();
+        Region region2 = new Region();
+        VBox.setVgrow(region1, Priority.ALWAYS);
+        VBox.setVgrow(region2, Priority.ALWAYS);
+
+        box.getChildren().add(region1);
+        for(Pair<Label, ComboBox> p : newParamGUI) {
+            box.getChildren().add(p.getFirst());
+            box.getChildren().add(p.getSecond());
+        }
+        box.getChildren().add(region2);
+        box.setStyle("-fx-border-color: black");
+        return box;
+    }
 
     protected void changeParam(java.awt.event.ActionEvent evt) {
         for(Pair<JLabel, JComboBox> p : paramGUI) {
             this.setParameter(p.getSecond().getName(), (String)p.getSecond().getSelectedItem());
         }
+    }
+    protected void changeParam(javafx.event.ActionEvent evt) {
+        for(Pair<Label, ComboBox> p : newParamGUI) {
+            this.setParameter(p.getSecond().getId(), (String)p.getSecond().getSelectionModel().getSelectedItem());
+        }
+        evt.consume();
     }
     
     /**
@@ -296,6 +344,9 @@ public class Parameterizable {
      */
     public List<Pair<JLabel, JComboBox>> getParamGUI() {
     	return paramGUI;
+    }
+    public List<Pair<Label, ComboBox>> getNewParamGUI() {
+    	return newParamGUI;
     }
     
     /**
@@ -321,5 +372,22 @@ public class Parameterizable {
     		
     		addParams(paramName, displayName, defaultValue, possibleValues, editable);
     	}
+    }
+    public void setParamNewGUI(List<Pair<Label, ComboBox>> incomingParamGUI){
+        for(Pair<Label, ComboBox> guiPair : incomingParamGUI){
+            Label label = guiPair.getFirst();
+            ComboBox box = guiPair.getSecond();
+            String paramName = box.getId();
+            String displayName = label.getText();
+            String defaultValue = String.valueOf(box.getSelectionModel().getSelectedItem());
+            String[] possibleValues = new String[box.getItems().size()];
+            boolean editable = box.isEditable();
+
+            for(int x = 0; x < possibleValues.length; x++){
+                possibleValues[x] = String.valueOf(box.getItems().get(x));
+            }
+
+            addParams(paramName, displayName, defaultValue, possibleValues, editable);
+        }
     }
 }

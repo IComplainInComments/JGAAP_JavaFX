@@ -18,6 +18,7 @@ public abstract class NonDistanceDependentAnalysisDriver extends AnalysisDriver 
 		// for this driver, and analysisDriver as the dependency for this
 		// driver.
 		setParamGUI(analysisDriver.getParamGUI());
+		setParamNewGUI(analysisDriver.getNewParamGUI());
 		this.analysisDriver = analysisDriver;
 	}
 	

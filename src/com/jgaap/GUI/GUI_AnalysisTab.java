@@ -16,6 +16,7 @@ import com.jgaap.generics.AnalysisDriver;
 import com.jgaap.backend.AnalysisDrivers;
 import com.jgaap.backend.DistanceFunctions;
 import com.jgaap.generics.DistanceFunction;
+import com.jgaap.generics.EventDriver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,6 +43,9 @@ public class GUI_AnalysisTab {
     private ListView<String> anList;
     private ListView<String> dfList;
     private ListView<String> selList;
+    private VBox param;
+    private VBox paraBoxChildOne;
+    private VBox paraBoxChildTwo;
     private TextArea anArea;
     private TextArea dfArea;
     private static API JAPI;
@@ -78,9 +82,9 @@ public class GUI_AnalysisTab {
         HBox noteBox = new HBox();
         VBox meth = new VBox();
         VBox sel = new VBox();
-        VBox param = new VBox();
-        VBox paraBoxChildOne = new VBox();
-        VBox paraBoxChildTwo = new VBox();
+        this.param = new VBox();
+        this.paraBoxChildOne = new VBox();
+        this.paraBoxChildTwo = new VBox();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         Button notes = notesBox.getButton();
@@ -154,6 +158,30 @@ public class GUI_AnalysisTab {
         this.selList.setItems(this.selItems);
         this.selList.prefHeightProperty().bind(this.box.heightProperty());
         this.selList.prefWidthProperty().bind(this.box.widthProperty());
+        this.selList.setOnMouseClicked(e -> {
+            String sel = this.selList.getSelectionModel().getSelectedItem();
+            Iterator<AnalysisDriver> iter = this.anSel.iterator();
+            while (iter.hasNext()) {
+                AnalysisDriver temp = iter.next();
+                if (sel.equalsIgnoreCase(temp.displayName())) {
+                    VBox para = temp.getNewGUILayout();
+                    if (this.param.getChildren().contains(this.paraBoxChildOne) || this.param.getChildren().contains(this.paraBoxChildTwo)) {
+                        para.prefHeightProperty().bind(this.box.heightProperty());
+                        para.prefWidthProperty().bind(this.box.widthProperty());
+                        this.param.getChildren().removeAll(this.paraBoxChildOne);
+                        this.param.getChildren().removeAll(this.paraBoxChildTwo);
+                        this.param.getChildren().add(para);
+                    } else if (!this.param.getChildren().contains(para) || !this.param.getChildren().contains(para)) {
+                        para.prefHeightProperty().bind(this.box.heightProperty());
+                        para.prefWidthProperty().bind(this.box.widthProperty());
+                        this.param.getChildren().removeAll(this.paraBoxChildOne);
+                        this.param.getChildren().removeAll(this.paraBoxChildTwo);
+                        this.param.getChildren().add(para);
+                    }
+                }
+            }
+            e.consume();
+        });
 
         return this.selList;
     }

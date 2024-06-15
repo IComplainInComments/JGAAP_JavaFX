@@ -22,8 +22,8 @@ import com.jgaap.generics.Parameterizable;
 public class GUI_ParamBuilder<T> {
     
     private VBox panel;
-    private ComboBox<T> box1;
-    private ComboBox<T> box2;
+    private ComboBox<String> com1;
+    private ComboBox<String> com2;
     private ObservableList<String> list1;
     private ObservableList<String> list2;
     private String itemName;
@@ -35,8 +35,6 @@ public class GUI_ParamBuilder<T> {
 
     public GUI_ParamBuilder(T item){
         this.item = item;
-        this.box1 = null;
-        this.box2 = null;
         this.list1 = null;
         this.list2 = null;
         JAPI = API.getInstance();
@@ -49,6 +47,33 @@ public class GUI_ParamBuilder<T> {
             case "eventDrivers":
                 EventDriver temp = (EventDriver)this.item;
                 build_panel(temp.getParameters().replaceAll("\\s", ""));
+                break;
+            case "eventCullers":
+                break;
+            case "analysisDrivers":
+                break;
+            case "distanceFunctions":
+                break;
+            default:
+                break;
+        }
+    }
+    public void setUpAction(String kind, int amount){
+        switch(kind){
+            case "eventDrivers":
+                if(amount == 2){
+                    this.com1.setOnAction(e -> {
+                        this.val1 = this.com1.getSelectionModel().getSelectedItem();
+                    });
+                }else if(amount == 4){
+                    com1.setOnAction(e -> {
+                        this.val1 = com1.getSelectionModel().getSelectedItem();
+        
+                    });
+                    com2.setOnAction(e -> {
+                        this.val2 = com2.getSelectionModel().getSelectedItem();
+                    });
+                }
                 break;
             case "eventCullers":
                 break;
@@ -75,18 +100,16 @@ public class GUI_ParamBuilder<T> {
                 temp.add(i+"");
             }
             setListTop(temp);
-            ComboBox<String> com = build_comboBox();
-            com.setId("com1");
-            com.setOnAction(e -> {
-                this.val1 = com.getSelectionModel().getSelectedItem();
-            });
+            this.com1 = build_comboBox();
+            this.com1.setId("com1");
+            setUpAction(this.itemName, paramSize);
             region1 = new Region();
             region2 = new Region();
             VBox.setVgrow(region1, Priority.ALWAYS);
             VBox.setVgrow(region2, Priority.ALWAYS);
-            com.setItems(this.list1);
-            com.getSelectionModel().select(this.split[1]);
-            this.panel.getChildren().addAll(region1,label1, com, region2);
+            this.com1.setItems(this.list1);
+            this.com1.getSelectionModel().select(this.split[1]);
+            this.panel.getChildren().addAll(region1,label1, this.com1, region2);
 
         } else if(split.length == 4){
             label1 = build_title(this.split[0]);
@@ -101,21 +124,16 @@ public class GUI_ParamBuilder<T> {
             ComboBox<String> com2 = build_comboBox();
             com1.setId("com1");
             com2.setId("com2");
-            com1.setOnAction(e -> {
-                this.val1 = com1.getSelectionModel().getSelectedItem();
-            });
-            com2.setOnAction(e -> {
-                this.val2 = com2.getSelectionModel().getSelectedItem();
-            });
+            setUpAction(this.itemName, paramSize);
             region1 = new Region();
             region2 = new Region();
             VBox.setVgrow(region1, Priority.ALWAYS);
             VBox.setVgrow(region2, Priority.ALWAYS);
-            com1.setItems(this.list1);
-            com2.setItems(this.list2);
-            com1.getSelectionModel().select(this.split[1]);
-            com2.getSelectionModel().select(this.split[3]);
-            this.panel.getChildren().addAll(region1, label1, com1, label2, com2, region2);
+            this.com1.setItems(this.list1);
+            this.com2.setItems(this.list2);
+            this.com1.getSelectionModel().select(this.split[1]);
+            this.com2.getSelectionModel().select(this.split[3]);
+            this.panel.getChildren().addAll(region1, label1, this.com1, label2, this.com2, region2);
         }
     }
     private Spinner<T> build_spinner(){

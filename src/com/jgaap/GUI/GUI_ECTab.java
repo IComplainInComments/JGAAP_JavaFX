@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import com.jgaap.generics.EventCuller;
+import com.jgaap.generics.EventDriver;
 import com.jgaap.backend.EventCullers;
 import com.jgaap.backend.API;
 /**
@@ -35,6 +36,8 @@ public class GUI_ECTab {
     private ListView<String> listLeft;
     private ListView<String> listRight;
     private TextArea area;
+    private VBox paraBox;
+    private VBox paraBoxChild;
     private VBox box;
     private HBox bottomButtons;
     private static Logger logger;
@@ -73,8 +76,8 @@ public class GUI_ECTab {
         HBox notesBox = new HBox();
         VBox edBox = new VBox();
         VBox selBox = new VBox();
-        VBox paraBox = new VBox();
-        VBox paraBoxChild = new VBox();
+        this.paraBox = new VBox();
+        this.paraBoxChild = new VBox();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
@@ -158,9 +161,21 @@ public class GUI_ECTab {
         this.listRight.setOnMouseClicked(e -> {
             String sel = this.listRight.getSelectionModel().getSelectedItem();
             Iterator<EventCuller> iter = this.ecSel.iterator();
-            while(iter.hasNext()){
+            while (iter.hasNext()) {
                 EventCuller temp = iter.next();
-                if(sel.equalsIgnoreCase(temp.displayName())){
+                if (sel.equalsIgnoreCase(temp.displayName())) {
+                    VBox para = temp.getNewGUILayout();
+                    if (this.paraBox.getChildren().contains(this.paraBoxChild)) {
+                        para.prefHeightProperty().bind(this.box.heightProperty());
+                        para.prefWidthProperty().bind(this.box.widthProperty());
+                        this.paraBox.getChildren().removeAll(this.paraBoxChild);
+                        this.paraBox.getChildren().add(para);
+                    } else if (!this.paraBox.getChildren().contains(para)) {
+                        para.prefHeightProperty().bind(this.box.heightProperty());
+                        para.prefWidthProperty().bind(this.box.widthProperty());
+                        this.paraBox.getChildren().removeLast();
+                        this.paraBox.getChildren().add(para);
+                    }
                     this.area.setText(temp.longDescription());
                 }
             }
