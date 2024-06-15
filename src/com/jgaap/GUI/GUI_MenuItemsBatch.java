@@ -209,6 +209,7 @@ public class GUI_MenuItemsBatch {
         }
         this.tab.updateUnknownDocumentsTable();
         this.tab.updateAuthorTree();
+        GUI_CanTab.UpdateCanonicizerDocTypeComboBox();
     }
 
     /**

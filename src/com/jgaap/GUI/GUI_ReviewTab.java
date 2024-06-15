@@ -45,7 +45,7 @@ public class GUI_ReviewTab {
    private ArrayList<String> ecVals;
    private ArrayList<String> edVals;
    private ArrayList<String> anVals;
-   private List<Pair<Canonicizer, Object>> SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
+   private List<Pair<Canonicizer, Object>> SelectedCanonicizerList;
    private GUI_ResultsWindow res;
    private VBox box;
    private HBox bottomButtons;
@@ -57,6 +57,7 @@ public class GUI_ReviewTab {
     */
    public GUI_ReviewTab() {
       logger = Logger.getLogger(GUI_ReviewTab.class);
+      this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
       this.box = new VBox();
       this.res = new GUI_ResultsWindow();
       this.res.hideStage();
@@ -65,6 +66,7 @@ public class GUI_ReviewTab {
    }
    public GUI_ReviewTab(GUI_ResultsWindow grw) {
       logger = Logger.getLogger(GUI_ReviewTab.class);
+      this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
       this.box = new VBox();
       this.res = grw;
       this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
@@ -133,13 +135,12 @@ public class GUI_ReviewTab {
          try {
             JAPI.clearData();
             JAPI.clearCanonicizers();
-            for (Pair<Canonicizer, Object> canonicizerPair : this.SelectedCanonicizerList) {
-               if (canonicizerPair.getSecond() instanceof Document.Type) {
-                  JAPI.addCanonicizer(canonicizerPair.getFirst().displayName(),
-                        (Document.Type) canonicizerPair.getSecond());
-               } else if (canonicizerPair.getSecond() instanceof Document) {
-                  JAPI.addCanonicizer(canonicizerPair.getFirst().displayName(),
-                        (Document) canonicizerPair.getSecond());
+            this.SelectedCanonicizerList = GUI_CanTab.getSelectedCanList();
+            for(Pair<Canonicizer, Object> canonicizerPair : this.SelectedCanonicizerList){
+               if(canonicizerPair.getSecond() instanceof Document.Type){
+                  JAPI.addCanonicizer(canonicizerPair.getFirst().displayName(), (Document.Type)canonicizerPair.getSecond());
+               } else if(canonicizerPair.getSecond() instanceof Document){
+                  JAPI.addCanonicizer(canonicizerPair.getFirst().displayName(), (Document)canonicizerPair.getSecond());
                } else {
                   JAPI.addCanonicizer(canonicizerPair.getFirst().displayName());
                }

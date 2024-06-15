@@ -10,6 +10,8 @@ import com.jgaap.backend.API;
 import com.jgaap.backend.Canonicizers;
 import com.jgaap.generics.Canonicizer;
 import com.jgaap.util.Document;
+import com.jgaap.util.Document.Type;
+import com.jgaap.util.Pair;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -37,13 +39,16 @@ public class GUI_CanTab {
     private ArrayList<String> canonName;
     private ArrayList<String> canonSelect;
     private ArrayList<Canonicizer> canMethSel;
-    private ArrayList<String> CanonicizerComboBoxModel;
+    private static ArrayList<String> CanonicizerComboBoxModel;
+    private static ArrayList<Pair<Canonicizer, Object>> SelectedCanonicizerList;
     private ObservableList<String> selItems;
     private ObservableList<String> items;
     private ListView<String> canList;
     private ListView<String> selList;
-    private List<Object> docTypesList;
+    private static List<Object> docTypesList;
+    private static ComboBox<String> comboBox;
     private TextArea area;
+    private Type docTypes;
     private HBox bottomButtons;
     private static Logger logger;
     private static API JAPI;
@@ -53,9 +58,11 @@ public class GUI_CanTab {
      * Constructor for the class.
      */
     public GUI_CanTab() {
+        comboBox = new ComboBox<String>();
         logger = Logger.getLogger(GUI_CanTab.class);
-        this.docTypesList = new ArrayList<Object>();
-        this.CanonicizerComboBoxModel = new ArrayList<String>();
+        docTypesList = new ArrayList<Object>();
+        SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
+        CanonicizerComboBoxModel = new ArrayList<String>();
         box = new VBox();
         noteBox = new GUI_NotesWindow();
         JAPI = API.getInstance();
@@ -246,15 +253,11 @@ public class GUI_CanTab {
      * @return ComboBox<String>
      */
     private ComboBox<String> init_rowTwoSelectionDropDown() {
-        ComboBox<String> comboBox;
         UpdateCanonicizerDocTypeComboBox();
-        ObservableList<String> options = FXCollections.observableArrayList(this.CanonicizerComboBoxModel);
-
-        comboBox = new ComboBox<String>(options);
         comboBox.setMinSize(100, 25);
         comboBox.getSelectionModel().select("All");
         comboBox.setOnAction(e -> {
-
+            this.docTypes = Type.valueOf(comboBox.getSelectionModel().getSelectedItem());
         });
 
         return comboBox;
@@ -278,6 +281,8 @@ public class GUI_CanTab {
             Canonicizer temp = master.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
                 try {
+                    SelectedCanonicizerList.add(new Pair<Canonicizer, Object>(temp,
+					docTypesList.get(comboBox.getSelectionModel().getSelectedIndex())));
                     this.canMethSel.add(JAPI.addCanonicizer(temp.displayName()));
                 } catch (Exception e) {
                     logger.error(e.getCause(), e);
@@ -309,20 +314,22 @@ public class GUI_CanTab {
         this.canList.setItems(this.items);
         this.selList.setItems(this.selItems);
     }
-    private void UpdateCanonicizerDocTypeComboBox() {
-        this.CanonicizerComboBoxModel.clear();
-		docTypesList.clear();
+    public static void UpdateCanonicizerDocTypeComboBox() {
+        comboBox.getItems().clear();
+        CanonicizerComboBoxModel.clear();
+        docTypesList.clear();
 		docTypesList.add("All");
 		docTypesList.add(Document.Type.GENERIC);
 		docTypesList.add(Document.Type.DOC);
 		docTypesList.add(Document.Type.PDF);
 		docTypesList.add(Document.Type.HTML);
 		for(Document document : JAPI.getDocuments()){
-			docTypesList.add(document);
+			docTypesList.add(document.getTitle());
 		}
 		for(Object obj : docTypesList){
 			CanonicizerComboBoxModel.add(obj.toString());
 		}
+        comboBox.setItems(FXCollections.observableArrayList(CanonicizerComboBoxModel));
 	}
 
     /**
@@ -336,6 +343,9 @@ public class GUI_CanTab {
     }
     public void setBottomButtons(HBox box){
         this.bottomButtons = box;
+    }
+    public static ArrayList<Pair<Canonicizer, Object>> getSelectedCanList(){
+        return SelectedCanonicizerList;
     }
 
 }

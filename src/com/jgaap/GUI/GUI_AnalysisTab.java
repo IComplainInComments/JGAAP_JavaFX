@@ -168,9 +168,11 @@ public class GUI_AnalysisTab {
                     if (this.param.getChildren().contains(this.paraBoxChildOne) || this.param.getChildren().contains(this.paraBoxChildTwo)) {
                         para.prefHeightProperty().bind(this.box.heightProperty());
                         para.prefWidthProperty().bind(this.box.widthProperty());
-                        this.param.getChildren().removeAll(this.paraBoxChildOne);
-                        this.param.getChildren().removeAll(this.paraBoxChildTwo);
-                        this.param.getChildren().add(para);
+                        if(para.getChildren().size() > 2){
+                            //this.param.getChildren().removeAll(this.paraBoxChildOne);
+                            //this.param.getChildren().removeAll(this.paraBoxChildTwo);
+                            this.param.getChildren().add(para);
+                        }
                     } else if (!this.param.getChildren().contains(para) || !this.param.getChildren().contains(para)) {
                         para.prefHeightProperty().bind(this.box.heightProperty());
                         para.prefWidthProperty().bind(this.box.widthProperty());
@@ -272,7 +274,7 @@ public class GUI_AnalysisTab {
             e.consume();
         });
         right.setOnAction(e -> {
-            if(this.dfList.getSelectionModel().isEmpty()){
+            /*if(this.dfList.getSelectionModel().isEmpty()){
                 anSelected(this.anList.getSelectionModel().getSelectedItem());
             } else {
                 Iterator<AnalysisDriver> iter = this.AnalysisDriverMasterList.iterator();
@@ -282,7 +284,8 @@ public class GUI_AnalysisTab {
                         dfAdd("NOMETHOD", this.dfList.getSelectionModel().getSelectedItem(), temp);
                     }
                 }
-            }
+            }*/
+            anSelected(this.anList.getSelectionModel().getSelectedItem());
             this.selItems = FXCollections.observableArrayList(this.selName);
             this.selList.setItems(this.selItems);
             this.selList.refresh();

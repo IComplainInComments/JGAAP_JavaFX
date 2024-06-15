@@ -152,6 +152,7 @@ public class GUI_DocTab {
             try {
                JAPI.addDocument(file.getCanonicalPath(), "", "");
                filepath = file.getCanonicalPath();
+               GUI_CanTab.UpdateCanonicizerDocTypeComboBox();
             } catch (Exception ex) {
                logger.error("Error adding document(s)", ex);
                if (filepath != null) {
@@ -162,8 +163,8 @@ public class GUI_DocTab {
                         .ifPresent(response -> error.close());
                }
             }
-            updateUnknownDocumentsTable();
          }
+         updateUnknownDocumentsTable();
          e.consume();
       });
       //===============================================================================
@@ -200,6 +201,7 @@ public class GUI_DocTab {
          Stage stage = pop.getStage();
          stage.showAndWait();
          updateAuthorTree();
+         GUI_CanTab.UpdateCanonicizerDocTypeComboBox();
          e.consume();
       });
       //===============================================================================
@@ -210,6 +212,7 @@ public class GUI_DocTab {
          Stage stage = pop.getStage();
          stage.showAndWait();
          updateAuthorTree();
+         GUI_CanTab.UpdateCanonicizerDocTypeComboBox();
          e.consume();
       });
       //===============================================================================
@@ -224,6 +227,7 @@ public class GUI_DocTab {
             }
          }
          updateAuthorTree();
+         GUI_CanTab.UpdateCanonicizerDocTypeComboBox();
          e.consume();
       });
       //===============================================================================
@@ -284,7 +288,7 @@ public class GUI_DocTab {
       for(String i : authors){
          TreeItem<String> node = new TreeItem<String>(i);
          authNode.add(node);
-         for(TreeItem<String> j : authNode){
+         for(TreeItem<String> j : authNode){ //Adding documents doubled here or bellow
             List<Document> docs = JAPI.getDocumentsByAuthor(j.getValue());
             for(Document k : docs){
                TreeItem<String> temp = new TreeItem<String>(k.getFilePath());
@@ -292,9 +296,7 @@ public class GUI_DocTab {
             }
          }
       }
-      for(TreeItem<String> i : authNode){
-         this.rootNode.getChildren().add(i);
-      }
+      this.rootNode.getChildren().addAll(authNode);
       this.tree.refresh();
    }
    private List<String> populateLanguageMasterList(){
@@ -317,8 +319,5 @@ public class GUI_DocTab {
    }
    public void setBottomButtons(HBox box){
       this.bottomButtons = box;
-  }
-  public GUI_DocTab getInstance(){
-   return this;
   }
 }
