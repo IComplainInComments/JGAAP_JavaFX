@@ -216,6 +216,7 @@ public class GUI_ECTab {
             ecSelected(this.listLeft.getSelectionModel().getSelectedItem().trim());
             this.listLeft.refresh();
             this.listRight.refresh();
+            this.listRight.getSelectionModel().select(this.selItems.getLast());
             e.consume();
         });
         clear.setOnAction(e -> {

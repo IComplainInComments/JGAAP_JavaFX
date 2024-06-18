@@ -289,6 +289,7 @@ public class GUI_AnalysisTab {
             this.selItems = FXCollections.observableArrayList(this.selName);
             this.selList.setItems(this.selItems);
             this.selList.refresh();
+            this.selList.getSelectionModel().select(this.selItems.getLast());
             e.consume();
         });
         clear.setOnAction(e -> {

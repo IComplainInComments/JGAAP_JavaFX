@@ -271,7 +271,8 @@ public class Parameterizable {
 
         fxBox.setItems(FXCollections.observableList(Arrays.asList(possibleValues)));
         fxBox.setEditable(editable);
-        fxBox.setId(defaultValue);
+        fxBox.setId(paramName);
+        fxBox.getSelectionModel().select(defaultValue);
         fxBox.setOnAction(e -> {
             changeParam(e);
         });

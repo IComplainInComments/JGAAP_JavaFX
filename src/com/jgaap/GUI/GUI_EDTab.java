@@ -228,6 +228,7 @@ public class GUI_EDTab {
             edSelected(this.edList.getSelectionModel().getSelectedItem().trim());
             this.selList.refresh();
             this.edList.refresh();
+            this.selList.getSelectionModel().select(this.selItems.getLast());
             e.consume();
         });
         clear.setOnAction(e -> {
