@@ -18,7 +18,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import com.jgaap.generics.EventCuller;
-import com.jgaap.generics.EventDriver;
 import com.jgaap.backend.EventCullers;
 import com.jgaap.backend.API;
 /**
@@ -254,6 +253,22 @@ public class GUI_ECTab {
 
         return box;
     }
+    /**
+     * Method for initializing the Event Culler Master list
+     */
+    private void init_eventCullers(){
+        this.EventCullersMasterList = new ArrayList<EventCuller>();
+        for (int i = 0; i < EventCullers.getEventCullers().size(); i++){
+            //for (EventCuller eventCuller : EventCullers.getEventCullers()) {
+                EventCuller eventCuller = EventCullers.getEventCullers().get(i);
+                if (eventCuller.showInGUI())
+                    this.EventCullersMasterList.add(eventCuller);
+            }
+    }
+    /**
+     * Method for adding a selected Event Culler
+     * @param method String
+     */
     private void ecSelected(String method) {
         this.ecSelect.add(method);
         this.ecName.remove(method);
@@ -276,6 +291,9 @@ public class GUI_ECTab {
         this.listLeft.setItems(this.items);
         this.listRight.setItems(this.selItems);
     }
+    /**
+     * Method for adding all Event Cullers
+     */
     private void allSelected() {
         this.ecSelect.addAll(this.ecName);
         this.ecName.clear();
@@ -295,6 +313,10 @@ public class GUI_ECTab {
         this.listLeft.setItems(this.items);
         this.listRight.setItems(this.selItems);
     }
+    /**
+     * Method for removing a selected Event Culler
+     * @param method String
+     */
     private void ecDeselected(String method) {
         this.ecSelect.remove(method);
         this.ecName.add(method);
@@ -312,15 +334,6 @@ public class GUI_ECTab {
         this.listLeft.setItems(this.items);
         this.listRight.setItems(this.selItems);
     }
-    private void init_eventCullers(){
-        this.EventCullersMasterList = new ArrayList<EventCuller>();
-        for (int i = 0; i < EventCullers.getEventCullers().size(); i++){
-            //for (EventCuller eventCuller : EventCullers.getEventCullers()) {
-                EventCuller eventCuller = EventCullers.getEventCullers().get(i);
-                if (eventCuller.showInGUI())
-                    this.EventCullersMasterList.add(eventCuller);
-            }
-    }
     /**
      * Getter for getting the built Pane.
      * @return VBox
@@ -329,6 +342,10 @@ public class GUI_ECTab {
         build_pane();
         return this.box;
     }
+    /**
+     * Method for applying the bottom buttons to the panel
+     * @param box HBox
+     */
     public void setBottomButtons(HBox box){
         this.bottomButtons = box;
     }

@@ -180,14 +180,19 @@ public class GUI_MenuItemsBatch {
         }
 
     }
-
+    /**
+     * Add the document prefix that can be loaded into the program.
+     */
     private void genDocTypes() {
         this.docTypes.add("*.pdf");
         this.docTypes.add("*.doc");
         this.docTypes.add("*.txt");
         this.docTypes.add("*.html");
     }
-
+    /**
+     * Method for loading the AAAC Problems into JGAAP
+     * @param problem String
+     */
     private void loadAAACProblem(String problem) {
         String filepath;
         filepath = JGAAPConstants.JGAAP_RESOURCE_PACKAGE + "aaac/problem"
@@ -228,9 +233,5 @@ public class GUI_MenuItemsBatch {
      */
     public List<MenuItem> getProblems() {
         return this.problems;
-    }
-
-    public File getFile() {
-        return this.filepath;
     }
 }

@@ -18,6 +18,9 @@ import org.apache.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * GUI_ResultsWindow class is the class responsible for Building and Managing the window that displays the results.
+ */
 public class GUI_ResultsWindow {
 
     private Stage stage;
@@ -27,6 +30,9 @@ public class GUI_ResultsWindow {
 
     public static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
 
+    /**
+     * Constructor for the class.
+     */
     public GUI_ResultsWindow(){
         logger = Logger.getLogger(GUI_ResultsWindow.class);
         this.resultStorage = new ArrayList<String>();
@@ -35,6 +41,10 @@ public class GUI_ResultsWindow {
         this.stage.setScene(build_scene());
 
     }
+    /**
+     * Method builds the Scene for the Stage.
+     * @return Scene
+     */
     private Scene build_scene(){
         Scene scene;
         VBox box = new VBox(5);
@@ -48,6 +58,10 @@ public class GUI_ResultsWindow {
         scene = new Scene(box, 700, 900);
         return scene;
     }
+    /**
+     * Method builds the clear button at the bottom of the window.
+     * @return HBox
+     */
     private HBox init_button(){
         HBox buttonBox = new HBox(5);
         Region region1 = new Region();
@@ -63,6 +77,10 @@ public class GUI_ResultsWindow {
         buttonBox.autosize();
         return buttonBox;
     }
+    /**
+     * Builds the TabPanel that holds all the child tabs from each result.
+     * @param results String
+     */
     public void build_resultTab(String results){
         String now = now();
         VBox box = build_tab(results);
@@ -77,6 +95,10 @@ public class GUI_ResultsWindow {
         this.tabs.getTabs().add(resultTab);
         
     }
+    /**
+     * Builds a new tab for each new experiment ran.
+     * @param results String
+     */
     private VBox build_tab(String results){
         TextArea area = new TextArea();
         VBox box = new VBox(5);
@@ -87,14 +109,24 @@ public class GUI_ResultsWindow {
         box.getChildren().addAll(area, init_button());
         return box;
     }
+    /**
+     * Gets the current date/time.
+     * @return String
+     */
     public static String now(){
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
         return sdf.format(cal.getTime());
     }
+    /**
+     * Show the window.
+     */
     public void showStage(){
         this.stage.show();
     }
+    /**
+     * Close (Hide) the Window.
+     */
     public void hideStage(){
         this.stage.hide();
     }

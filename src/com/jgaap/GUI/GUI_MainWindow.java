@@ -198,6 +198,10 @@ public class GUI_MainWindow extends Application{
 
         return bar;
      }
+     /**
+      * Builds the bottom buttons that control the TabView in the main window.
+      * @return  HBox
+      */
     private HBox init_bottomButtons() {
         HBox box = new HBox(5);
         Button finish = new Button("Finish & Review");

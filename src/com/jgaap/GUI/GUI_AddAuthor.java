@@ -26,6 +26,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * GUI_AddAuthor class is for building a Window to add an Author to the program
+ */
 public class GUI_AddAuthor {
 
     private TableView<Document> table;
@@ -35,6 +38,9 @@ public class GUI_AddAuthor {
     private TextField auth;
     private Stage stage;
 
+    /**
+     * Initial constructor for the class
+     */
     public GUI_AddAuthor() {
         logger = Logger.getLogger(GUI_AddAuthor.class);
         this.docs = new ArrayList<Document>();
@@ -44,7 +50,10 @@ public class GUI_AddAuthor {
         stage.setScene(init_scene());
 
     }
-
+    /**
+     * Constructor for the class to edit an author
+     * @param author String
+     */
     public GUI_AddAuthor(String author) {
         logger = Logger.getLogger(GUI_AddAuthor.class);
         this.docs = new ArrayList<Document>();
@@ -54,7 +63,10 @@ public class GUI_AddAuthor {
         stage.setScene(init_scene(author));
 
     }
-
+    /**
+     * Method to build the Scene for the Stage
+     * @return Scene
+     */
     private Scene init_scene() {
         VBox box = new VBox();
         box.getChildren().addAll(init_authorBox(), init_authorTable(), init_bottomButtons());
@@ -63,16 +75,10 @@ public class GUI_AddAuthor {
         return scene;
 
     }
-
-    private Scene init_scene(String author) {
-        VBox box = new VBox(5);
-        box.getChildren().addAll(init_authorBox(author), init_authorTable(author), init_bottomButtons());
-        box.setPadding(new Insets(5));
-        Scene scene = new Scene(box,500,300);
-        return scene;
-
-    }
-
+    /**
+     * Method to initialize the Author name text box
+     * @return HBox
+     */
     private HBox init_authorBox() {
         HBox box = new HBox(5);
         Label auth = new Label("Author");
@@ -84,7 +90,10 @@ public class GUI_AddAuthor {
         box.getChildren().addAll(auth, this.auth);
         return box;
     }
-
+    /**
+     * Method to initialize the Documents to be added to the Author
+     * @return VBox
+     */
     private VBox init_authorTable() {
         VBox box = new VBox(5);
         HBox butBox = new HBox(5);
@@ -142,7 +151,22 @@ public class GUI_AddAuthor {
         return box;
 
     }
+        /**
+     * Method to build the Scene for the Stage for an author edit
+     * @return Scene
+     */
+    private Scene init_scene(String author) {
+        VBox box = new VBox(5);
+        box.getChildren().addAll(init_authorBox(author), init_authorTable(author), init_bottomButtons());
+        box.setPadding(new Insets(5));
+        Scene scene = new Scene(box,500,300);
+        return scene;
 
+    }
+    /**
+     * Method to initialize the Author name text box for an Edit
+     * @return HBox
+     */
     private HBox init_authorBox(String author) {
         HBox box = new HBox(5);
         Label auth = new Label("Author");
@@ -151,7 +175,10 @@ public class GUI_AddAuthor {
         box.getChildren().addAll(auth, this.auth);
         return box;
     }
-
+    /**
+     * Method to initialize the Documents to be added to the Author for an Edit
+     * @return VBox
+     */
     private VBox init_authorTable(String author) {
         VBox box = new VBox(5);
         HBox butBox = new HBox(5);
@@ -211,7 +238,10 @@ public class GUI_AddAuthor {
         return box;
 
     }
-
+    /**
+     * Build the bottom buttons on the Panel
+     * @return HBox
+     */
     private HBox init_bottomButtons() {
         HBox box = new HBox(5);
         Button ok = new Button("OK");
@@ -241,16 +271,17 @@ public class GUI_AddAuthor {
 
         return box;
     }
-
-    public String getTextFieldString() {
-        return this.auth.getText();
-    }
-
+    /**
+     * Update the Document List View box
+     */
     private void updateItemView() {
         this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(this.auth.getText().trim())));
         this.table.refresh();
     }
-
+    /**
+     * Get the constructed stage (Window)
+     * @return Stage
+     */
     public Stage getStage() {
         return this.stage;
     }

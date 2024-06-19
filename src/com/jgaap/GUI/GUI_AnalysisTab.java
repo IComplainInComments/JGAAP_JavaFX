@@ -16,7 +16,6 @@ import com.jgaap.generics.AnalysisDriver;
 import com.jgaap.backend.AnalysisDrivers;
 import com.jgaap.backend.DistanceFunctions;
 import com.jgaap.generics.DistanceFunction;
-import com.jgaap.generics.EventDriver;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -326,6 +325,34 @@ public class GUI_AnalysisTab {
         return box;
         
     }
+    /**
+     * Method for initializing the Distance Function Master List
+     */
+    private void init_distanceFunctions(){
+        this.DistanceFunctionsMasterList = new ArrayList<DistanceFunction>();
+        for (int i = 0; i < DistanceFunctions.getDistanceFunctions().size(); i++){
+            //for (DistanceFunction distanceFunction : DistanceFunctions.getDistanceFunctions()) {
+                DistanceFunction distanceFunction = DistanceFunctions.getDistanceFunctions().get(i);
+                if (distanceFunction.showInGUI())
+                    this.DistanceFunctionsMasterList.add(distanceFunction);
+            }
+    }
+    /**
+     * Method for initializing the Analysis Driver Master List
+     */
+    private void init_analysisDrivers(){
+        this.AnalysisDriverMasterList = new ArrayList<AnalysisDriver>();
+        for (int i = 0; i < AnalysisDrivers.getAnalysisDrivers().size(); i++){
+            //for (AnalysisDriver analysisDriver : AnalysisDrivers.getAnalysisDrivers()) {
+                AnalysisDriver analysisDriver = AnalysisDrivers.getAnalysisDrivers().get(i);
+                if (analysisDriver.showInGUI())
+                    this.AnalysisDriverMasterList.add(analysisDriver);
+            }
+    }
+    /**
+     * Method for adding an analysis driver
+     * @param method String
+     */
     private void anSelected(String method){
         this.selName.add(method);
         Iterator<AnalysisDriver> iter = this.AnalysisDriverMasterList.iterator();
@@ -339,6 +366,10 @@ public class GUI_AnalysisTab {
         this.selList.setItems(this.selItems);
         this.selList.refresh();
     }
+    /**
+     * Method for removing an Analysis Driver
+     * @param method String
+     */
     private void anDeselected(String method){
         this.selName.remove(method);
         Iterator<AnalysisDriver> iter = this.anSel.iterator();
@@ -390,24 +421,6 @@ public class GUI_AnalysisTab {
     private void dfRemove(DistanceFunction df){
 
     }
-    private void init_distanceFunctions(){
-        this.DistanceFunctionsMasterList = new ArrayList<DistanceFunction>();
-        for (int i = 0; i < DistanceFunctions.getDistanceFunctions().size(); i++){
-            //for (DistanceFunction distanceFunction : DistanceFunctions.getDistanceFunctions()) {
-                DistanceFunction distanceFunction = DistanceFunctions.getDistanceFunctions().get(i);
-                if (distanceFunction.showInGUI())
-                    this.DistanceFunctionsMasterList.add(distanceFunction);
-            }
-    }
-    private void init_analysisDrivers(){
-        this.AnalysisDriverMasterList = new ArrayList<AnalysisDriver>();
-        for (int i = 0; i < AnalysisDrivers.getAnalysisDrivers().size(); i++){
-            //for (AnalysisDriver analysisDriver : AnalysisDrivers.getAnalysisDrivers()) {
-                AnalysisDriver analysisDriver = AnalysisDrivers.getAnalysisDrivers().get(i);
-                if (analysisDriver.showInGUI())
-                    this.AnalysisDriverMasterList.add(analysisDriver);
-            }
-    }
     /**
      * Getter method for getting the built pane.
      * @return VBox
@@ -416,6 +429,10 @@ public class GUI_AnalysisTab {
         build_pane();
         return this.box;
     }
+    /**
+     * Method for adding bottom buttons to Panel
+     * @param box HBox
+     */
     public void setBottomButtons(HBox box){
         this.bottomButtons = box;
     }

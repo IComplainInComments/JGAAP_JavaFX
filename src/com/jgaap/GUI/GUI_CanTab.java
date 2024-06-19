@@ -127,12 +127,6 @@ public class GUI_CanTab {
     }
 
     /**
-     * Method for building the 'Bottom Buttons' of GUI elements.
-     * 
-     * @return HBox
-     */
-
-    /**
      * Method for generating the List Box of Canocinizers.
      * 
      * @return ListView<String>
@@ -257,7 +251,9 @@ public class GUI_CanTab {
 
         return comboBox;
     }
-
+    /**
+     * Method for building the Canonicizer Master List
+     */
     private void init_canonicizers() {
         CanonicizerMasterList = new ArrayList<Canonicizer>();
         for (int i = 0; i < Canonicizers.getCanonicizers().size(); i++) {
@@ -267,7 +263,11 @@ public class GUI_CanTab {
                 CanonicizerMasterList.add(canonicizer);
         }
     }
-
+    /**
+     * Method for Adding a Canonicizer
+     * @param method Canonicizer
+     * @param doc Document or String
+     */
     private void canonSelected(Canonicizer method, Object doc) {
 
         Pair<Canonicizer, Object> temp = new Pair<Canonicizer, Object>(method, doc);
@@ -279,6 +279,10 @@ public class GUI_CanTab {
         this.selList.setItems(this.selItems);
         this.selList.getSelectionModel().select(this.selItems.getLast());
     }
+    /**
+     * Method for removing a selected Canonicizer
+     * @param key String
+     */
   private void canonDeselected(String key) {
         //this.canonName.add(method);
         /*Iterator<Pair<Canonicizer, Object>> canMeth = SelectedCanonicizerList.iterator();
@@ -295,6 +299,9 @@ public class GUI_CanTab {
         this.canList.setItems(this.canItems);
         this.selList.setItems(this.selItems);
     }
+    /**
+     * Method for updating the ComboBox Element for the Canonicizer
+     */
     public static void UpdateCanonicizerDocTypeComboBox() {
         comboBox.getItems().clear();
         CanonicizerComboBoxModel.clear();
@@ -323,9 +330,17 @@ public class GUI_CanTab {
         build_pane();
         return this.box;
     }
+    /**
+     * Sets the bottom row buttons
+     * @param box HBox
+     */
     public void setBottomButtons(HBox box){
         this.bottomButtons = box;
     }
+    /**
+     * Gives the current selected Canonicizers
+     * @return HashMap<String,Pair<Canonicizer, Object>>
+     */
     public static HashMap<String,Pair<Canonicizer, Object>> getSelectedCanList(){
         return SelectedCanonicizerMap;
     }

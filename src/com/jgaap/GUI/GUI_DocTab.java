@@ -283,13 +283,16 @@ public class GUI_DocTab {
       this.table.setItems(FXCollections.observableArrayList(JAPI.getUnknownDocuments()));
       this.table.refresh();
    }
+   /**
+    * Method for building the Author Tree View
+    */
    public void updateAuthorTree(){
       List<String> authors = JAPI.getAuthors();
       List<TreeItem<String>> authNode = new ArrayList<TreeItem<String>>();
       TreeItem<String> node = new TreeItem<String>();
       List<Document> docs = Collections.emptyList();
       for(String i : authors){
-         node = new TreeItem<String>(i); //Adding documents doubled here or bellow
+         node = new TreeItem<String>(i);
          docs = JAPI.getDocumentsByAuthor(i);
          for(Document k : docs){
             TreeItem<String> temp = new TreeItem<String>(k.getFilePath());

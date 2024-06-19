@@ -25,9 +25,7 @@ import com.jgaap.generics.EventCuller;
 import com.jgaap.generics.EventDriver;
 import com.jgaap.util.Document;
 import com.jgaap.util.Pair;
-import com.jgaap.util.Document.Type;
 
-import edu.stanford.nlp.process.DocumentPreprocessor.DocType;
 
 import com.jgaap.generics.Canonicizer;
 
@@ -52,7 +50,6 @@ public class GUI_ReviewTab {
    private List<Pair<Canonicizer, Object>> SelectedCanonicizerList;
    private GUI_ResultsWindow res;
    private VBox box;
-   private HBox bottomButtons;
    private static Logger logger;
    private static API JAPI;
 
@@ -241,7 +238,9 @@ public class GUI_ReviewTab {
       this.anList.refresh();
       return this.anList;
    }
-
+      /**
+    * mMethod for refreshing the Canonicizer List view
+    */
    public void refresh_canList() {
       Iterator<String> iter = GUI_CanTab.getSelectedCanList().keySet().iterator();
       this.canVals.clear();
@@ -252,7 +251,9 @@ public class GUI_ReviewTab {
       this.canItems = FXCollections.observableArrayList(this.canVals);
       this.canList.setItems(this.canItems);
    }
-
+      /**
+    * mMethod for refreshing the Event Driver List view
+    */
    public void refresh_edList() {
       Iterator<EventDriver> iter = JAPI.getEventDrivers().iterator();
       this.edVals.clear();
@@ -262,7 +263,9 @@ public class GUI_ReviewTab {
       this.edItems = FXCollections.observableArrayList(this.edVals);
       this.edList.setItems(this.edItems);
    }
-
+      /**
+    * mMethod for refreshing the Event Culler List view
+    */
    public void refresh_ecList() {
       Iterator<EventCuller> iter = JAPI.getEventCullers().iterator();
       this.ecVals.clear();
@@ -272,7 +275,9 @@ public class GUI_ReviewTab {
       this.ecItems = FXCollections.observableArrayList(this.ecVals);
       this.ecList.setItems(this.ecItems);
    }
-
+   /**
+    * mMethod for refreshing the Analysis Driver List view
+    */
    public void refresh_anList() {
       Iterator<AnalysisDriver> iter = JAPI.getAnalysisDrivers().iterator();
       this.anVals.clear();
@@ -282,7 +287,9 @@ public class GUI_ReviewTab {
       this.anItems = FXCollections.observableArrayList(this.anVals);
       this.anList.setItems(this.anItems);
    }
-
+   /**
+    * Method for refreshing the list views
+    */
    public void refreshView() {
       refresh_canList();
       refresh_edList();
@@ -304,7 +311,4 @@ public class GUI_ReviewTab {
       build_pane();
       return this.box;
    }
-   public void setBottomButtons(HBox box){
-      this.bottomButtons = box;
-  }
 }

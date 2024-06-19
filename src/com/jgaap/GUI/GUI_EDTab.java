@@ -1,7 +1,6 @@
 package com.jgaap.GUI;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -10,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -21,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import com.jgaap.generics.EventDriver;
-import com.jgaap.generics.Parameterizable;
 import com.jgaap.backend.EventDrivers;
 import com.jgaap.backend.API;
 
@@ -268,7 +265,10 @@ public class GUI_EDTab {
 
         return box;
     }
-
+    /**
+     * Method for adding a selected Event Driver
+     * @param method String
+     */
     private void edSelected(String method) {
         this.edSelect.add(method);
         this.edName.remove(method);
@@ -291,7 +291,20 @@ public class GUI_EDTab {
         this.edList.setItems(this.items);
         this.selList.setItems(this.selItems);
     }
-
+    /**
+     * Method for initializing the Event Driver Master List
+     */
+    private void init_EventDrivers() {
+        this.EventDriverMasterList = new ArrayList<EventDriver>();
+        for (int i = 0; i < EventDrivers.getEventDrivers().size(); i++) {
+            EventDriver eventDriver = EventDrivers.getEventDrivers().get(i);
+            if (eventDriver.showInGUI())
+                this.EventDriverMasterList.add(eventDriver);
+        }
+    }
+    /**
+     * Method for selecting all Event Drivers
+     */
     private void allSelected() {
         this.edSelect.addAll(this.edName);
         this.edName.clear();
@@ -311,7 +324,10 @@ public class GUI_EDTab {
         this.edList.setItems(this.items);
         this.selList.setItems(this.selItems);
     }
-
+    /**
+     * Method for removing selected Event Driver
+     * @param method String
+     */
     private void edDeselected(String method) {
         this.edSelect.remove(method);
         this.edName.add(method);
@@ -330,16 +346,6 @@ public class GUI_EDTab {
         this.selList.setItems(this.selItems);
     }
 
-    private void init_EventDrivers() {
-        this.EventDriverMasterList = new ArrayList<EventDriver>();
-        for (int i = 0; i < EventDrivers.getEventDrivers().size(); i++) {
-            // for (EventDriver eventDriver : EventDrivers.getEventDrivers()) {
-            EventDriver eventDriver = EventDrivers.getEventDrivers().get(i);
-            if (eventDriver.showInGUI())
-                this.EventDriverMasterList.add(eventDriver);
-        }
-    }
-
     /**
      * Getter for getting the built Pane.
      * 
@@ -349,7 +355,10 @@ public class GUI_EDTab {
         build_pane();
         return this.box;
     }
-
+    /**
+     * Method for applying the bottom buttons to the panel
+     * @param box HBOX
+     */
     public void setBottomButtons(HBox box) {
         this.bottomButtons = box;
     }
