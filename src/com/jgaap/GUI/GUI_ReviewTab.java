@@ -28,6 +28,7 @@ import com.jgaap.util.Pair;
 
 
 import com.jgaap.generics.Canonicizer;
+import com.jgaap.generics.DistanceFunction;
 
 /**
  * Review Tab Class.
@@ -154,7 +155,6 @@ public class GUI_ReviewTab {
                String result = document.getResult();
                buffer.append(result);
             }
-            buffer.append("dicks");
             this.res.build_resultTab(buffer.toString());
             this.res.showStage();
 

@@ -16,8 +16,12 @@ import com.jgaap.generics.AnalysisDriver;
 import com.jgaap.backend.AnalysisDrivers;
 import com.jgaap.backend.DistanceFunctions;
 import com.jgaap.generics.DistanceFunction;
+import com.jgaap.generics.NeighborAnalysisDriver;
+import com.jgaap.generics.NonDistanceDependentAnalysisDriver;
+import com.jgaap.util.Pair;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.log4j.Logger;
@@ -32,13 +36,10 @@ public class GUI_AnalysisTab {
     private ArrayList<AnalysisDriver> AnalysisDriverMasterList;
     private ArrayList<DistanceFunction> DistanceFunctionsMasterList;
     private ArrayList<AnalysisDriver> anSel;
-    private ArrayList<DistanceFunction> dfSel;
     private ArrayList<String> anName;
     private ArrayList<String> dfName;
     private ArrayList<String> selName;
     private ObservableList<String> selItems;
-    private ObservableList<String> anItems;
-    private ObservableList<String> dfItems;
     private ListView<String> anList;
     private ListView<String> dfList;
     private ListView<String> selList;
@@ -47,6 +48,7 @@ public class GUI_AnalysisTab {
     private VBox paraBoxChildTwo;
     private TextArea anArea;
     private TextArea dfArea;
+    private static HashMap<String, Pair<DistanceFunction, AnalysisDriver>> distanceFunctions;
     private static API JAPI;
     private static Logger logger;
     private HBox bottomButtons;
@@ -57,6 +59,7 @@ public class GUI_AnalysisTab {
      * Constructor for the class.
      */
     public GUI_AnalysisTab(){
+        distanceFunctions = new HashMap<String, Pair<DistanceFunction, AnalysisDriver>>();
         logger = Logger.getLogger(GUI_AnalysisTab.class);
         JAPI = API.getInstance();
         this.box = new VBox();
@@ -170,11 +173,13 @@ public class GUI_AnalysisTab {
                         para.prefHeightProperty().bind(this.box.heightProperty());
                         para.prefWidthProperty().bind(this.box.widthProperty());
                         if(para.getChildren().size() > 2){
+                            logger.info("Changing Analysis Tab Parameter Boxes");
                             //this.param.getChildren().removeAll(this.paraBoxChildOne);
                             //this.param.getChildren().removeAll(this.paraBoxChildTwo);
                             this.param.getChildren().add(para);
                         }
                     } else if (!this.param.getChildren().contains(para) || !this.param.getChildren().contains(para)) {
+                        logger.info("Changing Analysis Tab Parameter Boxes");
                         para.prefHeightProperty().bind(this.box.heightProperty());
                         para.prefWidthProperty().bind(this.box.widthProperty());
                         this.param.getChildren().removeAll(this.paraBoxChildOne);
@@ -194,7 +199,6 @@ public class GUI_AnalysisTab {
      */
     private ListView<String> init_AnalysisMethodBox(){
         this.anSel = new ArrayList<AnalysisDriver>();
-        this.dfSel = new ArrayList<DistanceFunction>();
         this.selList = new ListView<String>();
         this.anName = new ArrayList<String>();
         this.dfName = new ArrayList<String>();
@@ -203,12 +207,13 @@ public class GUI_AnalysisTab {
         for (AnalysisDriver i : this.AnalysisDriverMasterList) {
             this.anName.add(i.displayName());
         }
-        this.anItems = FXCollections.observableArrayList (this.anName);
+        ObservableList<String> anItems = FXCollections.observableArrayList(this.anName);
 
-        this.anList.setItems(this.anItems);
+        this.anList.setItems(anItems);
         this.anList.prefHeightProperty().bind(this.box.heightProperty());
         this.anList.prefWidthProperty().bind(this.box.widthProperty());
         this.anList.setOnMouseClicked(e -> {
+            this.dfList.getSelectionModel().clearSelection();
             String sel = this.anList.getSelectionModel().getSelectedItem();
             Iterator<AnalysisDriver> iter = this.AnalysisDriverMasterList.iterator();
             while(iter.hasNext()){
@@ -231,9 +236,9 @@ public class GUI_AnalysisTab {
         for (DistanceFunction i : this.DistanceFunctionsMasterList) {
             this.dfName.add(i.displayName());
         }
-        this.dfItems = FXCollections.observableArrayList (this.dfName);
+        ObservableList<String> dfItems = FXCollections.observableArrayList(this.dfName);
 
-        this.dfList.setItems(this.dfItems);
+        this.dfList.setItems(dfItems);
         this.dfList.prefHeightProperty().bind(this.box.heightProperty());
         this.dfList.prefWidthProperty().bind(this.box.widthProperty());
         this.dfList.setOnMouseClicked(e -> {
@@ -268,44 +273,36 @@ public class GUI_AnalysisTab {
         VBox.setVgrow(region1, Priority.ALWAYS);
         VBox.setVgrow(region2, Priority.ALWAYS);
         left.setOnAction(e -> {
-            anDeselected(this.selList.getSelectionModel().getSelectedItem());
+            String selection = this.selList.getSelectionModel().getSelectedItem();
+            if(selection.contains("with")){
+                dfRemove(this.selList.getSelectionModel().getSelectedItem());
+            } else {
+                anDeselected(selection);
+            }
             this.selItems = FXCollections.observableArrayList(this.selName);
             this.selList.setItems(this.selItems);
             this.selList.refresh();
             e.consume();
         });
         right.setOnAction(e -> {
-            /*if(this.dfList.getSelectionModel().isEmpty()){
+            if(this.dfList.getSelectionModel().isEmpty()){
                 anSelected(this.anList.getSelectionModel().getSelectedItem());
             } else {
-                Iterator<AnalysisDriver> iter = this.AnalysisDriverMasterList.iterator();
-                while(iter.hasNext()){
-                    AnalysisDriver temp = iter.next();
-                    if(temp.displayName().equalsIgnoreCase(this.anList.getSelectionModel().getSelectedItem())){
-                        dfAdd("NOMETHOD", this.dfList.getSelectionModel().getSelectedItem(), temp);
-                    }
-                }
-            }*/
-            anSelected(this.anList.getSelectionModel().getSelectedItem());
+                dfAdd(this.dfList.getSelectionModel().getSelectedItem(), this.anList.getSelectionModel().getSelectedItem());
+                this.dfList.getSelectionModel().clearSelection();
+            }
             this.selItems = FXCollections.observableArrayList(this.selName);
             this.selList.setItems(this.selItems);
+            this.selList.getSelectionModel().selectLast();
+            this.selList.getFocusModel().focusNext();
             this.selList.refresh();
-            this.selList.getSelectionModel().select(this.selItems.getLast());
+            //this.selList.getSelectionModel().select(this.selItems.getLast());
             e.consume();
         });
         clear.setOnAction(e -> {
             JAPI.removeAllAnalysisDrivers();
-            this.anName.clear();
-            this.dfName.clear();
             this.selName.clear();
-            this.anSel.clear();
-            this.dfSel.clear();
-            for (AnalysisDriver i : this.AnalysisDriverMasterList) {
-                this.anName.add(i.displayName());
-            }
-            for (DistanceFunction i : this.DistanceFunctionsMasterList) {
-                this.dfName.add(i.displayName());
-            }
+            distanceFunctions.clear();
             this.selItems = FXCollections.observableArrayList(this.selName);
             this.selList.setItems(this.selItems);
             this.selList.refresh();
@@ -375,56 +372,79 @@ public class GUI_AnalysisTab {
      */
     private void anDeselected(String method){
         logger.info("Removing Analysis Method "+method);
+        AnalysisDriver ad = null;
         this.selName.remove(method);
-        Iterator<AnalysisDriver> iter = this.anSel.iterator();
-        while(iter.hasNext()){
-            AnalysisDriver temp = iter.next();
-            if(temp.displayName().equalsIgnoreCase(method)){
-                JAPI.removeAnalysisDriver(temp);
-                iter.remove();
+        for(AnalysisDriver i : AnalysisDriverMasterList){
+            if(i.displayName().equalsIgnoreCase(method)){
+                ad = i;
             }
         }
+        JAPI.removeAnalysisDriver(ad);
+        this.anSel.remove(ad);
         this.selItems = FXCollections.observableArrayList(this.selName);
         this.selList.setItems(this.selItems);
         this.selList.refresh();
     }
-    private void dfAdd(String type, String method, AnalysisDriver ad){
+    private void dfAdd(String method, String and){
         logger.info("Adding Distance Function "+method);
-        this.selName.add(ad.displayName());
-        switch(type){
-            case "METHOD":
-                try {
-                    this.dfSel.add(JAPI.addDistanceFunction(method, ad));
-                } catch (Exception e) {
-                    logger.error(e.getCause(), e);
-                    e.printStackTrace();
-                }
-                break;
-            case "NOMETHOD":
-                Iterator<DistanceFunction> iter = this.DistanceFunctionsMasterList.iterator();
-                while(iter.hasNext()){
-                    DistanceFunction temp = iter.next();
-                    if(temp.displayName().equalsIgnoreCase(method)){
-                        this.dfSel.add(JAPI.addDistanceFunction(temp, ad));
-                    }
-                }
-                break;
-            default:
-                Iterator<DistanceFunction> iter2 = this.DistanceFunctionsMasterList.iterator();
-                while(iter2.hasNext()){
-                    DistanceFunction temp = iter2.next();
-                    if(temp.displayName().equalsIgnoreCase(method)){
-                        this.dfSel.add(JAPI.addDistanceFunction(temp, ad));
-                    }
-                }
-                break;
+        DistanceFunction df = null;
+        AnalysisDriver ad = null;
+        Pair<DistanceFunction, AnalysisDriver> item = null;
+        for(DistanceFunction i : DistanceFunctionsMasterList){
+            if(i.displayName().equalsIgnoreCase(method)){
+                df = i;
+            }
         }
+        for(AnalysisDriver i : AnalysisDriverMasterList){
+                if(i.displayName().contains("with")){
+                    //String val = i.displayName().replace(" with metric ", ":");
+                    String[] temp = i.displayName().replace(" with metric ", ":").split("\\:");
+                    if(temp[0].equalsIgnoreCase(and)){
+                        ad = i;
+                    }
+                } else {
+                    if(i.displayName().equalsIgnoreCase(and)){
+                        ad = i;
+                    }
+                }
+            }
+            this.anSel.add(JAPI.addAnalysisDriver(ad));
+        if (ad instanceof NeighborAnalysisDriver) {
+			// If the analysis driver that was selected requires a distance,
+			// add the selected distance function.
+			try {
+                JAPI.addDistanceFunction(df.displayName(), ad);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+		}  else if (ad instanceof NonDistanceDependentAnalysisDriver) {
+			// If the analysis driver that was selected is dependent on
+			// another analysis driver being selected, add the one that
+			// that is selected.
+			try {
+                JAPI.addAnalysisDriverAsParamToOther(method, (NonDistanceDependentAnalysisDriver) ad);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+		}
+        item = new Pair<DistanceFunction,AnalysisDriver>(df, ad);
+        distanceFunctions.put(ad.displayName(), item);
+        this.selName.add(ad.displayName());
         this.selItems = FXCollections.observableArrayList(this.selName);
         this.selList.setItems(this.selItems);
         this.selList.refresh();
     }
-    private void dfRemove(DistanceFunction df){
-        logger.info("Removing Distance Function "+df.displayName());
+    private void dfRemove(String method){
+        logger.info("Removing Distance Function "+method);
+        Pair<DistanceFunction, AnalysisDriver> item = distanceFunctions.remove(method);
+        JAPI.removeAnalysisDriver(item.getSecond());
+        this.anSel.remove(item.getSecond());
+        this.selName.remove(method);
+        this.selItems = FXCollections.observableArrayList(this.selName);
+        this.selList.setItems(this.selItems);
+        this.selList.refresh();
     }
     /**
      * Getter method for getting the built pane.
