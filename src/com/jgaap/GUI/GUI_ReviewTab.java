@@ -139,7 +139,7 @@ public class GUI_ReviewTab {
          try {
             JAPI.clearData();
             JAPI.clearCanonicizers();
-            this.SelectedCanonicizerList = GUI_CanTab.getSelectedCanList();
+            this.SelectedCanonicizerList = GUI_CanTab.getSelectedCanList().values().parallelStream().toList();
             for(Pair<Canonicizer, Object> canonicizerPair : this.SelectedCanonicizerList){
                if(canonicizerPair.getSecond() instanceof Document.Type){
                   JAPI.addCanonicizer(canonicizerPair.getFirst().displayName(), (Document.Type)canonicizerPair.getSecond());
@@ -243,11 +243,11 @@ public class GUI_ReviewTab {
    }
 
    public void refresh_canList() {
-      Iterator<Pair<Canonicizer,Object>> iter = GUI_CanTab.getSelectedCanList().iterator();
+      Iterator<String> iter = GUI_CanTab.getSelectedCanList().keySet().iterator();
       this.canVals.clear();
       while (iter.hasNext()) {
-         Pair<Canonicizer,Object> item = iter.next();
-            this.canVals.add(item.getFirst().displayName()+" + "+(item.getSecond().toString()));
+         String item = iter.next();
+            this.canVals.add(item);
       }
       this.canItems = FXCollections.observableArrayList(this.canVals);
       this.canList.setItems(this.canItems);

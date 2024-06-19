@@ -179,7 +179,7 @@ public class GUI_AddAuthor {
                     String filepath = file.getCanonicalPath();
                     String[] Split = filepath.split("[\\\\[\\/]]");
                     String Title = Split[Split.length - 1];
-                    Document temp = new Document(filepath, this.auth.getText(), Title);
+                    Document temp = new Document(filepath, this.auth.getText().trim(), Title);
                     this.docs.add(temp);
                     this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(author)));
                     this.table.refresh();
@@ -232,6 +232,7 @@ public class GUI_AddAuthor {
         // ===============================================================================
         can.setOnAction(e -> {
             this.auth.setText("");
+            this.docs.clear();
             stage.close();
             e.consume();
         });

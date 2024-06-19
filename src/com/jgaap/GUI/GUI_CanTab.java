@@ -1,11 +1,9 @@
 package com.jgaap.GUI;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -13,12 +11,10 @@ import com.jgaap.backend.API;
 import com.jgaap.backend.Canonicizers;
 import com.jgaap.generics.Canonicizer;
 import com.jgaap.util.Document;
-import com.jgaap.util.Document.Type;
 import com.jgaap.util.Pair;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableSet;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -41,15 +37,14 @@ public class GUI_CanTab {
     private VBox box;
     private ArrayList<Canonicizer> CanonicizerMasterList;
     private ArrayList<String> canonName;
-    private ObservableList<String> items;
+    private ObservableList<String> canItems;
     private ObservableList<String> selItems;
     private ListView<String> canList;
     private ListView<String> selList;
     private TextArea area;
     private HBox bottomButtons;
     private static ArrayList<String> CanonicizerComboBoxModel;
-    private static ArrayList<Pair<Canonicizer, Object>> SelectedCanonicizerList;
-    private static HashMap<String, Pair<Canonicizer, Object>> selCanonMap;
+    private static HashMap<String, Pair<Canonicizer, Object>> SelectedCanonicizerMap;
     private static List<Object> docTypesList;
     private static ComboBox<String> comboBox;
     private static Logger logger;
@@ -63,8 +58,8 @@ public class GUI_CanTab {
         comboBox = new ComboBox<String>();
         logger = Logger.getLogger(GUI_CanTab.class);
         docTypesList = new ArrayList<Object>();
-        SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
         CanonicizerComboBoxModel = new ArrayList<String>();
+        SelectedCanonicizerMap = new HashMap<String, Pair<Canonicizer, Object>>();
         box = new VBox();
         noteBox = new GUI_NotesWindow();
         JAPI = API.getInstance();
@@ -144,12 +139,13 @@ public class GUI_CanTab {
      */
     private ListView<String> init_listBoxCan() {
         this.canList = new ListView<String>();
+        this.canonName = new ArrayList<String>();
         for (Canonicizer i : this.CanonicizerMasterList) {
             this.canonName.add(i.displayName());
         }
-        this.items = FXCollections.observableArrayList(this.canonName);
+        this.canItems = FXCollections.observableArrayList(this.canonName);
 
-        this.canList.setItems(this.items);
+        this.canList.setItems(this.canItems);
         this.canList.prefHeightProperty().bind(this.box.heightProperty());
         this.canList.prefWidthProperty().bind(this.box.widthProperty());
         this.canList.setOnMouseClicked(e -> {
@@ -174,7 +170,7 @@ public class GUI_CanTab {
      */
     private ListView<String> init_listBoxSel() {
         this.selList = new ListView<String>();
-        this.selItems = FXCollections.observableList(selCanonMap.keySet().parallelStream().toList());
+        this.selItems = FXCollections.observableList(SelectedCanonicizerMap.keySet().parallelStream().toList());
 
         this.selList.setItems(this.selItems);
         this.selList.prefHeightProperty().bind(this.box.heightProperty());
@@ -211,7 +207,7 @@ public class GUI_CanTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            Iterator<String> iter = selCanonMap.keySet().iterator();
+            Iterator<String> iter = SelectedCanonicizerMap.keySet().iterator();
             while (iter.hasNext()) {
                 String i = iter.next();
                 if(this.selList.getSelectionModel().getSelectedItem().equalsIgnoreCase(i)){
@@ -233,10 +229,10 @@ public class GUI_CanTab {
             e.consume();
         });
         clear.setOnAction(e -> {
-            SelectedCanonicizerList.clear();
-            this.items = FXCollections.observableArrayList(this.canonName);
-            this.selItems = FXCollections.observableList(selCanonMap.keySet().parallelStream().toList());
-            this.canList.setItems(this.items);
+            SelectedCanonicizerMap.clear();
+            this.canItems = FXCollections.observableArrayList(this.canonName);
+            this.selItems = FXCollections.observableList(SelectedCanonicizerMap.keySet().parallelStream().toList());
+            this.canList.setItems(this.canItems);
             this.selList.setItems(this.selItems);
             this.selList.refresh();
             this.canList.refresh();
@@ -276,10 +272,10 @@ public class GUI_CanTab {
 
         Pair<Canonicizer, Object> temp = new Pair<Canonicizer, Object>(method, doc);
         String key = temp.getFirst().displayName()+" ["+comboBox.getSelectionModel().getSelectedItem()+"]";
-        selCanonMap.put(key, temp);
+        SelectedCanonicizerMap.put(key, temp);
 
-        this.selItems = FXCollections.observableList(selCanonMap.keySet().parallelStream().toList());
-        this.canList.setItems(this.items);
+        this.selItems = FXCollections.observableList(SelectedCanonicizerMap.keySet().parallelStream().toList());
+        this.canList.setItems(this.canItems);
         this.selList.setItems(this.selItems);
         this.selList.getSelectionModel().select(this.selItems.getLast());
     }
@@ -293,16 +289,17 @@ public class GUI_CanTab {
                 canMeth.remove();
             }
         }*/
-        selCanonMap.remove(key);
-        this.items = FXCollections.observableArrayList(this.canonName);
-        this.selItems = FXCollections.observableArrayList(selCanonMap.keySet().parallelStream().toList());
-        this.canList.setItems(this.items);
+        SelectedCanonicizerMap.remove(key);
+        this.canItems = FXCollections.observableArrayList(this.canonName);
+        this.selItems = FXCollections.observableArrayList(SelectedCanonicizerMap.keySet().parallelStream().toList());
+        this.canList.setItems(this.canItems);
         this.selList.setItems(this.selItems);
     }
     public static void UpdateCanonicizerDocTypeComboBox() {
         comboBox.getItems().clear();
         CanonicizerComboBoxModel.clear();
         docTypesList.clear();
+        docTypesList.add("All");
 		docTypesList.add(Document.Type.GENERIC);
 		docTypesList.add(Document.Type.DOC);
 		docTypesList.add(Document.Type.PDF);
@@ -329,8 +326,8 @@ public class GUI_CanTab {
     public void setBottomButtons(HBox box){
         this.bottomButtons = box;
     }
-    public static ArrayList<Pair<Canonicizer, Object>> getSelectedCanList(){
-        return SelectedCanonicizerList;
+    public static HashMap<String,Pair<Canonicizer, Object>> getSelectedCanList(){
+        return SelectedCanonicizerMap;
     }
 
 }
