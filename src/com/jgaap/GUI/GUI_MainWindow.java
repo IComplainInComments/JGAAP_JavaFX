@@ -1,6 +1,7 @@
 package com.jgaap.GUI;
 import org.apache.log4j.Logger;
 
+import com.jgaap.JGAAPConstants;
 import com.jgaap.backend.API;
 
 import javafx.application.Application;
@@ -48,7 +49,7 @@ public class GUI_MainWindow extends Application{
             Platform.exit();
             System.exit(0);
         });
-        mainStage.setTitle("JGAAP 2.0");
+        mainStage.setTitle(JGAAPConstants.VERSION+" BETA");
         mainStage.setScene(init_mainScene(mainStage));
         mainStage.show();
     }

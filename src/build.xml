@@ -43,6 +43,7 @@
 			<include name="com/jgaap/backend/*.java" />
 			<include name="com/jgaap/languages/*.java" />
 			<include name="com/jgaap/ui/*.java" />
+			<include name="com/jgaap/GUI/*.java" />
 			<include name="com/jgaap/util/*.java" />
 		</javac>
 		<copy todir="../bin">
@@ -94,7 +95,7 @@
 
 	<target name="run-gui" depends="build">
 		<java classname="com.jgaap.JGAAP" fork="true" maxmemory="4g">
-			<jvmarg value="-XX:+UseG1GC"/>
+			<jvmarg value="-XX:+UseG1GC --module-path=../lib/external --modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"/>
 			<classpath refid="run-classpath" />
 		</java>
 	</target>
@@ -102,6 +103,11 @@
 	<target name="jar" depends="build">
 		<jar destfile="../JGGAP.jar" basedir="../bin" excludes="unittest_logs/**">
 			<zipgroupfileset dir="../lib/external" includes="*.jar" excludes="junit.jar" />
+
+			<java classname="com.jgaap.JGAAP" fork="true" maxmemory="4g">
+				<jvmarg value="-XX:+UseG1GC --module-path=../lib/external --modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"/>
+				<classpath refid="run-classpath" />
+			</java>
 			
 			<manifest>
 				<attribute name="Main-Class" value="com.jgaap.JGAAP"/>
