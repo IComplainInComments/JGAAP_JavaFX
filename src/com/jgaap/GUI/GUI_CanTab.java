@@ -64,12 +64,14 @@ public class GUI_CanTab {
         noteBox = new GUI_NotesWindow();
         JAPI = API.getInstance();
         init_canonicizers();
+        logger.info("Finished building Canonicizer Tab");
     }
 
     /**
      * Builds the pane row by row.
      */
     private void build_pane() {
+        logger.info("Building Canonicizer Tab");
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
         this.box.getChildren().add(this.bottomButtons);
@@ -269,7 +271,7 @@ public class GUI_CanTab {
      * @param doc Document or String
      */
     private void canonSelected(Canonicizer method, Object doc) {
-
+        logger.info("Adding Canonicizer "+method.displayName());
         Pair<Canonicizer, Object> temp = new Pair<Canonicizer, Object>(method, doc);
         String key = temp.getFirst().displayName()+" ["+comboBox.getSelectionModel().getSelectedItem()+"]";
         SelectedCanonicizerMap.put(key, temp);
@@ -293,6 +295,7 @@ public class GUI_CanTab {
                 canMeth.remove();
             }
         }*/
+        logger.info("Removing Canonicizer "+key);
         SelectedCanonicizerMap.remove(key);
         this.canItems = FXCollections.observableArrayList(this.canonName);
         this.selItems = FXCollections.observableArrayList(SelectedCanonicizerMap.keySet().parallelStream().toList());
@@ -303,6 +306,7 @@ public class GUI_CanTab {
      * Method for updating the ComboBox Element for the Canonicizer
      */
     public static void UpdateCanonicizerDocTypeComboBox() {
+        logger.info("Updating Canonicizer ComboBox");
         comboBox.getItems().clear();
         CanonicizerComboBoxModel.clear();
         docTypesList.clear();

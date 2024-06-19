@@ -58,6 +58,7 @@ public class GUI_EDTab {
      * Method for building the Window row by row.
      */
     private void build_pane() {
+        logger.info("Building Event Driver Tab");
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
         this.box.getChildren().add(this.bottomButtons);
@@ -266,10 +267,22 @@ public class GUI_EDTab {
         return box;
     }
     /**
+     * Method for initializing the Event Driver Master List
+     */
+    private void init_EventDrivers() {
+        this.EventDriverMasterList = new ArrayList<EventDriver>();
+        for (int i = 0; i < EventDrivers.getEventDrivers().size(); i++) {
+            EventDriver eventDriver = EventDrivers.getEventDrivers().get(i);
+            if (eventDriver.showInGUI())
+                this.EventDriverMasterList.add(eventDriver);
+        }
+    }
+    /**
      * Method for adding a selected Event Driver
      * @param method String
      */
     private void edSelected(String method) {
+        logger.info("Adding Event Driver "+method);
         this.edSelect.add(method);
         this.edName.remove(method);
         Iterator<EventDriver> master = this.EventDriverMasterList.iterator();
@@ -292,20 +305,10 @@ public class GUI_EDTab {
         this.selList.setItems(this.selItems);
     }
     /**
-     * Method for initializing the Event Driver Master List
-     */
-    private void init_EventDrivers() {
-        this.EventDriverMasterList = new ArrayList<EventDriver>();
-        for (int i = 0; i < EventDrivers.getEventDrivers().size(); i++) {
-            EventDriver eventDriver = EventDrivers.getEventDrivers().get(i);
-            if (eventDriver.showInGUI())
-                this.EventDriverMasterList.add(eventDriver);
-        }
-    }
-    /**
      * Method for selecting all Event Drivers
      */
     private void allSelected() {
+        logger.info("Adding all Event Drivers");
         this.edSelect.addAll(this.edName);
         this.edName.clear();
         Iterator<EventDriver> master = this.EventDriverMasterList.iterator();
@@ -329,6 +332,7 @@ public class GUI_EDTab {
      * @param method String
      */
     private void edDeselected(String method) {
+        logger.info("Removing Event Driver "+method);
         this.edSelect.remove(method);
         this.edName.add(method);
         Iterator<EventDriver> canMeth = this.edSel.iterator();
@@ -352,6 +356,7 @@ public class GUI_EDTab {
      * @return VBox
      */
     public VBox getPane() {
+        logger.info("Finished building Event Culler Tab");
         build_pane();
         return this.box;
     }

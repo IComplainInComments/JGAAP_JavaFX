@@ -63,11 +63,13 @@ public class GUI_AnalysisTab {
         notesBox = new GUI_NotesWindow();
         init_analysisDrivers();
         init_distanceFunctions();
+        logger.info("Finished building Analysis Tab");
     }
     /**
      * Builds the Pane row by row.
      */
     private void build_pane(){
+        logger.info("Building Analysis Tab");
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
         this.box.getChildren().add(this.bottomButtons);
@@ -354,6 +356,7 @@ public class GUI_AnalysisTab {
      * @param method String
      */
     private void anSelected(String method){
+        logger.info("Adding Analysis Method "+method);
         this.selName.add(method);
         Iterator<AnalysisDriver> iter = this.AnalysisDriverMasterList.iterator();
         while(iter.hasNext()){
@@ -371,6 +374,7 @@ public class GUI_AnalysisTab {
      * @param method String
      */
     private void anDeselected(String method){
+        logger.info("Removing Analysis Method "+method);
         this.selName.remove(method);
         Iterator<AnalysisDriver> iter = this.anSel.iterator();
         while(iter.hasNext()){
@@ -385,6 +389,7 @@ public class GUI_AnalysisTab {
         this.selList.refresh();
     }
     private void dfAdd(String type, String method, AnalysisDriver ad){
+        logger.info("Adding Distance Function "+method);
         this.selName.add(ad.displayName());
         switch(type){
             case "METHOD":
@@ -419,7 +424,7 @@ public class GUI_AnalysisTab {
         this.selList.refresh();
     }
     private void dfRemove(DistanceFunction df){
-
+        logger.info("Removing Distance Function "+df.displayName());
     }
     /**
      * Getter method for getting the built pane.

@@ -71,6 +71,7 @@ public class GUI_DocTab {
     * Builds the window row by row.
     */
    private void build_tab() {
+      logger.info("Building Document Tab");
       this.box.getChildren().add(init_LangSelection());
       this.box.getChildren().add(init_UnknownAuth());
       this.box.getChildren().add(init_UnknownAuthButtons());
@@ -318,6 +319,7 @@ public class GUI_DocTab {
     * @return VBox
     */
    public VBox getPane() {
+      logger.info("Finished building Document Tab");
       build_tab();
       return this.box;
    }

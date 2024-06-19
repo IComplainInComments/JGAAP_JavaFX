@@ -78,6 +78,7 @@ public class GUI_ReviewTab {
     * Builds the window row by row.
     */
    private void build_pane() {
+      logger.info("Building Review Tab");
       this.box.getChildren().add(init_firstRow());
       this.box.getChildren().add(init_secondRow());
       this.box.getChildren().add(init_bottomButtons());
@@ -291,6 +292,7 @@ public class GUI_ReviewTab {
     * Method for refreshing the list views
     */
    public void refreshView() {
+      logger.info("Refreshing Review Tab List Views");
       refresh_canList();
       refresh_edList();
       refresh_ecList();
@@ -308,6 +310,7 @@ public class GUI_ReviewTab {
     * @return VBox
     */
    public VBox getPane() {
+      logger.info("Finished Build Review Tab");
       build_pane();
       return this.box;
    }

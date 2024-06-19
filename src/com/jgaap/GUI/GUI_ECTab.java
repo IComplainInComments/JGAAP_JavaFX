@@ -56,6 +56,7 @@ public class GUI_ECTab {
      * Method for building the Window row by row.
      */
     private void build_pane(){
+        logger.info("Building Event Culler Tab");
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
         this.box.getChildren().add(this.bottomButtons);
@@ -270,6 +271,7 @@ public class GUI_ECTab {
      * @param method String
      */
     private void ecSelected(String method) {
+        logger.info("Adding Event Culler "+method);
         this.ecSelect.add(method);
         this.ecName.remove(method);
         Iterator<EventCuller> master = this.EventCullersMasterList.iterator();
@@ -295,6 +297,7 @@ public class GUI_ECTab {
      * Method for adding all Event Cullers
      */
     private void allSelected() {
+        logger.info("Adding all Event Cullers");
         this.ecSelect.addAll(this.ecName);
         this.ecName.clear();
         Iterator<EventCuller> master = this.EventCullersMasterList.iterator();
@@ -318,6 +321,7 @@ public class GUI_ECTab {
      * @param method String
      */
     private void ecDeselected(String method) {
+        logger.info("Removing Event Culler "+method);
         this.ecSelect.remove(method);
         this.ecName.add(method);
         Iterator<EventCuller> canMeth = this.ecSel.iterator();
