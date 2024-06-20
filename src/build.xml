@@ -95,7 +95,7 @@
 
 	<target name="run-gui" depends="build">
 		<java classname="com.jgaap.JGAAP" fork="true" maxmemory="4g">
-			<jvmarg value="-XX:+UseG1GC --module-path=../lib/external --modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"/>
+			<jvmarg value="-XX:+UseG1GC"/>
 			<classpath refid="run-classpath" />
 		</java>
 	</target>
@@ -105,7 +105,7 @@
 			<zipgroupfileset dir="../lib/external" includes="*.jar" excludes="junit.jar" />
 
 			<java classname="com.jgaap.JGAAP" fork="true" maxmemory="4g">
-				<jvmarg value="-XX:+UseG1GC --module-path=../lib/external --modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"/>
+				<jvmarg value="-XX:+UseG1GC"/>
 				<classpath refid="run-classpath" />
 			</java>
 			

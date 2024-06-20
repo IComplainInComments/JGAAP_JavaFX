@@ -17,21 +17,21 @@
             "request": "launch",
             "mainClass": "com.jgaap.GUI.GUI_MainWindow",
             "projectName": "JGAAP_JavaFX_8574907e",
-            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
+            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --add-modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
         },
         {
             "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
+            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --add-modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
         },
         {
             "type": "java",
             "name": "Main Method",
             "request": "launch",
             "mainClass": "com.jgaap.JGAAP",
-            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
+            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --add-modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
         }
     ]
 }
