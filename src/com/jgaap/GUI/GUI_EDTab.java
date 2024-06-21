@@ -217,9 +217,11 @@ public class GUI_EDTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            edDeselected(this.selList.getSelectionModel().getSelectedItem().trim());
-            this.selList.refresh();
-            this.edList.refresh();
+            if(!this.edSelect.isEmpty()){
+                edDeselected(this.selList.getSelectionModel().getSelectedItem().trim());
+                this.selList.refresh();
+                this.edList.refresh();
+            }
             e.consume();
         });
         right.setOnAction(e -> {
@@ -230,23 +232,25 @@ public class GUI_EDTab {
             e.consume();
         });
         clear.setOnAction(e -> {
-            this.EventDriverMasterList.clear();
-            this.edName.clear();
-            this.edSelect.clear();
-            this.edSel.clear();
-            init_EventDrivers();
-            for (EventDriver i : this.EventDriverMasterList) {
-                this.edName.add(i.displayName());
+            if(!this.edSelect.isEmpty()){
+                this.EventDriverMasterList.clear();
+                this.edName.clear();
+                this.edSelect.clear();
+                this.edSel.clear();
+                init_EventDrivers();
+                for (EventDriver i : this.EventDriverMasterList) {
+                    this.edName.add(i.displayName());
+                }
+                JAPI.removeAllEventDrivers();
+                this.items = FXCollections.observableArrayList(this.edName);
+                this.selItems = FXCollections.observableArrayList(this.edSelect);
+                this.edList.setItems(this.items);
+                this.selList.setItems(this.selItems);
+                this.selList.refresh();
+                this.edList.refresh();
+                this.paraBox.getChildren().removeLast();
+                this.paraBox.getChildren().add(this.paraBoxChild);
             }
-            JAPI.removeAllEventDrivers();
-            this.items = FXCollections.observableArrayList(this.edName);
-            this.selItems = FXCollections.observableArrayList(this.edSelect);
-            this.edList.setItems(this.items);
-            this.selList.setItems(this.selItems);
-            this.selList.refresh();
-            this.edList.refresh();
-            this.paraBox.getChildren().removeLast();
-            this.paraBox.getChildren().add(this.paraBoxChild);
             e.consume();
         });
         all.setOnAction(e -> {
@@ -295,7 +299,6 @@ public class GUI_EDTab {
                     logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
-                // this.edSel.add(temp);
                 master.remove();
             }
         }

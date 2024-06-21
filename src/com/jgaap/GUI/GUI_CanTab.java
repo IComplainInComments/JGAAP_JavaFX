@@ -203,15 +203,17 @@ public class GUI_CanTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            Iterator<String> iter = SelectedCanonicizerMap.keySet().iterator();
-            while (iter.hasNext()) {
-                String i = iter.next();
-                if(this.selList.getSelectionModel().getSelectedItem().equalsIgnoreCase(i)){
-                    canonDeselected(i);
+            if(!SelectedCanonicizerMap.isEmpty()){
+                Iterator<String> iter = SelectedCanonicizerMap.keySet().iterator();
+                while (iter.hasNext()) {
+                    String i = iter.next();
+                    if(this.selList.getSelectionModel().getSelectedItem().equalsIgnoreCase(i)){
+                        canonDeselected(i);
+                    }
                 }
+                this.selList.refresh();
+                this.canList.refresh();
             }
-            this.selList.refresh();
-            this.canList.refresh();
             e.consume();
         });
         right.setOnAction(e -> {
@@ -225,13 +227,15 @@ public class GUI_CanTab {
             e.consume();
         });
         clear.setOnAction(e -> {
-            SelectedCanonicizerMap.clear();
-            this.canItems = FXCollections.observableArrayList(this.canonName);
-            this.selItems = FXCollections.observableList(SelectedCanonicizerMap.keySet().parallelStream().toList());
-            this.canList.setItems(this.canItems);
-            this.selList.setItems(this.selItems);
-            this.selList.refresh();
-            this.canList.refresh();
+            if(!SelectedCanonicizerMap.isEmpty()){
+                SelectedCanonicizerMap.clear();
+                this.canItems = FXCollections.observableArrayList(this.canonName);
+                this.selItems = FXCollections.observableList(SelectedCanonicizerMap.keySet().parallelStream().toList());
+                this.canList.setItems(this.canItems);
+                this.selList.setItems(this.selItems);
+                this.selList.refresh();
+                this.canList.refresh();
+            }
             e.consume();
         });
 
@@ -259,7 +263,6 @@ public class GUI_CanTab {
     private void init_canonicizers() {
         CanonicizerMasterList = new ArrayList<Canonicizer>();
         for (int i = 0; i < Canonicizers.getCanonicizers().size(); i++) {
-            // for (Canonicizer canonicizer : Canonicizers.getCanonicizers()) {
             Canonicizer canonicizer = Canonicizers.getCanonicizers().get(i);
             if (canonicizer.showInGUI())
                 CanonicizerMasterList.add(canonicizer);
@@ -286,15 +289,6 @@ public class GUI_CanTab {
      * @param key String
      */
   private void canonDeselected(String key) {
-        //this.canonName.add(method);
-        /*Iterator<Pair<Canonicizer, Object>> canMeth = SelectedCanonicizerList.iterator();
-        while(canMeth.hasNext()) {
-            Pair<Canonicizer, Object> temp = canMeth.next();
-            if (temp.getFirst().displayName().equalsIgnoreCase(method.displayName()) && temp.getSecond().equals(doc)) {
-                canonSelect.remove(temp.getFirst().displayName()+" ["+temp.getSecond().toString()+"]");
-                canMeth.remove();
-            }
-        }*/
         logger.info("Removing Canonicizer "+key);
         SelectedCanonicizerMap.remove(key);
         this.canItems = FXCollections.observableArrayList(this.canonName);

@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
@@ -83,7 +84,8 @@ class DocumentHelper {
 	static private InputStream getInputStream(String filepath) throws Exception{
 		InputStream is;
 		if (filepath.startsWith("http://") || filepath.startsWith("https://")) {
-			URL url = new URL(filepath);
+			URI uri = new URI(filepath);
+			URL url = uri.toURL();
 			is = url.openStream();
 		} else if (filepath.startsWith("/com/jgaap/resources")){
 			is = com.jgaap.JGAAP.class.getResourceAsStream(filepath);

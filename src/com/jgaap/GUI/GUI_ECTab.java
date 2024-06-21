@@ -207,9 +207,11 @@ public class GUI_ECTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            ecDeselected(this.listRight.getSelectionModel().getSelectedItem().trim());
-            this.listLeft.refresh();
-            this.listRight.refresh();
+            if(!this.ecSelect.isEmpty()){
+                ecDeselected(this.listRight.getSelectionModel().getSelectedItem().trim());
+                this.listLeft.refresh();
+                this.listRight.refresh();
+            }
             e.consume();
         });
         right.setOnAction(e -> {
@@ -220,21 +222,23 @@ public class GUI_ECTab {
             e.consume();
         });
         clear.setOnAction(e -> {
-            this.EventCullersMasterList.clear();
-            this.ecName.clear();
-            this.ecSelect.clear();
-            this.ecSel.clear();
-            init_eventCullers();
-            for (EventCuller i : this.EventCullersMasterList) {
-                this.ecName.add(i.displayName());
+            if(!this.ecSelect.isEmpty()){
+                this.EventCullersMasterList.clear();
+                this.ecName.clear();
+                this.ecSelect.clear();
+                this.ecSel.clear();
+                init_eventCullers();
+                for (EventCuller i : this.EventCullersMasterList) {
+                    this.ecName.add(i.displayName());
+                }
+                JAPI.removeAllEventDrivers();
+                this.items = FXCollections.observableArrayList(this.ecName);
+                this.selItems = FXCollections.observableArrayList(this.ecSelect);
+                this.listLeft.setItems(this.items);
+                this.listRight.setItems(this.selItems);
+                this.listLeft.refresh();
+                this.listRight.refresh();
             }
-            JAPI.removeAllEventDrivers();
-            this.items = FXCollections.observableArrayList(this.ecName);
-            this.selItems = FXCollections.observableArrayList(this.ecSelect);
-            this.listLeft.setItems(this.items);
-            this.listRight.setItems(this.selItems);
-            this.listLeft.refresh();
-            this.listRight.refresh();
             e.consume();
         });
         all.setOnAction(e -> {

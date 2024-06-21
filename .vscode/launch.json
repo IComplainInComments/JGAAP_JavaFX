@@ -6,21 +6,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "JGAAP",
-            "request": "launch",
-            "mainClass": "com.jgaap.JGAAP",
-            "projectName": "JGAAP_JavaFX_8574907e"
-        },
-        {
-            "type": "java",
-            "name": "GUI_MainWindow",
-            "request": "launch",
-            "mainClass": "com.jgaap.GUI.GUI_MainWindow",
-            "projectName": "JGAAP_JavaFX_8574907e",
-            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --add-modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
-        },
-        {
-            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",

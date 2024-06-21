@@ -273,15 +273,17 @@ public class GUI_AnalysisTab {
         VBox.setVgrow(region1, Priority.ALWAYS);
         VBox.setVgrow(region2, Priority.ALWAYS);
         left.setOnAction(e -> {
-            String selection = this.selList.getSelectionModel().getSelectedItem();
-            if(selection.contains("with")){
-                dfRemove(this.selList.getSelectionModel().getSelectedItem());
-            } else {
-                anDeselected(selection);
+            if(!this.selName.isEmpty()){
+                String selection = this.selList.getSelectionModel().getSelectedItem();
+                if(selection.contains("with")){
+                    dfRemove(this.selList.getSelectionModel().getSelectedItem());
+                } else {
+                    anDeselected(selection);
+                }
+                this.selItems = FXCollections.observableArrayList(this.selName);
+                this.selList.setItems(this.selItems);
+                this.selList.refresh();
             }
-            this.selItems = FXCollections.observableArrayList(this.selName);
-            this.selList.setItems(this.selItems);
-            this.selList.refresh();
             e.consume();
         });
         right.setOnAction(e -> {
@@ -300,12 +302,14 @@ public class GUI_AnalysisTab {
             e.consume();
         });
         clear.setOnAction(e -> {
-            JAPI.removeAllAnalysisDrivers();
-            this.selName.clear();
-            distanceFunctions.clear();
-            this.selItems = FXCollections.observableArrayList(this.selName);
-            this.selList.setItems(this.selItems);
-            this.selList.refresh();
+            if(!this.selName.isEmpty()){
+                JAPI.removeAllAnalysisDrivers();
+                this.selName.clear();
+                distanceFunctions.clear();
+                this.selItems = FXCollections.observableArrayList(this.selName);
+                this.selList.setItems(this.selItems);
+                this.selList.refresh();
+            }
             e.consume();
             
         });
@@ -330,7 +334,6 @@ public class GUI_AnalysisTab {
     private void init_distanceFunctions(){
         this.DistanceFunctionsMasterList = new ArrayList<DistanceFunction>();
         for (int i = 0; i < DistanceFunctions.getDistanceFunctions().size(); i++){
-            //for (DistanceFunction distanceFunction : DistanceFunctions.getDistanceFunctions()) {
                 DistanceFunction distanceFunction = DistanceFunctions.getDistanceFunctions().get(i);
                 if (distanceFunction.showInGUI())
                     this.DistanceFunctionsMasterList.add(distanceFunction);
@@ -342,7 +345,6 @@ public class GUI_AnalysisTab {
     private void init_analysisDrivers(){
         this.AnalysisDriverMasterList = new ArrayList<AnalysisDriver>();
         for (int i = 0; i < AnalysisDrivers.getAnalysisDrivers().size(); i++){
-            //for (AnalysisDriver analysisDriver : AnalysisDrivers.getAnalysisDrivers()) {
                 AnalysisDriver analysisDriver = AnalysisDrivers.getAnalysisDrivers().get(i);
                 if (analysisDriver.showInGUI())
                     this.AnalysisDriverMasterList.add(analysisDriver);
@@ -397,7 +399,6 @@ public class GUI_AnalysisTab {
         }
         for(AnalysisDriver i : AnalysisDriverMasterList){
                 if(i.displayName().contains("with")){
-                    //String val = i.displayName().replace(" with metric ", ":");
                     String[] temp = i.displayName().replace(" with metric ", ":").split("\\:");
                     if(temp[0].equalsIgnoreCase(and)){
                         ad = i;
