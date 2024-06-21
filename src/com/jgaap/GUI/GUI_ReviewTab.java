@@ -28,7 +28,6 @@ import com.jgaap.util.Pair;
 
 
 import com.jgaap.generics.Canonicizer;
-import com.jgaap.generics.DistanceFunction;
 
 /**
  * Review Tab Class.
@@ -51,6 +50,7 @@ public class GUI_ReviewTab {
    private List<Pair<Canonicizer, Object>> SelectedCanonicizerList;
    private GUI_ResultsWindow res;
    private VBox box;
+   private Button process;
    private static Logger logger;
    private static API JAPI;
 
@@ -131,10 +131,10 @@ public class GUI_ReviewTab {
     */
    private HBox init_bottomButtons() {
       HBox box = new HBox(5);
-      Button process = new Button("Process");
+      this.process = new Button("Process");
       Region region1 = new Region();
       HBox.setHgrow(region1, Priority.ALWAYS);
-      process.setOnAction(e -> {
+      this.process.setOnAction(e -> {
          try {
             JAPI.clearData();
             JAPI.clearCanonicizers();
@@ -164,6 +164,7 @@ public class GUI_ReviewTab {
          }
          e.consume();
       });
+      this.process.setDisable(true);
       box.getChildren().add(region1);
       box.getChildren().add(process);
       return box;
@@ -289,9 +290,10 @@ public class GUI_ReviewTab {
       this.anList.setItems(this.anItems);
    }
    /**
-    * Method for refreshing the list views
+    * Method for refreshing the list views and checking if experiment is setup properly to process.
     */
    public void refreshView() {
+      boolean go = false;
       logger.info("Refreshing Review Tab List Views");
       refresh_canList();
       refresh_edList();
@@ -302,6 +304,21 @@ public class GUI_ReviewTab {
       this.edList.refresh();
       this.ecList.refresh();
       this.canList.refresh();
+
+      go = (!this.canVals.isEmpty()) ? true : false;
+      
+      go = (!this.edVals.isEmpty() && go) ? true : false;
+      
+      go = (!this.ecVals.isEmpty() && go) ? true : false;
+
+      
+      go = (!this.edVals.isEmpty() && go) ? true : false;
+      
+      if(go){
+         this.process.setDisable(false);
+      } else {
+         this.process.setDisable(true);
+      }
    }
 
    /**

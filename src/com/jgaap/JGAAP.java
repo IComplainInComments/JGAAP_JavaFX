@@ -26,7 +26,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.jgaap.backend.CLI;
-import com.jgaap.ui.JGAAP_UI_MainForm;
 
 /**
  * The jgaap main file.
@@ -45,8 +44,6 @@ public class JGAAP {
      * Launches the jgaap GUI.
      */
     private static void createAndShowGUI() {
-		//JGAAP_UI_MainForm gui = new JGAAP_UI_MainForm();
-    	//gui.setVisible(true);
 		Application.launch(com.jgaap.GUI.GUI_MainWindow.class, "");
     }
 
@@ -62,11 +59,6 @@ public class JGAAP {
     	if (args.length == 0) {
     		mainLogger.info("Starting GUI");
             createAndShowGUI();
-            //javax.swing.SwingUtilities.invokeLater(new Runnable() {
-               // public void run() {
-                    //createAndShowGUI();
-                //}
-            //});
 
         } else {
         	mainLogger.info("Starting CLI");

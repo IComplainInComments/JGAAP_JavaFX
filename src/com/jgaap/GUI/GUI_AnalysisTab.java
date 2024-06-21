@@ -171,9 +171,6 @@ public class GUI_AnalysisTab {
             Iterator<AnalysisDriver> iter = this.anSel.iterator();
             while (iter.hasNext()) {
                 AnalysisDriver temp = iter.next();
-                if (temp instanceof NeighborAnalysisDriver) {
-                    this.dfArea.setText(((NeighborAnalysisDriver) temp).getDistanceFunction().longDescription());
-                }
                 if (sel.equalsIgnoreCase(temp.displayName())) {
                     VBox para = temp.getNewGUILayout();
                     if (this.param.getChildren().contains(this.paraBoxChildOne)) {
@@ -182,7 +179,6 @@ public class GUI_AnalysisTab {
                         if(para.getChildren().size() > 2){
                             logger.info("Changing Analysis Tab Parameter Boxes");
                             this.param.getChildren().removeAll(this.paraBoxChildOne);
-                            //this.param.getChildren().removeAll(this.paraBoxChildTwo);
                             this.param.getChildren().add(para);
                         }
                     } else if (!this.param.getChildren().contains(para)) {
@@ -450,10 +446,17 @@ public class GUI_AnalysisTab {
     }
     private void dfRemove(String method){
         int index;
+        AnalysisDriver ad = null;
         logger.info("Removing Distance Function "+method);
         Pair<DistanceFunction, AnalysisDriver> item = distanceFunctions.remove(method);
         index = AnalysisDriverMasterList.indexOf(item.getSecond());
+        try {
+            ad = item.getSecond().getClass().getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JAPI.removeAnalysisDriver(item.getSecond());
+        AnalysisDriverMasterList.add(index, ad);
         this.anSel.remove(item.getSecond());
         this.selName.remove(method);
         this.selItems = FXCollections.observableArrayList(this.selName);
