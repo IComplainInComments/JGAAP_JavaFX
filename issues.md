@@ -10,7 +10,6 @@
 
 - Check everything is setup before allowing process to be used.
 - Check that an Analysis driver can use a distance function.
-- Assemble the About Window.
 
 ## Future features
 

@@ -51,6 +51,8 @@ public class GUI_MainWindow extends Application{
         });
         mainStage.setTitle(JGAAPConstants.VERSION+" BETA");
         mainStage.setScene(init_mainScene(mainStage));
+        mainStage.minHeightProperty().set(600);
+        mainStage.minWidthProperty().set(1000);
         mainStage.show();
     }
     /**
