@@ -45,7 +45,7 @@ public class GUI_AnalysisTab {
     private ListView<String> selList;
     private VBox param;
     private VBox paraBoxChildOne;
-    private VBox paraBoxChildTwo;
+    //private VBox paraBoxChildTwo;
     private TextArea anArea;
     private TextArea dfArea;
     private static HashMap<String, Pair<DistanceFunction, AnalysisDriver>> distanceFunctions;
@@ -88,34 +88,34 @@ public class GUI_AnalysisTab {
         VBox sel = new VBox();
         this.param = new VBox();
         this.paraBoxChildOne = new VBox();
-        this.paraBoxChildTwo = new VBox();
+        //this.paraBoxChildTwo = new VBox();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         Button notes = notesBox.getButton();
         Label an = new Label("Analysis Method");
         Label df = new Label("Distance Function");
         Label se = new Label("Selected");
-        Label am = new Label("AM Parameters");
-        Label dfp = new Label("DF Parameters");
+        Label am = new Label("Parameters");
+        //Label dfp = new Label("DF Parameters");
 
         an.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         df.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         se.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         am.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
-        dfp.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
+        //dfp.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
 
         paraBoxChildOne.setStyle("-fx-border-color: black");
-        paraBoxChildTwo.setStyle("-fx-border-color: black");
+        //paraBoxChildTwo.setStyle("-fx-border-color: black");
 
         paraBoxChildOne.prefHeightProperty().bind(this.box.heightProperty());
         paraBoxChildOne.prefWidthProperty().bind(this.box.widthProperty());
-        paraBoxChildTwo.prefHeightProperty().bind(this.box.heightProperty());
-        paraBoxChildTwo.prefWidthProperty().bind(this.box.widthProperty());
+        //paraBoxChildTwo.prefHeightProperty().bind(this.box.heightProperty());
+        //paraBoxChildTwo.prefWidthProperty().bind(this.box.widthProperty());
 
         noteBox.getChildren().addAll(am, region1, notes);
         meth.getChildren().addAll(an, init_AnalysisMethodBox(),df, init_DistanceFunctionBox());
         sel.getChildren().addAll(se, init_SelectedBox());
-        param.getChildren().addAll(noteBox,paraBoxChildOne,dfp,paraBoxChildTwo);
+        param.getChildren().addAll(noteBox,paraBoxChildOne);
 
         box.getChildren().addAll(meth,init_rowOneButtons(),sel,param);
 
@@ -141,6 +141,10 @@ public class GUI_AnalysisTab {
         this.dfArea.prefWidthProperty().bind(this.box.widthProperty());
         this.anArea.setMinSize(100, 100);
         this.dfArea.setMinSize(100, 100);
+        this.anArea.setWrapText(true);
+        this.dfArea.setWrapText(true);
+        this.anArea.setEditable(false);
+        this.dfArea.setEditable(false);
 
         an.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         df.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
@@ -167,23 +171,25 @@ public class GUI_AnalysisTab {
             Iterator<AnalysisDriver> iter = this.anSel.iterator();
             while (iter.hasNext()) {
                 AnalysisDriver temp = iter.next();
+                if (temp instanceof NeighborAnalysisDriver) {
+                    this.dfArea.setText(((NeighborAnalysisDriver) temp).getDistanceFunction().longDescription());
+                }
                 if (sel.equalsIgnoreCase(temp.displayName())) {
                     VBox para = temp.getNewGUILayout();
-                    if (this.param.getChildren().contains(this.paraBoxChildOne) || this.param.getChildren().contains(this.paraBoxChildTwo)) {
+                    if (this.param.getChildren().contains(this.paraBoxChildOne)) {
                         para.prefHeightProperty().bind(this.box.heightProperty());
                         para.prefWidthProperty().bind(this.box.widthProperty());
                         if(para.getChildren().size() > 2){
                             logger.info("Changing Analysis Tab Parameter Boxes");
-                            //this.param.getChildren().removeAll(this.paraBoxChildOne);
+                            this.param.getChildren().removeAll(this.paraBoxChildOne);
                             //this.param.getChildren().removeAll(this.paraBoxChildTwo);
                             this.param.getChildren().add(para);
                         }
-                    } else if (!this.param.getChildren().contains(para) || !this.param.getChildren().contains(para)) {
+                    } else if (!this.param.getChildren().contains(para)) {
                         logger.info("Changing Analysis Tab Parameter Boxes");
                         para.prefHeightProperty().bind(this.box.heightProperty());
                         para.prefWidthProperty().bind(this.box.widthProperty());
-                        this.param.getChildren().removeAll(this.paraBoxChildOne);
-                        this.param.getChildren().removeAll(this.paraBoxChildTwo);
+                        this.param.getChildren().removeLast();
                         this.param.getChildren().add(para);
                     }
                 }
@@ -219,6 +225,11 @@ public class GUI_AnalysisTab {
             while(iter.hasNext()){
                 AnalysisDriver temp = iter.next();
                 if(sel.equalsIgnoreCase(temp.displayName())){
+                    if(!(temp instanceof NeighborAnalysisDriver)){
+                        this.dfList.setDisable(true);
+                    } else {
+                        this.dfList.setDisable(false);
+                    }
                     this.anArea.setText(temp.longDescription());
                 }
             }
@@ -438,8 +449,10 @@ public class GUI_AnalysisTab {
         this.selList.refresh();
     }
     private void dfRemove(String method){
+        int index;
         logger.info("Removing Distance Function "+method);
         Pair<DistanceFunction, AnalysisDriver> item = distanceFunctions.remove(method);
+        index = AnalysisDriverMasterList.indexOf(item.getSecond());
         JAPI.removeAnalysisDriver(item.getSecond());
         this.anSel.remove(item.getSecond());
         this.selName.remove(method);
