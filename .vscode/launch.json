@@ -9,16 +9,14 @@
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.2/lib --add-modules=javafx.controls"
-
+            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --add-modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
         },
         {
             "type": "java",
-            "name": "GUI_MainWindow",
+            "name": "Main Method",
             "request": "launch",
-            "mainClass": "GUI_MainWindow",
-            "projectName": "JGAAP_JavaFX_4a2591a",
-            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.2/lib --add-modules=javafx.controls"
+            "mainClass": "com.jgaap.JGAAP",
+            "vmArgs": "--module-path=/Library/Java/Extensions/JavaFX_21/javafx-sdk-21.0.3/lib --add-modules=javafx.controls,javafx.fxml,javafx.graphics,javafx.base,javafx.swing"
         }
     ]
 }
