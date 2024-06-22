@@ -1,3 +1,5 @@
+move "build\JGAAP_JavaFX.jar" "jgaap-app-build\java-runtime"
+
 jpackage --input "jgaap-app-build\java-runtime" ^
 --type msi ^
 --app-version "9.0.0" ^
