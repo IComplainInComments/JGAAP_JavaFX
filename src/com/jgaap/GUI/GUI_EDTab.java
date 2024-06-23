@@ -28,17 +28,17 @@ import com.jgaap.backend.API;
  */
 public class GUI_EDTab {
 
-    private ArrayList<String> edName;
-    private ArrayList<String> edSelect;
     private ArrayList<EventDriver> edSel;
-    private ArrayList<EventDriver> EventDriverMasterList;
     private ObservableList<String> selItems;
     private ObservableList<String> items;
-    private ListView<String> edList;
-    private ListView<String> selList;
-    private TextArea area;
-    private HBox bottomButtons, notesBox;
     private VBox box, paraBoxChild, paraBox;
+    private static ArrayList<String> edName;
+    private static ArrayList<String> edSelect;
+    private static ArrayList<EventDriver> EventDriverMasterList;
+    private static ListView<String> edList;
+    private static ListView<String> selList;
+    private static TextArea area;
+    private static HBox bottomButtons, notesBox;
     private static API JAPI;
     private static Logger logger;
     private static GUI_NotesWindow noteBox;
@@ -61,7 +61,7 @@ public class GUI_EDTab {
         logger.info("Building Event Driver Tab");
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
-        this.box.getChildren().add(this.bottomButtons);
+        this.box.getChildren().add(bottomButtons);
     }
 
     /**
@@ -70,17 +70,17 @@ public class GUI_EDTab {
      * @return HBox
      */
     private HBox init_rowOne() {
-        ListView<String> listLeft = init_ListBoxLeft();
-        ListView<String> listRight = init_ListBoxRight();
+        ListView<String> listLeft = init_ListLeft();
+        ListView<String> listRight = init_ListRight();
         Label can = new Label("Event Drivers");
         Label sel = new Label("Selected");
         Label para = new Label("Parameters");
         Button notes = noteBox.getButton();
         HBox box = new HBox(5);
-        this.notesBox = new HBox();
+        notesBox = new HBox();
         VBox edBox = new VBox();
         VBox selBox = new VBox();
-        this.paraBox = new VBox();
+        paraBox = new VBox();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
@@ -92,11 +92,11 @@ public class GUI_EDTab {
         paraBoxChild.prefHeightProperty().bind(this.box.heightProperty());
         paraBoxChild.prefWidthProperty().bind(this.box.widthProperty());
 
-        this.notesBox.getChildren().addAll(para, region1, notes);
+        notesBox.getChildren().addAll(para, region1, notes);
 
         edBox.getChildren().addAll(can, listLeft);
         selBox.getChildren().addAll(sel, listRight);
-        paraBox.getChildren().addAll(this.notesBox, paraBoxChild);
+        paraBox.getChildren().addAll(notesBox, paraBoxChild);
 
         box.getChildren().addAll(edBox, init_rowTwoButtons(), selBox, paraBox);
 
@@ -111,15 +111,17 @@ public class GUI_EDTab {
     private VBox init_rowTwo() {
         VBox box = new VBox(5);
         Label can = new Label("Event Driver Description");
-        this.area = new TextArea();
+        area = new TextArea();
 
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
 
-        this.area.setText("Enter your description here");
-        this.area.prefHeightProperty().bind(this.box.heightProperty());
-        this.area.prefWidthProperty().bind(this.box.widthProperty());
+        area.setText("");
+        area.setWrapText(true);
+        area.setEditable(false);
+        area.prefHeightProperty().bind(this.box.heightProperty());
+        area.prefWidthProperty().bind(this.box.widthProperty());
         box.getChildren().add(can);
-        box.getChildren().add(this.area);
+        box.getChildren().add(area);
 
         return box;
 
@@ -130,33 +132,33 @@ public class GUI_EDTab {
      * 
      * @return ListView<String>
      */
-    private ListView<String> init_ListBoxLeft() {
-        this.edName = new ArrayList<String>();
-        this.edSelect = new ArrayList<String>();
-        this.edSel = new ArrayList<EventDriver>();
-        this.edList = new ListView<String>();
-        this.edList = new ListView<String>();
-        for (EventDriver i : this.EventDriverMasterList) {
-            this.edName.add(i.displayName());
+    private ListView<String> init_ListLeft() {
+        edName = new ArrayList<String>();
+        edSelect = new ArrayList<String>();
+        edSel = new ArrayList<EventDriver>();
+        edList = new ListView<String>();
+        edList = new ListView<String>();
+        for (EventDriver i :EventDriverMasterList) {
+            edName.add(i.displayName());
         }
-        this.items = FXCollections.observableArrayList(this.edName);
+        this.items = FXCollections.observableArrayList(edName);
 
-        this.edList.setItems(items);
-        this.edList.prefHeightProperty().bind(this.box.heightProperty());
-        this.edList.prefWidthProperty().bind(this.box.widthProperty());
-        this.edList.setOnMouseClicked(e -> {
-            String sel = this.edList.getSelectionModel().getSelectedItem();
-            Iterator<EventDriver> iter = this.EventDriverMasterList.iterator();
+        edList.setItems(items);
+        edList.prefHeightProperty().bind(this.box.heightProperty());
+        edList.prefWidthProperty().bind(this.box.widthProperty());
+        edList.setOnMouseClicked(e -> {
+            String sel = edList.getSelectionModel().getSelectedItem();
+            Iterator<EventDriver> iter = EventDriverMasterList.iterator();
             while (iter.hasNext()) {
                 EventDriver temp = iter.next();
                 if (sel.equalsIgnoreCase(temp.displayName())) {
-                    this.area.setText(temp.longDescription());
+                    area.setText(temp.longDescription());
                 }
             }
             e.consume();
         });
 
-        return this.edList;
+        return edList;
     }
 
     /**
@@ -164,14 +166,14 @@ public class GUI_EDTab {
      * 
      * @return ListView<String>
      */
-    private ListView<String> init_ListBoxRight() {
-        this.selList = new ListView<String>();
-        this.selItems = FXCollections.observableArrayList(this.edSelect);
-        this.selList.setItems(this.selItems);
-        this.selList.prefHeightProperty().bind(this.box.heightProperty());
-        this.selList.prefWidthProperty().bind(this.box.widthProperty());
-        this.selList.setOnMouseClicked(e -> {
-            String sel = this.selList.getSelectionModel().getSelectedItem();
+    private ListView<String> init_ListRight() {
+        selList = new ListView<String>();
+        this.selItems = FXCollections.observableArrayList(edSelect);
+        selList.setItems(this.selItems);
+        selList.prefHeightProperty().bind(this.box.heightProperty());
+        selList.prefWidthProperty().bind(this.box.widthProperty());
+        selList.setOnMouseClicked(e -> {
+            String sel = selList.getSelectionModel().getSelectedItem();
             Iterator<EventDriver> iter = this.edSel.iterator();
             while (iter.hasNext()) {
                 EventDriver temp = iter.next();
@@ -188,7 +190,7 @@ public class GUI_EDTab {
                         this.paraBox.getChildren().removeLast();
                         this.paraBox.getChildren().add(para);
                     }
-                    this.area.setText(temp.longDescription());
+                    area.setText(temp.longDescription());
                 }
             }
             e.consume();
@@ -217,37 +219,37 @@ public class GUI_EDTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            if(!this.edSelect.isEmpty()){
-                edDeselected(this.selList.getSelectionModel().getSelectedItem().trim());
-                this.selList.refresh();
-                this.edList.refresh();
+            if(!edSelect.isEmpty()){
+                edDeselected(selList.getSelectionModel().getSelectedItem().trim());
+                selList.refresh();
+                edList.refresh();
             }
             e.consume();
         });
         right.setOnAction(e -> {
-            edSelected(this.edList.getSelectionModel().getSelectedItem().trim());
-            this.selList.refresh();
-            this.edList.refresh();
-            this.selList.getSelectionModel().select(this.selItems.getLast());
+            edSelected(edList.getSelectionModel().getSelectedItem().trim());
+            selList.refresh();
+            edList.refresh();
+            selList.getSelectionModel().select(this.selItems.getLast());
             e.consume();
         });
         clear.setOnAction(e -> {
-            if(!this.edSelect.isEmpty()){
-                this.EventDriverMasterList.clear();
-                this.edName.clear();
-                this.edSelect.clear();
-                this.edSel.clear();
+            if(!edSelect.isEmpty()){
+                EventDriverMasterList.clear();
+                edName.clear();
+                edSelect.clear();
+                edSel.clear();
                 init_EventDrivers();
-                for (EventDriver i : this.EventDriverMasterList) {
-                    this.edName.add(i.displayName());
+                for (EventDriver i : EventDriverMasterList) {
+                    edName.add(i.displayName());
                 }
                 JAPI.removeAllEventDrivers();
-                this.items = FXCollections.observableArrayList(this.edName);
-                this.selItems = FXCollections.observableArrayList(this.edSelect);
-                this.edList.setItems(this.items);
-                this.selList.setItems(this.selItems);
-                this.selList.refresh();
-                this.edList.refresh();
+                this.items = FXCollections.observableArrayList(edName);
+                this.selItems = FXCollections.observableArrayList(edSelect);
+                edList.setItems(this.items);
+                selList.setItems(this.selItems);
+                selList.refresh();
+                edList.refresh();
                 this.paraBox.getChildren().removeLast();
                 this.paraBox.getChildren().add(this.paraBoxChild);
             }
@@ -255,17 +257,11 @@ public class GUI_EDTab {
         });
         all.setOnAction(e -> {
             allSelected();
-            this.selList.refresh();
-            this.edList.refresh();
+            selList.refresh();
+            edList.refresh();
             e.consume();
         });
-
-        box.getChildren().add(region1);
-        box.getChildren().add(left);
-        box.getChildren().add(right);
-        box.getChildren().add(all);
-        box.getChildren().add(clear);
-        box.getChildren().add(region2);
+        box.getChildren().addAll(region1, right, left, all, clear, region2);
         box.setAlignment(Pos.TOP_CENTER);
 
         return box;
@@ -274,11 +270,11 @@ public class GUI_EDTab {
      * Method for initializing the Event Driver Master List
      */
     private void init_EventDrivers() {
-        this.EventDriverMasterList = new ArrayList<EventDriver>();
+        EventDriverMasterList = new ArrayList<EventDriver>();
         for (int i = 0; i < EventDrivers.getEventDrivers().size(); i++) {
             EventDriver eventDriver = EventDrivers.getEventDrivers().get(i);
             if (eventDriver.showInGUI())
-                this.EventDriverMasterList.add(eventDriver);
+                EventDriverMasterList.add(eventDriver);
         }
     }
     /**
@@ -287,9 +283,9 @@ public class GUI_EDTab {
      */
     private void edSelected(String method) {
         logger.info("Adding Event Driver "+method);
-        this.edSelect.add(method);
-        this.edName.remove(method);
-        Iterator<EventDriver> master = this.EventDriverMasterList.iterator();
+        edSelect.add(method);
+        edName.remove(method);
+        Iterator<EventDriver> master = EventDriverMasterList.iterator();
         while (master.hasNext()) {
             EventDriver temp = master.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
@@ -302,19 +298,19 @@ public class GUI_EDTab {
                 master.remove();
             }
         }
-        this.items = FXCollections.observableArrayList(this.edName);
-        this.selItems = FXCollections.observableArrayList(this.edSelect);
-        this.edList.setItems(this.items);
-        this.selList.setItems(this.selItems);
+        this.items = FXCollections.observableArrayList(edName);
+        this.selItems = FXCollections.observableArrayList(edSelect);
+        edList.setItems(this.items);
+        selList.setItems(this.selItems);
     }
     /**
      * Method for selecting all Event Drivers
      */
     private void allSelected() {
         logger.info("Adding all Event Drivers");
-        this.edSelect.addAll(this.edName);
-        this.edName.clear();
-        Iterator<EventDriver> master = this.EventDriverMasterList.iterator();
+        edSelect.addAll(edName);
+        edName.clear();
+        Iterator<EventDriver> master = EventDriverMasterList.iterator();
         while (master.hasNext()) {
             EventDriver temp = master.next();
             try {
@@ -325,10 +321,10 @@ public class GUI_EDTab {
             }
             master.remove();
         }
-        this.items = FXCollections.observableArrayList(this.edName);
-        this.selItems = FXCollections.observableArrayList(this.edSelect);
-        this.edList.setItems(this.items);
-        this.selList.setItems(this.selItems);
+        this.items = FXCollections.observableArrayList(edName);
+        this.selItems = FXCollections.observableArrayList(edSelect);
+        edList.setItems(this.items);
+        selList.setItems(this.selItems);
     }
     /**
      * Method for removing selected Event Driver
@@ -336,21 +332,21 @@ public class GUI_EDTab {
      */
     private void edDeselected(String method) {
         logger.info("Removing Event Driver "+method);
-        this.edSelect.remove(method);
-        this.edName.add(method);
+        edSelect.remove(method);
+        edName.add(method);
         Iterator<EventDriver> canMeth = this.edSel.iterator();
         while (canMeth.hasNext()) {
             EventDriver temp = canMeth.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
                 JAPI.removeEventDriver(temp);
                 canMeth.remove();
-                this.EventDriverMasterList.add(temp);
+                EventDriverMasterList.add(temp);
             }
         }
-        this.items = FXCollections.observableArrayList(this.edName);
-        this.selItems = FXCollections.observableArrayList(this.edSelect);
-        this.edList.setItems(this.items);
-        this.selList.setItems(this.selItems);
+        this.items = FXCollections.observableArrayList(edName);
+        this.selItems = FXCollections.observableArrayList(edSelect);
+        edList.setItems(this.items);
+        selList.setItems(this.selItems);
     }
 
     /**
@@ -359,8 +355,8 @@ public class GUI_EDTab {
      * @return VBox
      */
     public VBox getPane() {
-        logger.info("Finished building Event Culler Tab");
         build_pane();
+        logger.info("Finished building Event Culler Tab");
         return this.box;
     }
     /**
@@ -368,7 +364,7 @@ public class GUI_EDTab {
      * @param box HBOX
      */
     public void setBottomButtons(HBox box) {
-        this.bottomButtons = box;
+        bottomButtons = box;
     }
 
 }

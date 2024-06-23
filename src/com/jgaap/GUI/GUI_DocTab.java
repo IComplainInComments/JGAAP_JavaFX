@@ -44,27 +44,27 @@ import java.util.Collections;
  * This Class creates the scene for the Document Tab and it's GUI elements.
  */
 public class GUI_DocTab {
-   private VBox box;
    private static GUI_NotesWindow noteBox;
-   static Logger logger;
+   private static Logger logger;
    private static Stage mainStageRef;
    private static API JAPI;
-   private HBox bottomButtons;
-   private TableView<Document> table;
-   private TreeItem<String> rootNode;
-   private TreeView<String> tree;
+   private static TableView<Document> table;
+   private static TreeItem<String> rootNode;
+   private static TreeView<String> tree;
+   private static HBox bottomButtons;
+   private VBox box;
 
    /**
     * Constructor for the class.
     */
    public GUI_DocTab(Stage stage) {
+      rootNode = new TreeItem<String>("Authors");
+      tree = new TreeView<String>(rootNode);
+      noteBox = new GUI_NotesWindow();
       logger = Logger.getLogger(GUI_DocTab.class);
       JAPI = API.getInstance();
       mainStageRef = stage;
       this.box = new VBox();
-      this.rootNode = new TreeItem<String>("Authors");
-      this.tree = new TreeView<String>(this.rootNode);
-      noteBox = new GUI_NotesWindow();
    }
 
    /**
@@ -77,7 +77,7 @@ public class GUI_DocTab {
       this.box.getChildren().add(init_UnknownAuthButtons());
       this.box.getChildren().add(init_KnownAuth());
       this.box.getChildren().add(init_KnownAuthButtons());
-      this.box.getChildren().add(this.bottomButtons);
+      this.box.getChildren().add(bottomButtons);
    }
 
    /*
@@ -115,7 +115,7 @@ public class GUI_DocTab {
       table.prefWidthProperty().bind(this.box.widthProperty());
 
       box.getChildren().add(unAuth);
-      box.getChildren().add(this.table);
+      box.getChildren().add(table);
 
       return box;
    }
@@ -172,12 +172,12 @@ public class GUI_DocTab {
       //===============================================================================
       //===============================================================================
       remDoc.setOnAction(e -> {
-         TableViewSelectionModel<Document> selected = this.table.getSelectionModel();
+         TableViewSelectionModel<Document> selected = table.getSelectionModel();
          Document[] docs = new Document[selected.getSelectedItems().size()];
          for(int i = 0; i < docs.length; i++){
             JAPI.removeDocument(docs[i]);
          }
-         this.table.getItems().removeAll(docs);
+         table.getItems().removeAll(docs);
          updateUnknownDocumentsTable();
          e.consume();
       });
@@ -209,7 +209,7 @@ public class GUI_DocTab {
       //===============================================================================
       //===============================================================================
       editAuth.setOnAction(e -> {
-         SelectionModel<TreeItem<String>> selected = this.tree.getSelectionModel();
+         SelectionModel<TreeItem<String>> selected = tree.getSelectionModel();
          GUI_AddAuthor pop = new GUI_AddAuthor(selected.getSelectedItem().getValue());
          Stage stage = pop.getStage();
          stage.showAndWait();
@@ -220,7 +220,7 @@ public class GUI_DocTab {
       //===============================================================================
       //===============================================================================
       remAuth.setOnAction(e -> {
-         MultipleSelectionModel<TreeItem<String>> selected = this.tree.getSelectionModel();
+         MultipleSelectionModel<TreeItem<String>> selected = tree.getSelectionModel();
          Iterator<TreeItem<String>> iter = selected.getSelectedItems().iterator();
          while(iter.hasNext()){
             Iterator<Document> docIter = JAPI.getDocumentsByAuthor(iter.next().getValue()).iterator();
@@ -246,16 +246,16 @@ public class GUI_DocTab {
     * @return TableView<Object>
     */
    private void init_unknownAuthorTable() {
-      this.table = new TableView<Document>();
+      table = new TableView<Document>();
       TableColumn<Document, String> column1 = new TableColumn<Document, String>("Title");
       TableColumn<Document, String> column2 = new TableColumn<Document, String>("File Path");
       column1.setCellValueFactory(new PropertyValueFactory<Document, String>("title"));
       column2.setCellValueFactory(new PropertyValueFactory<Document, String>("FilePath"));
       column1.prefWidthProperty().bind(table.widthProperty().divide(2));
       column2.prefWidthProperty().bind(table.widthProperty().divide(2));
-      this.table.getColumns().add(column1);
-      this.table.getColumns().add(column2);
-      this.table.setItems(FXCollections.observableArrayList(JAPI.getUnknownDocuments()));
+      table.getColumns().add(column1);
+      table.getColumns().add(column2);
+      table.setItems(FXCollections.observableArrayList(JAPI.getUnknownDocuments()));
    }
 
    /**
@@ -280,14 +280,14 @@ public class GUI_DocTab {
       });
       return comboBox;
    }
-   public void updateUnknownDocumentsTable(){
-      this.table.setItems(FXCollections.observableArrayList(JAPI.getUnknownDocuments()));
-      this.table.refresh();
+   public static void updateUnknownDocumentsTable(){
+      table.setItems(FXCollections.observableArrayList(JAPI.getUnknownDocuments()));
+      table.refresh();
    }
    /**
     * Method for building the Author Tree View
     */
-   public void updateAuthorTree(){
+   public static void updateAuthorTree(){
       List<String> authors = JAPI.getAuthors();
       List<TreeItem<String>> authNode = new ArrayList<TreeItem<String>>();
       TreeItem<String> node = new TreeItem<String>();
@@ -301,8 +301,8 @@ public class GUI_DocTab {
          }
          authNode.add(node);
       }
-      this.rootNode.getChildren().addAll(authNode);
-      this.tree.refresh();
+      rootNode.getChildren().addAll(authNode);
+      tree.refresh();
    }
    private List<String> populateLanguageMasterList(){
       List<String> LanguagesMasterList = new ArrayList<String>();
@@ -324,6 +324,6 @@ public class GUI_DocTab {
       return this.box;
    }
    public void setBottomButtons(HBox box){
-      this.bottomButtons = box;
+      bottomButtons = box;
   }
 }

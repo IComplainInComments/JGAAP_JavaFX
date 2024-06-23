@@ -33,27 +33,27 @@ import com.jgaap.backend.API;
  */
 public class GUI_AnalysisTab {
 
-    private ArrayList<AnalysisDriver> AnalysisDriverMasterList;
-    private ArrayList<DistanceFunction> DistanceFunctionsMasterList;
-    private ArrayList<AnalysisDriver> anSel;
-    private ArrayList<String> anName;
-    private ArrayList<String> dfName;
-    private ArrayList<String> selName;
-    private ObservableList<String> selItems;
-    private ListView<String> anList;
-    private ListView<String> dfList;
-    private ListView<String> selList;
-    private VBox param;
-    private VBox paraBoxChildOne;
-    //private VBox paraBoxChildTwo;
-    private TextArea anArea;
-    private TextArea dfArea;
+    private static ArrayList<AnalysisDriver> AnalysisDriverMasterList;
+    private static ArrayList<DistanceFunction> DistanceFunctionsMasterList;
+    private static ArrayList<AnalysisDriver> anSel;
+    private static ArrayList<String> anName;
+    private static ArrayList<String> dfName;
+    private static ArrayList<String> selName;
+    private static TextArea anArea;
+    private static TextArea dfArea;
     private static HashMap<String, Pair<DistanceFunction, AnalysisDriver>> distanceFunctions;
     private static API JAPI;
     private static Logger logger;
-    private HBox bottomButtons;
-    private VBox box;
+    private static HBox bottomButtons;
+    private static ListView<String> anList;
+    private static ListView<String> dfList;
+    private static ListView<String> selList;
     private static GUI_NotesWindow notesBox;
+    private VBox box;
+    private ObservableList<String> selItems;
+    private VBox param;
+    private VBox paraBoxChildOne;
+    //private VBox paraBoxChildTwo;
 
     /**
      * Constructor for the class.
@@ -62,11 +62,10 @@ public class GUI_AnalysisTab {
         distanceFunctions = new HashMap<String, Pair<DistanceFunction, AnalysisDriver>>();
         logger = Logger.getLogger(GUI_AnalysisTab.class);
         JAPI = API.getInstance();
-        this.box = new VBox();
         notesBox = new GUI_NotesWindow();
+        this.box = new VBox();
         init_analysisDrivers();
         init_distanceFunctions();
-        logger.info("Finished building Analysis Tab");
     }
     /**
      * Builds the Pane row by row.
@@ -75,7 +74,7 @@ public class GUI_AnalysisTab {
         logger.info("Building Analysis Tab");
         this.box.getChildren().add(init_rowOne());
         this.box.getChildren().add(init_rowTwo());
-        this.box.getChildren().add(this.bottomButtons);
+        this.box.getChildren().add(bottomButtons);
     }
     /**
      * Creates the 'Top Row' of GUI elements in the window.
@@ -129,28 +128,28 @@ public class GUI_AnalysisTab {
     private HBox init_rowTwo(){
         Label an = new Label("Analysis Method Description");
         Label df = new Label("Distance Function Description");
-        this.anArea = new TextArea();
-        this.dfArea = new TextArea();
+        anArea = new TextArea();
+        dfArea = new TextArea();
         HBox box = new HBox(5);
         VBox amd = new VBox();
         VBox dfd = new VBox();
 
-        this.anArea.prefHeightProperty().bind(this.box.heightProperty());
-        this.anArea.prefWidthProperty().bind(this.box.widthProperty());
-        this.dfArea.prefHeightProperty().bind(this.box.heightProperty());
-        this.dfArea.prefWidthProperty().bind(this.box.widthProperty());
-        this.anArea.setMinSize(100, 100);
-        this.dfArea.setMinSize(100, 100);
-        this.anArea.setWrapText(true);
-        this.dfArea.setWrapText(true);
-        this.anArea.setEditable(false);
-        this.dfArea.setEditable(false);
+       anArea.prefHeightProperty().bind(this.box.heightProperty());
+       anArea.prefWidthProperty().bind(this.box.widthProperty());
+       dfArea.prefHeightProperty().bind(this.box.heightProperty());
+       dfArea.prefWidthProperty().bind(this.box.widthProperty());
+       anArea.setMinSize(100, 100);
+       dfArea.setMinSize(100, 100);
+       anArea.setWrapText(true);
+       dfArea.setWrapText(true);
+       anArea.setEditable(false);
+       dfArea.setEditable(false);
 
         an.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         df.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
 
-        amd.getChildren().addAll(an,this.anArea);
-        dfd.getChildren().addAll(df,this.dfArea);
+        amd.getChildren().addAll(an,anArea);
+        dfd.getChildren().addAll(df,dfArea);
 
         box.getChildren().addAll(amd,dfd);
 
@@ -161,14 +160,14 @@ public class GUI_AnalysisTab {
       * @return ListView<String>
       */
     private ListView<String> init_SelectedBox(){
-        this.selItems = FXCollections.observableArrayList (this.selName);
+        this.selItems = FXCollections.observableArrayList (selName);
 
-        this.selList.setItems(this.selItems);
-        this.selList.prefHeightProperty().bind(this.box.heightProperty());
-        this.selList.prefWidthProperty().bind(this.box.widthProperty());
-        this.selList.setOnMouseClicked(e -> {
-            String sel = this.selList.getSelectionModel().getSelectedItem();
-            Iterator<AnalysisDriver> iter = this.anSel.iterator();
+        selList.setItems(this.selItems);
+        selList.prefHeightProperty().bind(this.box.heightProperty());
+        selList.prefWidthProperty().bind(this.box.widthProperty());
+        selList.setOnMouseClicked(e -> {
+            String sel = selList.getSelectionModel().getSelectedItem();
+            Iterator<AnalysisDriver> iter = anSel.iterator();
             while (iter.hasNext()) {
                 AnalysisDriver temp = iter.next();
                 if (sel.equalsIgnoreCase(temp.displayName())) {
@@ -193,74 +192,74 @@ public class GUI_AnalysisTab {
             e.consume();
         });
 
-        return this.selList;
+        return selList;
     }
     /**
      * Method for generating the analysis method selection box.
      * @return ListView<String>
      */
     private ListView<String> init_AnalysisMethodBox(){
-        this.anSel = new ArrayList<AnalysisDriver>();
-        this.selList = new ListView<String>();
-        this.anName = new ArrayList<String>();
-        this.dfName = new ArrayList<String>();
-        this.selName = new ArrayList<String>();
-        this.anList = new ListView<String>();
-        for (AnalysisDriver i : this.AnalysisDriverMasterList) {
-            this.anName.add(i.displayName());
+        anSel = new ArrayList<AnalysisDriver>();
+        selList = new ListView<String>();
+        anName = new ArrayList<String>();
+        dfName = new ArrayList<String>();
+        selName = new ArrayList<String>();
+        anList = new ListView<String>();
+        for (AnalysisDriver i : AnalysisDriverMasterList) {
+            anName.add(i.displayName());
         }
-        ObservableList<String> anItems = FXCollections.observableArrayList(this.anName);
+        ObservableList<String> anItems = FXCollections.observableArrayList(anName);
 
-        this.anList.setItems(anItems);
-        this.anList.prefHeightProperty().bind(this.box.heightProperty());
-        this.anList.prefWidthProperty().bind(this.box.widthProperty());
-        this.anList.setOnMouseClicked(e -> {
-            this.dfList.getSelectionModel().clearSelection();
-            String sel = this.anList.getSelectionModel().getSelectedItem();
-            Iterator<AnalysisDriver> iter = this.AnalysisDriverMasterList.iterator();
+        anList.setItems(anItems);
+        anList.prefHeightProperty().bind(this.box.heightProperty());
+        anList.prefWidthProperty().bind(this.box.widthProperty());
+        anList.setOnMouseClicked(e -> {
+            dfList.getSelectionModel().clearSelection();
+            String sel = anList.getSelectionModel().getSelectedItem();
+            Iterator<AnalysisDriver> iter = AnalysisDriverMasterList.iterator();
             while(iter.hasNext()){
                 AnalysisDriver temp = iter.next();
                 if(sel.equalsIgnoreCase(temp.displayName())){
                     if(!(temp instanceof NeighborAnalysisDriver)){
-                        this.dfList.setDisable(true);
+                        dfList.setDisable(true);
                     } else {
-                        this.dfList.setDisable(false);
+                        dfList.setDisable(false);
                     }
-                    this.anArea.setText(temp.longDescription());
+                    anArea.setText(temp.longDescription());
                 }
             }
             e.consume();
         });
 
-        return this.anList;
+        return anList;
     }
     /**
      * Method for generating the distance function selection box.
      * @return ListView<String>
      */
     private ListView<String> init_DistanceFunctionBox(){
-        this.dfList = new ListView<String>();
-        for (DistanceFunction i : this.DistanceFunctionsMasterList) {
-            this.dfName.add(i.displayName());
+        dfList = new ListView<String>();
+        for (DistanceFunction i : DistanceFunctionsMasterList) {
+            dfName.add(i.displayName());
         }
-        ObservableList<String> dfItems = FXCollections.observableArrayList(this.dfName);
+        ObservableList<String> dfItems = FXCollections.observableArrayList(dfName);
 
-        this.dfList.setItems(dfItems);
-        this.dfList.prefHeightProperty().bind(this.box.heightProperty());
-        this.dfList.prefWidthProperty().bind(this.box.widthProperty());
-        this.dfList.setOnMouseClicked(e -> {
-            String sel = this.dfList.getSelectionModel().getSelectedItem();
-            Iterator<DistanceFunction> iter = this.DistanceFunctionsMasterList.iterator();
+        dfList.setItems(dfItems);
+        dfList.prefHeightProperty().bind(this.box.heightProperty());
+        dfList.prefWidthProperty().bind(this.box.widthProperty());
+        dfList.setOnMouseClicked(e -> {
+            String sel = dfList.getSelectionModel().getSelectedItem();
+            Iterator<DistanceFunction> iter = DistanceFunctionsMasterList.iterator();
             while(iter.hasNext()){
                 DistanceFunction temp = iter.next();
                 if(sel.equalsIgnoreCase(temp.displayName())){
-                    this.dfArea.setText(temp.longDescription());
+                    dfArea.setText(temp.longDescription());
                 }
             }
             e.consume();
         });
 
-        return this.dfList;
+        return dfList;
     }
     /**
      * Method for generating a VBox containing the buttons for de/selecting items for the Selection Box.
@@ -280,42 +279,42 @@ public class GUI_AnalysisTab {
         VBox.setVgrow(region1, Priority.ALWAYS);
         VBox.setVgrow(region2, Priority.ALWAYS);
         left.setOnAction(e -> {
-            if(!this.selName.isEmpty()){
-                String selection = this.selList.getSelectionModel().getSelectedItem();
+            if(!selName.isEmpty()){
+                String selection = selList.getSelectionModel().getSelectedItem();
                 if(selection.contains("with")){
-                    dfRemove(this.selList.getSelectionModel().getSelectedItem());
+                    dfRemove(selList.getSelectionModel().getSelectedItem());
                 } else {
                     anDeselected(selection);
                 }
-                this.selItems = FXCollections.observableArrayList(this.selName);
-                this.selList.setItems(this.selItems);
-                this.selList.refresh();
+                this.selItems = FXCollections.observableArrayList(selName);
+                selList.setItems(this.selItems);
+                selList.refresh();
             }
             e.consume();
         });
         right.setOnAction(e -> {
-            if(this.dfList.getSelectionModel().isEmpty()){
-                anSelected(this.anList.getSelectionModel().getSelectedItem());
+            if(dfList.getSelectionModel().isEmpty()){
+                anSelected(anList.getSelectionModel().getSelectedItem());
             } else {
-                dfAdd(this.dfList.getSelectionModel().getSelectedItem(), this.anList.getSelectionModel().getSelectedItem());
-                this.dfList.getSelectionModel().clearSelection();
+                dfAdd(dfList.getSelectionModel().getSelectedItem(), anList.getSelectionModel().getSelectedItem());
+                dfList.getSelectionModel().clearSelection();
             }
-            this.selItems = FXCollections.observableArrayList(this.selName);
-            this.selList.setItems(this.selItems);
-            this.selList.getSelectionModel().selectLast();
-            this.selList.getFocusModel().focusNext();
-            this.selList.refresh();
+            this.selItems = FXCollections.observableArrayList(selName);
+            selList.setItems(this.selItems);
+            selList.getSelectionModel().selectLast();
+            selList.getFocusModel().focusNext();
+            selList.refresh();
             //this.selList.getSelectionModel().select(this.selItems.getLast());
             e.consume();
         });
         clear.setOnAction(e -> {
-            if(!this.selName.isEmpty()){
+            if(!selName.isEmpty()){
                 JAPI.removeAllAnalysisDrivers();
-                this.selName.clear();
+                selName.clear();
                 distanceFunctions.clear();
-                this.selItems = FXCollections.observableArrayList(this.selName);
-                this.selList.setItems(this.selItems);
-                this.selList.refresh();
+                this.selItems = FXCollections.observableArrayList(selName);
+                selList.setItems(this.selItems);
+                selList.refresh();
             }
             e.consume();
             
@@ -324,12 +323,7 @@ public class GUI_AnalysisTab {
             e.consume();
         });
 
-        box.getChildren().add(region1);
-        box.getChildren().add(left);
-        box.getChildren().add(right);
-        box.getChildren().add(all);
-        box.getChildren().add(clear);
-        box.getChildren().add(region2);
+        box.getChildren().addAll(region1, right, left, all, clear, region2);
         box.setAlignment(Pos.TOP_CENTER);
 
         return box;
@@ -339,22 +333,22 @@ public class GUI_AnalysisTab {
      * Method for initializing the Distance Function Master List
      */
     private void init_distanceFunctions(){
-        this.DistanceFunctionsMasterList = new ArrayList<DistanceFunction>();
+        DistanceFunctionsMasterList = new ArrayList<DistanceFunction>();
         for (int i = 0; i < DistanceFunctions.getDistanceFunctions().size(); i++){
                 DistanceFunction distanceFunction = DistanceFunctions.getDistanceFunctions().get(i);
                 if (distanceFunction.showInGUI())
-                    this.DistanceFunctionsMasterList.add(distanceFunction);
+                    DistanceFunctionsMasterList.add(distanceFunction);
             }
     }
     /**
      * Method for initializing the Analysis Driver Master List
      */
     private void init_analysisDrivers(){
-        this.AnalysisDriverMasterList = new ArrayList<AnalysisDriver>();
+        AnalysisDriverMasterList = new ArrayList<AnalysisDriver>();
         for (int i = 0; i < AnalysisDrivers.getAnalysisDrivers().size(); i++){
                 AnalysisDriver analysisDriver = AnalysisDrivers.getAnalysisDrivers().get(i);
                 if (analysisDriver.showInGUI())
-                    this.AnalysisDriverMasterList.add(analysisDriver);
+                    AnalysisDriverMasterList.add(analysisDriver);
             }
     }
     /**
@@ -363,17 +357,17 @@ public class GUI_AnalysisTab {
      */
     private void anSelected(String method){
         logger.info("Adding Analysis Method "+method);
-        this.selName.add(method);
-        Iterator<AnalysisDriver> iter = this.AnalysisDriverMasterList.iterator();
+        selName.add(method);
+        Iterator<AnalysisDriver> iter = AnalysisDriverMasterList.iterator();
         while(iter.hasNext()){
             AnalysisDriver temp = iter.next();
             if(temp.displayName().equalsIgnoreCase(method)){
-                this.anSel.add(JAPI.addAnalysisDriver(temp));
+                anSel.add(JAPI.addAnalysisDriver(temp));
             }
         }
-        this.selItems = FXCollections.observableArrayList(this.selName);
-        this.selList.setItems(this.selItems);
-        this.selList.refresh();
+        this.selItems = FXCollections.observableArrayList(selName);
+        selList.setItems(this.selItems);
+        selList.refresh();
     }
     /**
      * Method for removing an Analysis Driver
@@ -382,17 +376,17 @@ public class GUI_AnalysisTab {
     private void anDeselected(String method){
         logger.info("Removing Analysis Method "+method);
         AnalysisDriver ad = null;
-        this.selName.remove(method);
+        selName.remove(method);
         for(AnalysisDriver i : AnalysisDriverMasterList){
             if(i.displayName().equalsIgnoreCase(method)){
                 ad = i;
             }
         }
         JAPI.removeAnalysisDriver(ad);
-        this.anSel.remove(ad);
-        this.selItems = FXCollections.observableArrayList(this.selName);
-        this.selList.setItems(this.selItems);
-        this.selList.refresh();
+        anSel.remove(ad);
+        this.selItems = FXCollections.observableArrayList(selName);
+        selList.setItems(this.selItems);
+        selList.refresh();
     }
     private void dfAdd(String method, String and){
         logger.info("Adding Distance Function "+method);
@@ -416,7 +410,7 @@ public class GUI_AnalysisTab {
                     }
                 }
             }
-            this.anSel.add(JAPI.addAnalysisDriver(ad));
+            anSel.add(JAPI.addAnalysisDriver(ad));
         if (ad instanceof NeighborAnalysisDriver) {
 			// If the analysis driver that was selected requires a distance,
 			// add the selected distance function.
@@ -439,10 +433,10 @@ public class GUI_AnalysisTab {
 		}
         item = new Pair<DistanceFunction,AnalysisDriver>(df, ad);
         distanceFunctions.put(ad.displayName(), item);
-        this.selName.add(ad.displayName());
-        this.selItems = FXCollections.observableArrayList(this.selName);
-        this.selList.setItems(this.selItems);
-        this.selList.refresh();
+        selName.add(ad.displayName());
+        this.selItems = FXCollections.observableArrayList(selName);
+        selList.setItems(this.selItems);
+        selList.refresh();
     }
     private void dfRemove(String method){
         int index;
@@ -457,11 +451,11 @@ public class GUI_AnalysisTab {
         }
         JAPI.removeAnalysisDriver(item.getSecond());
         AnalysisDriverMasterList.add(index, ad);
-        this.anSel.remove(item.getSecond());
-        this.selName.remove(method);
-        this.selItems = FXCollections.observableArrayList(this.selName);
-        this.selList.setItems(this.selItems);
-        this.selList.refresh();
+        anSel.remove(item.getSecond());
+        selName.remove(method);
+        this.selItems = FXCollections.observableArrayList(selName);
+        selList.setItems(this.selItems);
+        selList.refresh();
     }
     /**
      * Getter method for getting the built pane.
@@ -469,6 +463,7 @@ public class GUI_AnalysisTab {
      */
      public VBox getPane(){
         build_pane();
+        logger.info("Finished building Analysis Tab");
         return this.box;
     }
     /**
@@ -476,6 +471,6 @@ public class GUI_AnalysisTab {
      * @param box HBox
      */
     public void setBottomButtons(HBox box){
-        this.bottomButtons = box;
+        bottomButtons = box;
     }
 }

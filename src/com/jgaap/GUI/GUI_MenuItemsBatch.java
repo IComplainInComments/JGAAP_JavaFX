@@ -32,25 +32,23 @@ import javafx.stage.Stage;
  */
 public class GUI_MenuItemsBatch {
 
-    static Logger logger;
-    private List<MenuItem> items;
-    private List<MenuItem> problems;
-    private List<String> docTypes;
+    private static Logger logger;
+    private static List<MenuItem> items;
+    private static List<MenuItem> problems;
+    private static List<String> docTypes;
     private static Stage mainStageRef;
     private static API JGAAP_API;
     private File filepath;
-    private GUI_DocTab tab;
 
     /**
      * Constructor of the Class
      */
-    public GUI_MenuItemsBatch(Stage stage, API JAPI, GUI_DocTab tab) {
-        this.items = new ArrayList<MenuItem>();
-        this.problems = new ArrayList<MenuItem>();
-        this.docTypes = new ArrayList<String>();
-        this.tab = tab;
+    public GUI_MenuItemsBatch(Stage stage) {
+        items = new ArrayList<MenuItem>();
+        problems = new ArrayList<MenuItem>();
+        docTypes = new ArrayList<String>();
         logger = Logger.getLogger(GUI_MenuItemsBatch.class);
-        JGAAP_API = JAPI;
+        JGAAP_API = API.getInstance();
         mainStageRef = stage;
         genDocTypes();
         genItems();
@@ -64,7 +62,7 @@ public class GUI_MenuItemsBatch {
         MenuItem save = new MenuItem("Save Documents");
         MenuItem load = new MenuItem("Load Documents");
         save.setOnAction(e -> {
-            ExtensionFilter filter = new ExtensionFilter("Text Documents", this.docTypes);
+            ExtensionFilter filter = new ExtensionFilter("Text Documents", docTypes);
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Resource File");
             fileChooser.getExtensionFilters().addAll(filter);
@@ -89,7 +87,7 @@ public class GUI_MenuItemsBatch {
             e.consume();
         });
         load.setOnAction(e -> {
-            ExtensionFilter filter = new ExtensionFilter("Text Documents", this.docTypes);
+            ExtensionFilter filter = new ExtensionFilter("Text Documents", docTypes);
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             fileChooser.getExtensionFilters().addAll(filter);
@@ -105,8 +103,8 @@ public class GUI_MenuItemsBatch {
                                         : null));
                     }
 				}
-                this.tab.updateUnknownDocumentsTable();
-                this.tab.updateAuthorTree();
+                GUI_DocTab.updateUnknownDocumentsTable();
+                GUI_DocTab.updateAuthorTree();
 			    }catch (Exception ex) {
                     if(this.filepath != null){
                         logger.error(ex.getCause(), ex);
@@ -122,8 +120,8 @@ public class GUI_MenuItemsBatch {
         /*
          * Insert code for the menu items to do something here at a later date.
          */
-        this.items.add(save);
-        this.items.add(load);
+        items.add(save);
+        items.add(load);
     }
 
     /**
@@ -157,20 +155,20 @@ public class GUI_MenuItemsBatch {
         probList.add("K");
         probList.add("L");
         probList.add("M");
-        this.problems.add(pa);
-        this.problems.add(pb);
-        this.problems.add(pc);
-        this.problems.add(pd);
-        this.problems.add(pe);
-        this.problems.add(pf);
-        this.problems.add(pg);
-        this.problems.add(ph);
-        this.problems.add(pi);
-        this.problems.add(pj);
-        this.problems.add(pk);
-        this.problems.add(pl);
-        this.problems.add(pm);
-        Iterator<MenuItem> iterMenu = this.problems.iterator();
+        problems.add(pa);
+        problems.add(pb);
+        problems.add(pc);
+        problems.add(pd);
+        problems.add(pe);
+        problems.add(pf);
+        problems.add(pg);
+        problems.add(ph);
+        problems.add(pi);
+        problems.add(pj);
+        problems.add(pk);
+        problems.add(pl);
+        problems.add(pm);
+        Iterator<MenuItem> iterMenu = problems.iterator();
         Iterator<String> iterString = probList.iterator();
         while (iterMenu.hasNext() && iterString.hasNext()) {
             MenuItem item = iterMenu.next();
@@ -184,10 +182,10 @@ public class GUI_MenuItemsBatch {
      * Add the document prefix that can be loaded into the program.
      */
     private void genDocTypes() {
-        this.docTypes.add("*.pdf");
-        this.docTypes.add("*.doc");
-        this.docTypes.add("*.txt");
-        this.docTypes.add("*.html");
+        docTypes.add("*.pdf");
+        docTypes.add("*.doc");
+        docTypes.add("*.txt");
+        docTypes.add("*.html");
     }
     /**
      * Method for loading the AAAC Problems into JGAAP
@@ -212,8 +210,8 @@ public class GUI_MenuItemsBatch {
         for (Document document : documents) {
             JGAAP_API.addDocument(document);
         }
-        this.tab.updateUnknownDocumentsTable();
-        this.tab.updateAuthorTree();
+        GUI_DocTab.updateUnknownDocumentsTable();
+        GUI_DocTab.updateAuthorTree();
         GUI_CanTab.UpdateCanonicizerDocTypeComboBox();
     }
 
@@ -223,7 +221,7 @@ public class GUI_MenuItemsBatch {
      * @return List
      */
     public List<MenuItem> getItems() {
-        return this.items;
+        return items;
     }
 
     /**
@@ -232,6 +230,6 @@ public class GUI_MenuItemsBatch {
      * @return List
      */
     public List<MenuItem> getProblems() {
-        return this.problems;
+        return problems;
     }
 }

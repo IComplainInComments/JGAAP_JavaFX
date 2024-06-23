@@ -2,7 +2,6 @@ package com.jgaap.GUI;
 import org.apache.log4j.Logger;
 
 import com.jgaap.JGAAPConstants;
-import com.jgaap.backend.API;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -30,7 +29,6 @@ public class GUI_MainWindow extends Application{
     private static BorderPane pane;
     private static GUI_ResultsWindow grw;
     private static TabPane tabPane;
-    private API JGAAP_API = API.getInstance();
 
     /**
      * Used for debugging.
@@ -65,6 +63,7 @@ public class GUI_MainWindow extends Application{
         Scene scene;
         VBox docPane, canPane, edPane, ecPane, anPane,reviewPane;
 
+        MenuBar bar = init_MenuBar(stage);
         Tab doc = new Tab("Documents");
         Tab canon = new Tab("Canonicizers");
         Tab eve = new Tab("Event Driver");
@@ -104,7 +103,6 @@ public class GUI_MainWindow extends Application{
         ecTab.setBottomButtons(init_bottomButtons());
         anTab.setBottomButtons(init_bottomButtons());
 
-        MenuBar bar = init_MenuBar(stage, docTab);
 
         docPane = docTab.getPane();
         canPane = canTab.getPane();
@@ -164,7 +162,7 @@ public class GUI_MainWindow extends Application{
      * Builds the Menu Bar and its containing items/functions.
      * @return MenuBar
      */
-     private MenuBar init_MenuBar(Stage stage, GUI_DocTab tab) {
+     private MenuBar init_MenuBar(Stage stage) {
         Menu file = new Menu("File");
         Menu help = new Menu("Help");
         Menu windows = new Menu("View");
@@ -174,7 +172,7 @@ public class GUI_MainWindow extends Application{
         MenuItem about = new MenuItem("About");
         MenuItem show = new MenuItem("Show Results Window");
         MenuBar bar = new MenuBar();
-        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage, this.JGAAP_API, tab);
+        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage);
         GUI_JGAAPAboutWindow winAbout = new GUI_JGAAPAboutWindow();
 
         about.setOnAction(e -> {
