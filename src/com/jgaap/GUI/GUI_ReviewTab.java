@@ -32,6 +32,7 @@ import com.jgaap.generics.Canonicizer;
 /**
  * Review Tab Class.
  * This Class creates the scene for the Review Tab and it's GUI elements.
+ * @author Edward Polens
  */
 public class GUI_ReviewTab {
 

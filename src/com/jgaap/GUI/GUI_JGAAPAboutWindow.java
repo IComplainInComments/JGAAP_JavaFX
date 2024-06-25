@@ -25,29 +25,16 @@ import javafx.stage.Stage;
 /**
  * About Window Class.
  * This Class creates the Stage for the About Window and it's GUI elements.
+ * @author Edward Polens
  */
 public class GUI_JGAAPAboutWindow {
-     private static Stage stage;
 
-     /**
-      * Constructor for the class.
-      */
-    public GUI_JGAAPAboutWindow(){
-        stage = new Stage();
-        stage.setResizable(false);
-        stage.setTitle("About");
-        stage.hide();
-        build_stage();
-        stage.setOnCloseRequest(e -> {
-            stage.close();
-            e.consume();
-        });
-    }
+     private static Stage stage;
 
     /**
      * Builds the Window.
      */
-    private void build_stage(){
+    private static void build_stage(){
         Scene scene;
         VBox box = new VBox(5);
         HBox butBox = new HBox(5);
@@ -67,16 +54,22 @@ public class GUI_JGAAPAboutWindow {
 
         box.getChildren().addAll(init_rowOne(),init_rowTwo(),butBox);
 
-        
+        stage = new Stage();
         scene = new Scene(box, 530, 300);
         stage.setScene(scene);
+        stage.setResizable(false);
+        stage.setTitle("About");
+        stage.setOnCloseRequest(e -> {
+            stage.close();
+            e.consume();
+        });
     }
 
     /**
      * Method for building the first row of elements.
      * @return HBox
      */
-    private HBox init_rowOne(){
+    private static HBox init_rowOne(){
         HBox box = new HBox(5);
         Image evlIcon = new Image("/com/jgaap/resources/ui/EVL_Icon_duq.png");
         Image jgaapIcon = new Image("/com/jgaap/resources/ui/jgaap-icon.png");
@@ -104,7 +97,7 @@ public class GUI_JGAAPAboutWindow {
      * Method for building the second row of elements.
      * @return VBox
      */
-    private VBox init_rowTwo(){
+    private static VBox init_rowTwo(){
         HBox Labelbox = new HBox(5);
         HBox linkBox1 = new HBox(5);
         HBox linkBox2 = new HBox(5);
@@ -155,7 +148,7 @@ public class GUI_JGAAPAboutWindow {
      * @param url String
      * @return boolean
      */
-    public boolean browseToURL(String url) {
+    public static boolean browseToURL(String url) {
 		boolean succees = false;
 		try {
 			java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
@@ -173,7 +166,12 @@ public class GUI_JGAAPAboutWindow {
     /**
      * Controls showing or closing (Hiding) the window.
      */
-    public void show(){
-        stage.show();
+    public static void show(){
+        if(stage == null){
+            build_stage();
+            stage.show();
+        } else {
+            stage.show();
+        }
     }
 }

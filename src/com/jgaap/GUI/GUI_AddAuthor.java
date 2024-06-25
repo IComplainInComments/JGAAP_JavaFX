@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 
 /**
  * GUI_AddAuthor class is for building a Window to add an Author to the program
+ * @author Edward Polens
  */
 public class GUI_AddAuthor {
 
@@ -44,12 +45,14 @@ public class GUI_AddAuthor {
      */
     public GUI_AddAuthor() {
         logger = Logger.getLogger(GUI_AddAuthor.class);
+        logger.info("Author Adding constructor called.");
         docs = new ArrayList<Document>();
         this.stage = new Stage();
         JAPI = API.getInstance();
         selAuth = "";
         stage.setTitle("Add Author");
         stage.setScene(init_scene());
+        logger.info("Finished building Adding Author Window.");
 
     }
     /**
@@ -58,19 +61,21 @@ public class GUI_AddAuthor {
      */
     public GUI_AddAuthor(String author) {
         logger = Logger.getLogger(GUI_AddAuthor.class);
+        logger.info("Author Editing constructor called.");
         docs = new ArrayList<Document>();
         this.stage = new Stage();
         JAPI = API.getInstance();
         stage.setTitle("Add Author");
         selAuth = author;
         stage.setScene(init_scene());
-
+        logger.info("Finished building Edit Author Window.");
     }
     /**
      * Method to build the Scene for the Stage
      * @return Scene
      */
     private Scene init_scene() {
+        logger.info("Building Author Window.");
         VBox box = new VBox();
         box.getChildren().addAll(init_authorBox(), init_authorTable(), init_bottomButtons());
         box.setPadding(new Insets(5));

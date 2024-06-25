@@ -25,6 +25,7 @@ import com.jgaap.backend.API;
 /**
  * Event Driver Tab Class.
  * This Class creates the scene for the Event Driver Tab and it's GUI elements.
+ * @author Edward Polens
  */
 public class GUI_EDTab {
 

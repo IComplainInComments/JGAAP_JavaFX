@@ -30,6 +30,7 @@ import com.jgaap.backend.API;
 /**
  * Analysis Tab Class.
  * This Class creates the scene for the Analysis Tab and it's GUI elements.
+ * @author Edward Polens
  */
 public class GUI_AnalysisTab {
 

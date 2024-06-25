@@ -13,6 +13,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 /**
  * Main Window Class.
  * This Class is the heart of the GUI, and controls the GUI as a whole. It is used to intertwine all the other classes.
+ * @author Edward Polens
  */
 public class GUI_MainWindow extends Application{
 
@@ -48,6 +50,7 @@ public class GUI_MainWindow extends Application{
             System.exit(0);
         });
         mainStage.setTitle(JGAAPConstants.VERSION+" BETA");
+        mainStage.getIcons().add(new Image("/com/jgaap/resources/ui/jgaap-icon.png"));
         mainStage.setScene(init_mainScene(mainStage));
         mainStage.minHeightProperty().set(600);
         mainStage.minWidthProperty().set(1000);
@@ -173,11 +176,10 @@ public class GUI_MainWindow extends Application{
         MenuItem show = new MenuItem("Show Results Window");
         MenuBar bar = new MenuBar();
         GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage);
-        GUI_JGAAPAboutWindow winAbout = new GUI_JGAAPAboutWindow();
 
         about.setOnAction(e -> {
             e.consume();
-            winAbout.show();
+            GUI_JGAAPAboutWindow.show();
         });
         quit.setOnAction(e -> {
             e.consume();

@@ -23,6 +23,7 @@ import com.jgaap.backend.API;
 /**
  * Event Culling Tab Class.
  * This Class creates the scene for the Event CUlling Tab and it's GUI elements.
+ * @author Edward Polens
  */
 public class GUI_ECTab {
     

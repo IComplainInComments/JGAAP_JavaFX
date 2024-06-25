@@ -31,6 +31,7 @@ import javafx.scene.text.FontWeight;
 /**
  * Canonicizer Tab Class.
  * This Class creates the scene for the Canonicizer Tab and it's GUI elements.
+ * @author Edward Polens
  */
 public class GUI_CanTab {
 
