@@ -31,11 +31,12 @@ import javafx.stage.Stage;
  */
 public class GUI_AddAuthor {
 
-    private TableView<Document> table;
-    private ArrayList<Document> docs;
+    private static TableView<Document> table;
+    private static ArrayList<Document> docs;
     private static Logger logger;
     private static API JAPI;
-    private TextField auth;
+    private static TextField auth;
+    private static String selAuth;
     private Stage stage;
 
     /**
@@ -43,9 +44,10 @@ public class GUI_AddAuthor {
      */
     public GUI_AddAuthor() {
         logger = Logger.getLogger(GUI_AddAuthor.class);
-        this.docs = new ArrayList<Document>();
+        docs = new ArrayList<Document>();
         this.stage = new Stage();
         JAPI = API.getInstance();
+        selAuth = "";
         stage.setTitle("Add Author");
         stage.setScene(init_scene());
 
@@ -56,11 +58,12 @@ public class GUI_AddAuthor {
      */
     public GUI_AddAuthor(String author) {
         logger = Logger.getLogger(GUI_AddAuthor.class);
-        this.docs = new ArrayList<Document>();
+        docs = new ArrayList<Document>();
         this.stage = new Stage();
         JAPI = API.getInstance();
         stage.setTitle("Add Author");
-        stage.setScene(init_scene(author));
+        selAuth = author;
+        stage.setScene(init_scene());
 
     }
     /**
@@ -81,13 +84,13 @@ public class GUI_AddAuthor {
      */
     private HBox init_authorBox() {
         HBox box = new HBox(5);
-        Label auth = new Label("Author");
-        this.auth = new TextField();
-        this.auth.setOnAction(e -> {
+        Label authl = new Label("Author");
+        auth = new TextField();
+        auth.setOnAction(e -> {
             updateItemView();
             e.consume();
         });
-        box.getChildren().addAll(auth, this.auth);
+        box.getChildren().addAll(authl, auth);
         return box;
     }
     /**
@@ -99,18 +102,26 @@ public class GUI_AddAuthor {
         HBox butBox = new HBox(5);
         Button add = new Button("Add Document");
         Button rem = new Button("Remove Document");
-        this.table = new TableView<Document>();
+        table = new TableView<Document>();
         TableColumn<Document, String> column1 = new TableColumn<Document, String>("Title");
         TableColumn<Document, String> column2 = new TableColumn<Document, String>("File Path");
         column1.setCellValueFactory(new PropertyValueFactory<Document, String>("Title"));
         column2.setCellValueFactory(new PropertyValueFactory<Document, String>("FilePath"));
         column1.prefWidthProperty().bind(table.widthProperty().divide(2));
         column2.prefWidthProperty().bind(table.widthProperty().divide(2));
-        this.table.getColumns().add(column1);
-        this.table.getColumns().add(column2);
-        this.table.prefHeightProperty().bind(this.stage.heightProperty());
-        this.table.prefWidthProperty().bind(this.stage.widthProperty());
-        this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(this.auth.getText().trim())));
+        table.getColumns().add(column1);
+        table.getColumns().add(column2);
+        table.prefHeightProperty().bind(this.stage.heightProperty());
+        table.prefWidthProperty().bind(this.stage.widthProperty());
+        if(selAuth.isEmpty()){
+            table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(auth.getText().trim())));
+        } else {
+            for(Document i: JAPI.getDocumentsByAuthor(selAuth)){
+                docs.add(i);
+            }
+            auth.setText(selAuth);
+            table.setItems(FXCollections.observableArrayList(docs));
+        }
         // ===============================================================================
         add.setOnAction(e -> {
             FileChooser FileChoser = new FileChooser();
@@ -120,11 +131,10 @@ public class GUI_AddAuthor {
                     String filepath = file.getCanonicalPath();
                     String[] Split = filepath.split("[\\\\[\\/]]");
                     String Title = Split[Split.length - 1];
-                    Document temp = new Document(filepath, this.auth.getText().trim(), Title);
-                    // JAPI.addDocument(temp);
-                    this.docs.add(temp);
-                    this.table.setItems(FXCollections.observableArrayList(this.docs));
-                    this.table.refresh();
+                    Document temp = new Document(filepath, auth.getText().trim(), Title);
+                    docs.add(temp);
+                    table.setItems(FXCollections.observableArrayList(docs));
+                    table.refresh();
                 } catch (Exception ex) {
                     logger.error(ex.getCause(), ex);
                     ex.printStackTrace();
@@ -135,106 +145,19 @@ public class GUI_AddAuthor {
         // ===============================================================================
         // ===============================================================================
         rem.setOnAction(e -> {
-            TableViewSelectionModel<Document> selected = this.table.getSelectionModel();
+            TableViewSelectionModel<Document> selected = table.getSelectionModel();
             List<Document> docs = new ArrayList<Document>();
             docs.addAll(selected.getSelectedItems());
             for (Document doc : docs) {
-                this.docs.remove(doc);
+                docs.remove(doc);
             }
-            this.table.setItems(FXCollections.observableArrayList(this.docs));
-            this.table.refresh();
+            table.setItems(FXCollections.observableArrayList(docs));
+            table.refresh();
             e.consume();
         });
         // ===============================================================================
         butBox.getChildren().addAll(add, rem);
-        box.getChildren().addAll(this.table, butBox);
-        return box;
-
-    }
-        /**
-     * Method to build the Scene for the Stage for an author edit
-     * @return Scene
-     */
-    private Scene init_scene(String author) {
-        VBox box = new VBox(5);
-        box.getChildren().addAll(init_authorBox(author), init_authorTable(author), init_bottomButtons());
-        box.setPadding(new Insets(5));
-        Scene scene = new Scene(box,500,300);
-        return scene;
-
-    }
-    /**
-     * Method to initialize the Author name text box for an Edit
-     * @return HBox
-     */
-    private HBox init_authorBox(String author) {
-        HBox box = new HBox(5);
-        Label auth = new Label("Author");
-        this.auth = new TextField();
-        this.auth.setText(author);
-        box.getChildren().addAll(auth, this.auth);
-        return box;
-    }
-    /**
-     * Method to initialize the Documents to be added to the Author for an Edit
-     * @return VBox
-     */
-    private VBox init_authorTable(String author) {
-        VBox box = new VBox(5);
-        HBox butBox = new HBox(5);
-        Button add = new Button("Add Document");
-        Button rem = new Button("Remove Document");
-        this.table = new TableView<Document>();
-        TableColumn<Document, String> column1 = new TableColumn<Document, String>("Title");
-        TableColumn<Document, String> column2 = new TableColumn<Document, String>("File Path");
-        column1.setCellValueFactory(new PropertyValueFactory<Document, String>("Title"));
-        column2.setCellValueFactory(new PropertyValueFactory<Document, String>("FilePath"));
-        column1.prefWidthProperty().bind(table.widthProperty().divide(2));
-        column2.prefWidthProperty().bind(table.widthProperty().divide(2));
-        this.table.getColumns().add(column1);
-        this.table.getColumns().add(column2);
-        this.table.prefHeightProperty().bind(this.stage.heightProperty());
-        this.table.prefWidthProperty().bind(this.stage.widthProperty());
-        this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(author)));
-        this.table.refresh();
-        // ===============================================================================
-        add.setOnAction(e -> {
-            FileChooser FileChoser = new FileChooser();
-            List<File> choice = FileChoser.showOpenMultipleDialog(this.stage);
-            for (File file : choice) {
-                try {
-                    String filepath = file.getCanonicalPath();
-                    String[] Split = filepath.split("[\\\\[\\/]]");
-                    String Title = Split[Split.length - 1];
-                    Document temp = new Document(filepath, this.auth.getText().trim(), Title);
-                    this.docs.add(temp);
-                    this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(author)));
-                    this.table.refresh();
-                } catch (Exception ex) {
-                    logger.error(ex.getCause(), ex);
-                    ex.printStackTrace();
-                }
-            }
-            this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(author)));
-            this.table.refresh();
-            e.consume();
-        });
-        // ===============================================================================
-        // ===============================================================================
-        rem.setOnAction(e -> {
-            TableViewSelectionModel<Document> selected = this.table.getSelectionModel();
-            List<Document> docs = new ArrayList<Document>();
-            docs.addAll(selected.getSelectedItems());
-            for (Document doc : docs) {
-                this.docs.remove(doc);
-            }
-            this.table.setItems(FXCollections.observableArrayList(this.docs));
-            this.table.refresh();
-            e.consume();
-        });
-        // ===============================================================================
-        butBox.getChildren().addAll(add, rem);
-        box.getChildren().addAll(this.table, butBox);
+        box.getChildren().addAll(table, butBox);
         return box;
 
     }
@@ -250,19 +173,23 @@ public class GUI_AddAuthor {
         HBox.setHgrow(region1, Priority.ALWAYS);
         // ===============================================================================
         ok.setOnAction(e -> {
-            if (!this.docs.isEmpty()) {
-                for (Document temp : this.docs) {
-                    JAPI.addDocument(temp);
+            if (!docs.isEmpty()) {
+                if(selAuth.isEmpty()){
+                    addDoc(docs);
+                } else if(!selAuth.equalsIgnoreCase(auth.getText())) {
+                    updateAuthor(docs);
                 }
             }
+            GUI_DocTab.updateAuthorTree();
             stage.close();
             e.consume();
         });
         // ===============================================================================
         // ===============================================================================
         can.setOnAction(e -> {
-            this.auth.setText("");
-            this.docs.clear();
+            auth.setText("");
+            selAuth = "";
+            docs.clear();
             stage.close();
             e.consume();
         });
@@ -275,8 +202,21 @@ public class GUI_AddAuthor {
      * Update the Document List View box
      */
     private void updateItemView() {
-        this.table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(this.auth.getText().trim())));
-        this.table.refresh();
+        table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(auth.getText().trim())));
+        table.refresh();
+    }
+    private void addDoc(ArrayList<Document> doc){
+        for(Document i : doc){
+            JAPI.addDocument(i);
+        }
+    }
+    private void updateAuthor(ArrayList<Document> doc){
+        String temp = auth.getText().trim();
+        for(Document i : doc){
+            JAPI.removeDocument(i);
+            i.setAuthor(temp);
+            JAPI.addDocument(i);
+        }
     }
     /**
      * Get the constructed stage (Window)

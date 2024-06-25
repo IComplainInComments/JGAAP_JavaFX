@@ -320,6 +320,7 @@ public class GUI_AnalysisTab {
             
         });
         all.setOnAction(e -> {
+            allSelected();
             e.consume();
         });
 
@@ -364,6 +365,18 @@ public class GUI_AnalysisTab {
             if(temp.displayName().equalsIgnoreCase(method)){
                 anSel.add(JAPI.addAnalysisDriver(temp));
             }
+        }
+        this.selItems = FXCollections.observableArrayList(selName);
+        selList.setItems(this.selItems);
+        selList.refresh();
+    }
+    private void allSelected(){
+        logger.info("Adding All Analysis Methods");
+        Iterator<AnalysisDriver> iter = AnalysisDriverMasterList.iterator();
+        while(iter.hasNext()){
+            AnalysisDriver temp = iter.next();
+            anSel.add(JAPI.addAnalysisDriver(temp));
+            selName.add(temp.displayName());
         }
         this.selItems = FXCollections.observableArrayList(selName);
         selList.setItems(this.selItems);

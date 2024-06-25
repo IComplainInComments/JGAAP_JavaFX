@@ -284,7 +284,6 @@ public class GUI_EDTab {
     private void edSelected(String method) {
         logger.info("Adding Event Driver "+method);
         edSelect.add(method);
-        edName.remove(method);
         Iterator<EventDriver> master = EventDriverMasterList.iterator();
         while (master.hasNext()) {
             EventDriver temp = master.next();
@@ -295,7 +294,7 @@ public class GUI_EDTab {
                     logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
-                master.remove();
+                //master.remove();
             }
         }
         this.items = FXCollections.observableArrayList(edName);
@@ -333,14 +332,12 @@ public class GUI_EDTab {
     private void edDeselected(String method) {
         logger.info("Removing Event Driver "+method);
         edSelect.remove(method);
-        edName.add(method);
         Iterator<EventDriver> canMeth = this.edSel.iterator();
         while (canMeth.hasNext()) {
             EventDriver temp = canMeth.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
                 JAPI.removeEventDriver(temp);
                 canMeth.remove();
-                EventDriverMasterList.add(temp);
             }
         }
         this.items = FXCollections.observableArrayList(edName);

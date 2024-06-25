@@ -13,11 +13,8 @@ import com.jgaap.util.Document;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
-import javafx.scene.control.MultipleSelectionModel;
-import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -172,10 +169,9 @@ public class GUI_DocTab {
       //===============================================================================
       //===============================================================================
       remDoc.setOnAction(e -> {
-         TableViewSelectionModel<Document> selected = table.getSelectionModel();
-         Document[] docs = new Document[selected.getSelectedItems().size()];
-         for(int i = 0; i < docs.length; i++){
-            JAPI.removeDocument(docs[i]);
+         ObservableList<Document>  docs = table.getSelectionModel().getSelectedItems();
+         for(Document i : docs){
+            JAPI.removeDocument(i);
          }
          table.getItems().removeAll(docs);
          updateUnknownDocumentsTable();
@@ -201,31 +197,28 @@ public class GUI_DocTab {
       addAuth.setOnAction(e -> {
          GUI_AddAuthor pop = new GUI_AddAuthor();
          Stage stage = pop.getStage();
-         stage.showAndWait();
-         updateAuthorTree();
+         stage.show();
          GUI_CanTab.UpdateCanonicizerDocTypeComboBox();
          e.consume();
       });
       //===============================================================================
       //===============================================================================
       editAuth.setOnAction(e -> {
-         SelectionModel<TreeItem<String>> selected = tree.getSelectionModel();
-         GUI_AddAuthor pop = new GUI_AddAuthor(selected.getSelectedItem().getValue());
+         GUI_AddAuthor pop = new GUI_AddAuthor(tree.getSelectionModel().getSelectedItem().getValue());
          Stage stage = pop.getStage();
-         stage.showAndWait();
-         updateAuthorTree();
+         stage.show();
          GUI_CanTab.UpdateCanonicizerDocTypeComboBox();
          e.consume();
       });
       //===============================================================================
       //===============================================================================
       remAuth.setOnAction(e -> {
-         MultipleSelectionModel<TreeItem<String>> selected = tree.getSelectionModel();
-         Iterator<TreeItem<String>> iter = selected.getSelectedItems().iterator();
+         Iterator<TreeItem<String>> iter = tree.getSelectionModel().getSelectedItems().iterator();
          while(iter.hasNext()){
-            Iterator<Document> docIter = JAPI.getDocumentsByAuthor(iter.next().getValue()).iterator();
+            Iterator<Document> docIter = JAPI.getDocumentsByAuthor(iter.next().getValue().trim()).iterator();
             while(docIter.hasNext()){
                JAPI.removeDocument(docIter.next());
+               JAPI.getAuthors();
             }
          }
          updateAuthorTree();
@@ -301,7 +294,9 @@ public class GUI_DocTab {
          }
          authNode.add(node);
       }
+      rootNode.getChildren().clear();
       rootNode.getChildren().addAll(authNode);
+      //tree = new TreeView<String>(rootNode);
       tree.refresh();
    }
    private List<String> populateLanguageMasterList(){

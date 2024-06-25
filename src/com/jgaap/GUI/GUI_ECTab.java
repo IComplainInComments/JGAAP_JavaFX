@@ -224,28 +224,14 @@ public class GUI_ECTab {
             listRight.getSelectionModel().select(this.selItems.getLast());
             e.consume();
         });
-        clear.setOnAction(e -> {
-            if(!ecSelect.isEmpty()){
-                EventCullersMasterList.clear();
-                ecName.clear();
-                ecSelect.clear();
-                ecSel.clear();
-                init_eventCullers();
-                for (EventCuller i : EventCullersMasterList) {
-                    ecName.add(i.displayName());
-                }
-                JAPI.removeAllEventDrivers();
-                this.items = FXCollections.observableArrayList(ecName);
-                this.selItems = FXCollections.observableArrayList(ecSelect);
-                listLeft.setItems(this.items);
-                listRight.setItems(this.selItems);
-                listLeft.refresh();
-                listRight.refresh();
-            }
-            e.consume();
-        });
         all.setOnAction(e -> {
             allSelected();
+            listLeft.refresh();
+            listRight.refresh();
+            e.consume();
+        });
+        clear.setOnAction(e -> {
+            clearSelected();
             listLeft.refresh();
             listRight.refresh();
             e.consume();
@@ -275,7 +261,6 @@ public class GUI_ECTab {
     private void ecSelected(String method) {
         logger.info("Adding Event Culler "+method);
         ecSelect.add(method);
-        ecName.remove(method);
         Iterator<EventCuller> master = EventCullersMasterList.iterator();
         while(master.hasNext()) {
             EventCuller temp = master.next();
@@ -286,8 +271,7 @@ public class GUI_ECTab {
                     logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
-                ecSel.add(temp);
-                master.remove();
+                //ecSel.add(temp);
             }
         }
         this.items = FXCollections.observableArrayList(ecName);
@@ -311,7 +295,22 @@ public class GUI_ECTab {
                     logger.error(e.getCause(), e);
                     e.printStackTrace();
                 }
-                master.remove();
+        }
+        this.items = FXCollections.observableArrayList(ecName);
+        this.selItems = FXCollections.observableArrayList(ecSelect);
+        listLeft.setItems(this.items);
+        listRight.setItems(this.selItems);
+    }
+
+    private void clearSelected() {
+        logger.info("Removing all selected Event Cullers");
+        ecSelect.clear();
+        ecSel.clear();
+        JAPI.removeAllEventCullers();
+        Iterator<EventCuller> master = EventCullersMasterList.iterator();
+        while(master.hasNext()) {
+            EventCuller temp = master.next();
+            ecName.add(temp.displayName());
         }
         this.items = FXCollections.observableArrayList(ecName);
         this.selItems = FXCollections.observableArrayList(ecSelect);
@@ -325,14 +324,12 @@ public class GUI_ECTab {
     private void ecDeselected(String method) {
         logger.info("Removing Event Culler "+method);
         ecSelect.remove(method);
-        ecName.add(method);
         Iterator<EventCuller> canMeth = ecSel.iterator();
         while(canMeth.hasNext()) {
             EventCuller temp = canMeth.next();
             if (temp.displayName().equalsIgnoreCase(method)) {
                 JAPI.removeEventCuller(temp);
                 canMeth.remove();
-                EventCullersMasterList.add(temp);
             }
         }
         this.items = FXCollections.observableArrayList(ecName);

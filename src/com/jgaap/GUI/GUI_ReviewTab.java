@@ -307,7 +307,6 @@ public class GUI_ReviewTab {
 
       go = (!this.canVals.isEmpty()) ? true : false;
       go = (!this.edVals.isEmpty() && go) ? true : false;
-      go = (!this.ecVals.isEmpty() && go) ? true : false;
       go = (!this.edVals.isEmpty() && go) ? true : false;
       
       if(go){
