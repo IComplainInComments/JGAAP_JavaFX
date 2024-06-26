@@ -166,16 +166,18 @@ public class GUI_MainWindow extends Application{
      * @return MenuBar
      */
      private MenuBar init_MenuBar(Stage stage) {
+        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage);
+        GUI_LogWindow log = new GUI_LogWindow();
+        MenuBar bar = new MenuBar();
         Menu file = new Menu("File");
         Menu help = new Menu("Help");
-        Menu windows = new Menu("View");
+        Menu windows = new Menu("Window");
         Menu batch = new Menu("Batch Documents");
         Menu aaac = new Menu("AAAC Problems");
         MenuItem quit = new MenuItem("Quit");
         MenuItem about = new MenuItem("About");
         MenuItem show = new MenuItem("Show Results Window");
-        MenuBar bar = new MenuBar();
-        GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage);
+        MenuItem console = new MenuItem("Show JGAAP Logging Window");
 
         about.setOnAction(e -> {
             e.consume();
@@ -189,12 +191,16 @@ public class GUI_MainWindow extends Application{
             e.consume();
             grw.showStage();
         });
+        console.setOnAction(e -> {
+            e.consume();
+            log.showStage();
+        });
         
         aaac.getItems().addAll(items.getProblems());
         batch.getItems().addAll(items.getItems());
         file.getItems().addAll(batch,aaac,quit);
         help.getItems().add(about);
-        windows.getItems().add(show);
+        windows.getItems().addAll(show,console);
         bar.getMenus().add(file);
         bar.getMenus().add(windows);
         bar.getMenus().add(help);

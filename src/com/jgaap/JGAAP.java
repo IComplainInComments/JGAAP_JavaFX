@@ -35,11 +35,10 @@ import com.jgaap.backend.CLI;
 
 public class JGAAP {
 
-	static Logger logger = Logger.getLogger("com.jgaap");
-	static Logger mainLogger = Logger.getLogger(JGAAP.class);
+	private static Logger logger = Logger.getLogger("com.jgaap");
+	private static Logger mainLogger = Logger.getLogger(JGAAP.class);
 	
 	public static boolean commandline = false;
-
     /**
      * Launches the jgaap GUI.
      */
