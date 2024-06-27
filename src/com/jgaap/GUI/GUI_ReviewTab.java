@@ -171,6 +171,11 @@ public class GUI_ReviewTab {
       return box;
    }
 
+   /**
+    * Method for generating the a list of the selected Canonicizers.
+    
+    * @return ListView<String>
+    */
    private ListView<String> init_canonicizerTable() {
       this.canList = new ListView<String>();
       this.canVals = new ArrayList<String>();
@@ -307,7 +312,6 @@ public class GUI_ReviewTab {
       this.canList.refresh();
 
       go = (!this.canVals.isEmpty()) ? true : false;
-      go = (!this.edVals.isEmpty() && go) ? true : false;
       go = (!this.edVals.isEmpty() && go) ? true : false;
       
       if(go){

@@ -10,6 +10,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
@@ -29,15 +30,12 @@ import com.jgaap.backend.API;
  */
 public class GUI_EDTab {
 
-    private ArrayList<EventDriver> edSel;
-    private ObservableList<String> selItems;
-    private ObservableList<String> items;
     private VBox box, paraBoxChild, paraBox;
-    private static ArrayList<String> edName;
-    private static ArrayList<String> edSelect;
     private static ArrayList<EventDriver> EventDriverMasterList;
-    private static ListView<String> edList;
-    private static ListView<String> selList;
+    private static ObservableList<EventDriver> selected;
+    private static ObservableList<EventDriver> eventDrivers;
+    private static ListView<EventDriver> edList;
+    private static ListView<EventDriver> selList;
     private static TextArea area;
     private static HBox bottomButtons, notesBox;
     private static API JAPI;
@@ -71,8 +69,8 @@ public class GUI_EDTab {
      * @return HBox
      */
     private HBox init_rowOne() {
-        ListView<String> listLeft = init_ListLeft();
-        ListView<String> listRight = init_ListRight();
+        ListView<EventDriver> listLeft = init_ListLeft();
+        ListView<EventDriver> listRight = init_ListRight();
         Label can = new Label("Event Drivers");
         Label sel = new Label("Selected");
         Label para = new Label("Parameters");
@@ -133,29 +131,27 @@ public class GUI_EDTab {
      * 
      * @return ListView<String>
      */
-    private ListView<String> init_ListLeft() {
-        edName = new ArrayList<String>();
-        edSelect = new ArrayList<String>();
-        edSel = new ArrayList<EventDriver>();
-        edList = new ListView<String>();
-        edList = new ListView<String>();
-        for (EventDriver i :EventDriverMasterList) {
-            edName.add(i.displayName());
-        }
-        this.items = FXCollections.observableArrayList(edName);
+    private ListView<EventDriver> init_ListLeft() {
+        edList = new ListView<EventDriver>();
+        edList = new ListView<EventDriver>();
+        eventDrivers = FXCollections.observableArrayList(EventDriverMasterList);
 
-        edList.setItems(items);
+        edList.setItems(eventDrivers);
+        edList.setCellFactory(param -> new ListCell<EventDriver>(){
+            @Override
+            protected void updateItem(EventDriver item, boolean empty){
+                super.updateItem(item, empty);
+                if(empty || item == null || item.displayName().equalsIgnoreCase("")){
+                    setText("");
+                } else {
+                    setText(item.displayName());
+                }
+            }
+        });
         edList.prefHeightProperty().bind(this.box.heightProperty());
         edList.prefWidthProperty().bind(this.box.widthProperty());
         edList.setOnMouseClicked(e -> {
-            String sel = edList.getSelectionModel().getSelectedItem();
-            Iterator<EventDriver> iter = EventDriverMasterList.iterator();
-            while (iter.hasNext()) {
-                EventDriver temp = iter.next();
-                if (sel.equalsIgnoreCase(temp.displayName())) {
-                    area.setText(temp.longDescription());
-                }
-            }
+            area.setText(edList.getSelectionModel().getSelectedItem().longDescription());
             e.consume();
         });
 
@@ -167,18 +163,29 @@ public class GUI_EDTab {
      * 
      * @return ListView<String>
      */
-    private ListView<String> init_ListRight() {
-        selList = new ListView<String>();
-        this.selItems = FXCollections.observableArrayList(edSelect);
-        selList.setItems(this.selItems);
+    private ListView<EventDriver> init_ListRight() {
+        selList = new ListView<EventDriver>();
+        selected = FXCollections.observableArrayList(JAPI.getEventDrivers());
+        selList.setItems(selected);
+        selList.setCellFactory(param -> new ListCell<EventDriver>(){
+            @Override
+            protected void updateItem(EventDriver item, boolean empty){
+                super.updateItem(item, empty);
+                if(empty || item == null || item.displayName().equalsIgnoreCase("")){
+                    setText("");
+                } else {
+                    setText(item.displayName());
+                }
+            }
+        });
         selList.prefHeightProperty().bind(this.box.heightProperty());
         selList.prefWidthProperty().bind(this.box.widthProperty());
         selList.setOnMouseClicked(e -> {
-            String sel = selList.getSelectionModel().getSelectedItem();
-            Iterator<EventDriver> iter = this.edSel.iterator();
+            EventDriver sel = selList.getSelectionModel().getSelectedItem();
+            Iterator<EventDriver> iter = JAPI.getEventDrivers().iterator();
             while (iter.hasNext()) {
                 EventDriver temp = iter.next();
-                if (sel.equalsIgnoreCase(temp.displayName())) {
+                if (sel.equals(temp)) {
                     VBox para = temp.getNewGUILayout();
                     if (this.paraBox.getChildren().contains(this.paraBoxChild)) {
                         para.prefHeightProperty().bind(this.box.heightProperty());
@@ -220,35 +227,30 @@ public class GUI_EDTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            if(!edSelect.isEmpty()){
-                edDeselected(selList.getSelectionModel().getSelectedItem().trim());
+            if(!JAPI.getEventDrivers().isEmpty()){
+                edDeselected(selList.getSelectionModel().getSelectedItem());
                 selList.refresh();
                 edList.refresh();
             }
             e.consume();
         });
         right.setOnAction(e -> {
-            edSelected(edList.getSelectionModel().getSelectedItem().trim());
+            edSelected(edList.getSelectionModel().getSelectedItem());
             selList.refresh();
             edList.refresh();
-            selList.getSelectionModel().select(this.selItems.getLast());
+            selList.getSelectionModel().select(selected.getLast());
             e.consume();
         });
         clear.setOnAction(e -> {
-            if(!edSelect.isEmpty()){
+            if(!JAPI.getEventDrivers().isEmpty()){
                 EventDriverMasterList.clear();
-                edName.clear();
-                edSelect.clear();
-                edSel.clear();
+                //selectedEventDrivers.clear();
                 init_EventDrivers();
-                for (EventDriver i : EventDriverMasterList) {
-                    edName.add(i.displayName());
-                }
                 JAPI.removeAllEventDrivers();
-                this.items = FXCollections.observableArrayList(edName);
-                this.selItems = FXCollections.observableArrayList(edSelect);
-                edList.setItems(this.items);
-                selList.setItems(this.selItems);
+                eventDrivers = FXCollections.observableArrayList(EventDriverMasterList);
+                selected = FXCollections.observableArrayList(JAPI.getEventDrivers());
+                edList.setItems(eventDrivers);
+                selList.setItems(selected);
                 selList.refresh();
                 edList.refresh();
                 this.paraBox.getChildren().removeLast();
@@ -282,69 +284,48 @@ public class GUI_EDTab {
      * Method for adding a selected Event Driver
      * @param method String
      */
-    private void edSelected(String method) {
+    private void edSelected(EventDriver obj) {
+        String method = obj.displayName();
         logger.info("Adding Event Driver "+method);
-        edSelect.add(method);
-        Iterator<EventDriver> master = EventDriverMasterList.iterator();
-        while (master.hasNext()) {
-            EventDriver temp = master.next();
-            if (temp.displayName().equalsIgnoreCase(method)) {
-                try {
-                    this.edSel.add(JAPI.addEventDriver(temp.displayName()));
-                } catch (Exception e) {
-                    logger.error(e.getCause(), e);
-                    e.printStackTrace();
-                }
-                //master.remove();
-            }
+        try {
+            JAPI.addEventDriver(method);
+        } catch (Exception e) {
+            logger.error(e.getCause(), e);
+            e.printStackTrace();
         }
-        this.items = FXCollections.observableArrayList(edName);
-        this.selItems = FXCollections.observableArrayList(edSelect);
-        edList.setItems(this.items);
-        selList.setItems(this.selItems);
+        selected = FXCollections.observableArrayList(JAPI.getEventDrivers());
+        selList.setItems(selected);
     }
     /**
      * Method for selecting all Event Drivers
      */
     private void allSelected() {
         logger.info("Adding all Event Drivers");
-        edSelect.addAll(edName);
-        edName.clear();
-        Iterator<EventDriver> master = EventDriverMasterList.iterator();
-        while (master.hasNext()) {
-            EventDriver temp = master.next();
+        for(EventDriver temp : EventDriverMasterList){
             try {
-                this.edSel.add(JAPI.addEventDriver(temp.displayName()));
+                JAPI.addEventDriver(temp.displayName());
             } catch (Exception e) {
                 logger.error(e.getCause(), e);
                 e.printStackTrace();
             }
-            master.remove();
         }
-        this.items = FXCollections.observableArrayList(edName);
-        this.selItems = FXCollections.observableArrayList(edSelect);
-        edList.setItems(this.items);
-        selList.setItems(this.selItems);
+        eventDrivers = FXCollections.observableArrayList(EventDriverMasterList);
+        selected = FXCollections.observableArrayList(JAPI.getEventDrivers());
+        edList.setItems(eventDrivers);
+        selList.setItems(selected);
     }
     /**
      * Method for removing selected Event Driver
      * @param method String
      */
-    private void edDeselected(String method) {
+    private void edDeselected(EventDriver obj) {
+        String method = obj.displayName();
         logger.info("Removing Event Driver "+method);
-        edSelect.remove(method);
-        Iterator<EventDriver> canMeth = this.edSel.iterator();
-        while (canMeth.hasNext()) {
-            EventDriver temp = canMeth.next();
-            if (temp.displayName().equalsIgnoreCase(method)) {
-                JAPI.removeEventDriver(temp);
-                canMeth.remove();
-            }
-        }
-        this.items = FXCollections.observableArrayList(edName);
-        this.selItems = FXCollections.observableArrayList(edSelect);
-        edList.setItems(this.items);
-        selList.setItems(this.selItems);
+        JAPI.removeEventDriver(obj);
+        eventDrivers = FXCollections.observableArrayList(EventDriverMasterList);
+        selected = FXCollections.observableArrayList(JAPI.getEventDrivers());
+        edList.setItems(eventDrivers);
+        selList.setItems(selected);
     }
 
     /**

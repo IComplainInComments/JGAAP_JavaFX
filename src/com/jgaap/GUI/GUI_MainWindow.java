@@ -167,7 +167,7 @@ public class GUI_MainWindow extends Application{
      */
      private MenuBar init_MenuBar(Stage stage) {
         GUI_MenuItemsBatch items = new GUI_MenuItemsBatch(stage);
-        GUI_LogWindow log = new GUI_LogWindow();
+       // GUI_LogWindow log = new GUI_LogWindow();
         MenuBar bar = new MenuBar();
         Menu file = new Menu("File");
         Menu help = new Menu("Help");
@@ -193,7 +193,7 @@ public class GUI_MainWindow extends Application{
         });
         console.setOnAction(e -> {
             e.consume();
-            log.showStage();
+            //log.showStage();
         });
         
         aaac.getItems().addAll(items.getProblems());
