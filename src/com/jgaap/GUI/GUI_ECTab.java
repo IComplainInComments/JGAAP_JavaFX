@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
@@ -27,19 +28,13 @@ import com.jgaap.backend.API;
  */
 public class GUI_ECTab {
     
-
-    private ObservableList<String> selItems;
-    private ObservableList<String> items;
-    private VBox paraBox;
-    private VBox paraBoxChild;
-    private VBox box;
+    private VBox paraBox, paraBoxChild, box;
+    private static ObservableList<EventCuller> eventCullers;
+    private static ObservableList<EventCuller> selected;
     private static HBox bottomButtons;
-    private static ArrayList<String> ecName;
-    private static ArrayList<String> ecSelect;
-    private static ArrayList<EventCuller> ecSel;
     private static ArrayList<EventCuller> EventCullersMasterList;
-    private static ListView<String> listLeft;
-    private static ListView<String> listRight;
+    private static ListView<EventCuller> listLeft;
+    private static ListView<EventCuller> listRight;
     private static TextArea area;
     private static Logger logger;
     private static API JAPI;
@@ -68,8 +63,6 @@ public class GUI_ECTab {
      * @return HBox
      */
     private HBox init_rowOne(){
-        listLeft = init_ListLeft();
-        listRight = init_ListRight();
         Label can = new Label("Event Culling");
         Label sel = new Label("Selected");
         Label para = new Label("Parameters");
@@ -78,14 +71,13 @@ public class GUI_ECTab {
         HBox notesBox = new HBox();
         VBox edBox = new VBox();
         VBox selBox = new VBox();
-        this.paraBox = new VBox();
-        this.paraBoxChild = new VBox();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
+        this.paraBox = new VBox();
+        this.paraBoxChild = new VBox();
         can.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         sel.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         para.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
-
 
         paraBoxChild.setStyle("-fx-border-color: black");
         paraBoxChild.prefHeightProperty().bind(this.box.heightProperty());
@@ -93,8 +85,8 @@ public class GUI_ECTab {
 
         notesBox.getChildren().addAll(para,region1,notes);
 
-        edBox.getChildren().addAll(can, listLeft);
-        selBox.getChildren().addAll(sel,listRight);
+        edBox.getChildren().addAll(can, init_ListLeft());
+        selBox.getChildren().addAll(sel, init_ListRight());
         paraBox.getChildren().addAll(notesBox, paraBoxChild);
 
         box.getChildren().addAll(edBox, init_rowTwoButtons(), selBox, paraBox);
@@ -128,29 +120,26 @@ public class GUI_ECTab {
       * Method for building the Event Culling Selection Box.
       * @return ListView<String>
       */
-    private ListView<String> init_ListLeft(){
-        ecName = new ArrayList<String>();
-        ecSelect = new ArrayList<String>();
-        ecSel = new ArrayList<EventCuller>();
-        listLeft = new ListView<String>();
-        listRight = new ListView<String>();
-        for (EventCuller i : EventCullersMasterList) {
-            ecName.add(i.displayName());
-        }
-        this.items = FXCollections.observableArrayList (ecName);
+    private ListView<EventCuller> init_ListLeft(){
+        listLeft = new ListView<EventCuller>();
+        eventCullers = FXCollections.observableArrayList(EventCullersMasterList);
+
+        listLeft.setItems(eventCullers);
         listLeft.setOnMouseClicked(e -> {
-            String sel = listLeft.getSelectionModel().getSelectedItem();
-            Iterator<EventCuller> iter = EventCullersMasterList.iterator();
-            while(iter.hasNext()){
-                EventCuller temp = iter.next();
-                if(sel.equalsIgnoreCase(temp.displayName())){
-                    area.setText(temp.longDescription());
-                }
-            }
+            area.setText(listLeft.getSelectionModel().getSelectedItem().longDescription());
             e.consume();
         });
-
-        listLeft.setItems(this.items);
+        listLeft.setCellFactory(param -> new ListCell<EventCuller>(){
+            @Override
+            protected void updateItem(EventCuller item, boolean empty){
+                super.updateItem(item, empty);
+                if(empty || item == null || item.displayName().equalsIgnoreCase("")){
+                    setText("");
+                } else {
+                    setText(item.displayName());
+                }
+            }
+        });
         listLeft.prefHeightProperty().bind(this.box.heightProperty());
         listLeft.prefWidthProperty().bind(this.box.widthProperty());
 
@@ -160,14 +149,28 @@ public class GUI_ECTab {
      * Method for showing the Selected Event Culling box.
      * @return ListView<String>
      */
-    private ListView<String> init_ListRight(){
-        this.selItems = FXCollections.observableArrayList (ecSelect);
+    private ListView<EventCuller> init_ListRight(){
+        listRight = new ListView<EventCuller>();
+        selected = FXCollections.observableArrayList(selected);
+        listRight.setItems(selected);
+        listRight.setCellFactory(param -> new ListCell<EventCuller>(){
+            @Override
+            protected void updateItem(EventCuller item, boolean empty){
+                super.updateItem(item, empty);
+                if(empty || item == null || item.displayName().equalsIgnoreCase("")){
+                    setText("");
+                } else {
+                    setText(item.displayName());
+                }
+            }
+        });
+        //TODO - Rewrite
         listRight.setOnMouseClicked(e -> {
-            String sel = listRight.getSelectionModel().getSelectedItem();
-            Iterator<EventCuller> iter = ecSel.iterator();
+            EventCuller sel = listRight.getSelectionModel().getSelectedItem();
+            Iterator<EventCuller> iter = JAPI.getEventCullers().iterator();
             while (iter.hasNext()) {
                 EventCuller temp = iter.next();
-                if (sel.equalsIgnoreCase(temp.displayName())) {
+                if (sel.equals(temp)) {
                     VBox para = temp.getNewGUILayout();
                     if (this.paraBox.getChildren().contains(this.paraBoxChild)) {
                         para.prefHeightProperty().bind(this.box.heightProperty());
@@ -186,7 +189,6 @@ public class GUI_ECTab {
             e.consume();
         });
 
-        listRight.setItems(this.selItems);
         listRight.prefHeightProperty().bind(this.box.heightProperty());
         listRight.prefWidthProperty().bind(this.box.widthProperty());
 
@@ -211,30 +213,30 @@ public class GUI_ECTab {
         VBox.setVgrow(region2, Priority.ALWAYS);
 
         left.setOnAction(e -> {
-            if(!ecSelect.isEmpty()){
-                ecDeselected(listRight.getSelectionModel().getSelectedItem().trim());
-                listLeft.refresh();
+            if(!JAPI.getEventCullers().isEmpty()){
+                ecDeselected(listRight.getSelectionModel().getSelectedItem());
                 listRight.refresh();
             }
             e.consume();
         });
         right.setOnAction(e -> {
-            ecSelected(listLeft.getSelectionModel().getSelectedItem().trim());
-            listLeft.refresh();
-            listRight.refresh();
-            listRight.getSelectionModel().select(this.selItems.getLast());
+            if(!selected.isEmpty()){
+                ecSelected(listLeft.getSelectionModel().getSelectedItem());
+                listRight.refresh();
+                listRight.getSelectionModel().select(selected.getLast());
+            }
             e.consume();
         });
         all.setOnAction(e -> {
             allSelected();
-            listLeft.refresh();
             listRight.refresh();
             e.consume();
         });
         clear.setOnAction(e -> {
-            clearSelected();
-            listLeft.refresh();
-            listRight.refresh();
+            if(!JAPI.getEventDrivers().isEmpty()){
+                clearSelected();
+                listRight.refresh();
+            }
             e.consume();
         });
 
@@ -249,94 +251,64 @@ public class GUI_ECTab {
     private void init_eventCullers(){
         EventCullersMasterList = new ArrayList<EventCuller>();
         for (int i = 0; i < EventCullers.getEventCullers().size(); i++){
-            //for (EventCuller eventCuller : EventCullers.getEventCullers()) {
-                EventCuller eventCuller = EventCullers.getEventCullers().get(i);
-                if (eventCuller.showInGUI())
-                    EventCullersMasterList.add(eventCuller);
+            EventCuller eventCuller = EventCullers.getEventCullers().get(i);
+            if (eventCuller.showInGUI()){
+                EventCullersMasterList.add(eventCuller);
             }
+        }
     }
     /**
      * Method for adding a selected Event Culler
      * @param method String
      */
-    private void ecSelected(String method) {
+    private void ecSelected(EventCuller obj) {
+        String method = obj.displayName();
         logger.info("Adding Event Culler "+method);
-        ecSelect.add(method);
-        Iterator<EventCuller> master = EventCullersMasterList.iterator();
-        while(master.hasNext()) {
-            EventCuller temp = master.next();
-            if (temp.displayName().equalsIgnoreCase(method)) {
-                try {
-                    ecSel.add(JAPI.addEventCuller(temp.displayName()));
-                } catch (Exception e) {
-                    logger.error(e.getCause(), e);
-                    e.printStackTrace();
-                }
-                //ecSel.add(temp);
-            }
+        try {
+            JAPI.addEventCuller(method);
+        } catch (Exception e) {
+            logger.error(e.getCause(), e);
+            e.printStackTrace();
         }
-        this.items = FXCollections.observableArrayList(ecName);
-        this.selItems = FXCollections.observableArrayList(ecSelect);
-        listLeft.setItems(this.items);
-        listRight.setItems(this.selItems);
+        selected = FXCollections.observableArrayList(JAPI.getEventCullers());
+        listRight.setItems(selected);
     }
     /**
      * Method for adding all Event Cullers
      */
     private void allSelected() {
         logger.info("Adding all Event Cullers");
-        ecSelect.addAll(ecName);
-        ecName.clear();
-        Iterator<EventCuller> master = EventCullersMasterList.iterator();
-        while(master.hasNext()) {
-            EventCuller temp = master.next();
-                try {
-                    ecSel.add(JAPI.addEventCuller(temp.displayName()));
-                } catch (Exception e) {
-                    logger.error(e.getCause(), e);
-                    e.printStackTrace();
-                }
+        for(EventCuller i : EventCullersMasterList){
+            try {
+                JAPI.addEventCuller(i.displayName());
+            } catch (Exception e) {
+                logger.error(e.getCause(), e);
+                e.printStackTrace();
+            }
         }
-        this.items = FXCollections.observableArrayList(ecName);
-        this.selItems = FXCollections.observableArrayList(ecSelect);
-        listLeft.setItems(this.items);
-        listRight.setItems(this.selItems);
+        selected = FXCollections.observableArrayList(JAPI.getEventCullers());
+        listRight.setItems(selected);
     }
 
+    /**
+     * Method to delete all selected Event Cullers.
+     */
     private void clearSelected() {
         logger.info("Removing all selected Event Cullers");
-        ecSelect.clear();
-        ecSel.clear();
         JAPI.removeAllEventCullers();
-        Iterator<EventCuller> master = EventCullersMasterList.iterator();
-        while(master.hasNext()) {
-            EventCuller temp = master.next();
-            ecName.add(temp.displayName());
-        }
-        this.items = FXCollections.observableArrayList(ecName);
-        this.selItems = FXCollections.observableArrayList(ecSelect);
-        listLeft.setItems(this.items);
-        listRight.setItems(this.selItems);
+        selected = FXCollections.observableArrayList(JAPI.getEventCullers());
+        listRight.setItems(selected);
     }
     /**
      * Method for removing a selected Event Culler
      * @param method String
      */
-    private void ecDeselected(String method) {
+    private void ecDeselected(EventCuller obj) {
+        String method = obj.displayName();
         logger.info("Removing Event Culler "+method);
-        ecSelect.remove(method);
-        Iterator<EventCuller> canMeth = ecSel.iterator();
-        while(canMeth.hasNext()) {
-            EventCuller temp = canMeth.next();
-            if (temp.displayName().equalsIgnoreCase(method)) {
-                JAPI.removeEventCuller(temp);
-                canMeth.remove();
-            }
-        }
-        this.items = FXCollections.observableArrayList(ecName);
-        this.selItems = FXCollections.observableArrayList(ecSelect);
-        listLeft.setItems(this.items);
-        listRight.setItems(this.selItems);
+        JAPI.removeEventCuller(obj);
+        selected = FXCollections.observableArrayList(JAPI.getEventCullers());
+        listRight.setItems(selected);
     }
     /**
      * Getter for getting the built Pane.
