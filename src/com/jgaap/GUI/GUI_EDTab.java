@@ -19,6 +19,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+
+import com.jgaap.generics.EventCuller;
 import com.jgaap.generics.EventDriver;
 import com.jgaap.backend.EventDrivers;
 import com.jgaap.backend.API;
@@ -175,28 +177,14 @@ public class GUI_EDTab {
                 }
             }
         });
-        //TODO - Rewrite
         selList.setOnMouseClicked(e -> {
             EventDriver sel = selList.getSelectionModel().getSelectedItem();
-            Iterator<EventDriver> iter = JAPI.getEventDrivers().iterator();
-            while (iter.hasNext()) {
-                EventDriver temp = iter.next();
-                if (sel.equals(temp)) {
-                    VBox para = temp.getNewGUILayout();
-                    if (this.paraBox.getChildren().contains(this.paraBoxChild)) {
-                        para.prefHeightProperty().bind(this.box.heightProperty());
-                        para.prefWidthProperty().bind(this.box.widthProperty());
-                        this.paraBox.getChildren().removeAll(this.paraBoxChild);
-                        this.paraBox.getChildren().add(para);
-                    } else if (!this.paraBox.getChildren().contains(para)) {
-                        para.prefHeightProperty().bind(this.box.heightProperty());
-                        para.prefWidthProperty().bind(this.box.widthProperty());
-                        this.paraBox.getChildren().removeLast();
-                        this.paraBox.getChildren().add(para);
-                    }
-                    area.setText(temp.longDescription());
-                }
-            }
+            VBox para = sel.getNewGUILayout();
+            para.prefHeightProperty().bind(this.box.heightProperty());
+            para.prefWidthProperty().bind(this.box.widthProperty());
+            this.paraBox.getChildren().removeLast();
+            this.paraBox.getChildren().add(para);
+            area.setText(sel.longDescription());
             e.consume();
         });
 
@@ -233,11 +221,9 @@ public class GUI_EDTab {
             e.consume();
         });
         right.setOnAction(e -> {
-            if(!selected.isEmpty()){
                 edSelected(edList.getSelectionModel().getSelectedItem());
                 selList.refresh();
                 selList.getSelectionModel().select(selected.getLast());
-            }
             e.consume();
         });
         all.setOnAction(e -> {
