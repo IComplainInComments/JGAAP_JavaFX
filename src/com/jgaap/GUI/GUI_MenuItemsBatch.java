@@ -29,6 +29,7 @@ import javafx.stage.Stage;
  * Menu Item Batch Class File.
  * This class is used to generate the menu items under File/Help that appear in
  * the menu bar.
+ * 
  * @author Edward Polens
  */
 public class GUI_MenuItemsBatch {
@@ -118,9 +119,6 @@ public class GUI_MenuItemsBatch {
 			    }
                 e.consume();
 		});
-        /*
-         * Insert code for the menu items to do something here at a later date.
-         */
         items.add(save);
         items.add(load);
     }
@@ -190,6 +188,7 @@ public class GUI_MenuItemsBatch {
     }
     /**
      * Method for loading the AAAC Problems into JGAAP
+     * 
      * @param problem String
      */
     private void loadAAACProblem(String problem) {

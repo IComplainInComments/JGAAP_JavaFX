@@ -236,8 +236,6 @@ public class GUI_DocTab {
 
    /**
     * Method for building the Author Selection Table.
-    * 
-    * @return TableView<Object>
     */
    private void init_unknownAuthorTable() {
       table = new TableView<Document>();
@@ -274,6 +272,9 @@ public class GUI_DocTab {
       });
       return comboBox;
    }
+   /**
+    * Updates the unknown document table.
+    */
    public static void updateUnknownDocumentsTable(){
       table.setItems(FXCollections.observableArrayList(JAPI.getUnknownDocuments()));
       table.refresh();
@@ -300,6 +301,11 @@ public class GUI_DocTab {
       //tree = new TreeView<String>(rootNode);
       tree.refresh();
    }
+   /**
+    * Populate the master list of languages.
+    *
+    * @return List<String>
+    */
    private List<String> populateLanguageMasterList(){
       List<String> LanguagesMasterList = new ArrayList<String>();
             for (Language language : Languages.getLanguages()) {
@@ -319,6 +325,11 @@ public class GUI_DocTab {
       build_tab();
       return this.box;
    }
+   /**
+    * Set the bottom buttons of the tab.
+    *
+    * @param box HBox
+    */
    public void setBottomButtons(HBox box){
       bottomButtons = box;
   }

@@ -1,7 +1,6 @@
 package com.jgaap.GUI;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -13,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -104,7 +104,7 @@ public class GUI_ECTab {
     /**
      * Method for building the 'Second level' of GUI elements.
      * 
-     * @return
+     * @return VBox
      */
     private VBox init_rowTwo() {
         VBox box = new VBox(5);
@@ -128,7 +128,7 @@ public class GUI_ECTab {
     /**
      * Method for building the Event Culling Selection Box.
      * 
-     * @return ListView<String>
+     * @return ListView<EventCuller>
      */
     private ListView<EventCuller> init_ListLeft() {
         listLeft = new ListView<EventCuller>();
@@ -159,7 +159,7 @@ public class GUI_ECTab {
     /**
      * Method for showing the Selected Event Culling box.
      * 
-     * @return ListView<String>
+     * @return ListView<EventCuller>
      */
     private ListView<EventCuller> init_ListRight() {
         listRight = new ListView<EventCuller>();
@@ -206,7 +206,10 @@ public class GUI_ECTab {
         Button right = new Button("->");
         Button clear = new Button("Clear");
         Button all = new Button("All");
-
+        left.setTooltip(new Tooltip("Remove"));
+        right.setTooltip(new Tooltip("Add"));
+        clear.setTooltip(new Tooltip("Remove all"));
+        all.setTooltip(new Tooltip("Select all"));
         box.setMinSize(50, 0);
 
         VBox.setVgrow(region1, Priority.ALWAYS);
@@ -245,7 +248,7 @@ public class GUI_ECTab {
     }
 
     /**
-     * Method for initializing the Event Culler Master list
+     * Method for initializing the Event Culler Master list.
      */
     private void init_eventCullers() {
         EventCullersMasterList = new ArrayList<EventCuller>();
@@ -258,7 +261,7 @@ public class GUI_ECTab {
     }
 
     /**
-     * Method for adding a selected Event Culler
+     * Method for adding a selected Event Culler.
      * 
      * @param method String
      */
@@ -303,7 +306,7 @@ public class GUI_ECTab {
     }
 
     /**
-     * Method for removing a selected Event Culler
+     * Method for removing a selected Event Culler.
      * 
      * @param method String
      */
@@ -327,7 +330,7 @@ public class GUI_ECTab {
     }
 
     /**
-     * Method for applying the bottom buttons to the panel
+     * Method for applying the bottom buttons to the panel.
      * 
      * @param box HBox
      */

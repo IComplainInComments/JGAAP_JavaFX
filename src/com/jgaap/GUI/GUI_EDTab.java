@@ -1,7 +1,6 @@
 package com.jgaap.GUI;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -13,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -20,7 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-import com.jgaap.generics.EventCuller;
 import com.jgaap.generics.EventDriver;
 import com.jgaap.backend.EventDrivers;
 import com.jgaap.backend.API;
@@ -28,6 +27,7 @@ import com.jgaap.backend.API;
 /**
  * Event Driver Tab Class.
  * This Class creates the scene for the Event Driver Tab and it's GUI elements.
+ * 
  * @author Edward Polens
  */
 public class GUI_EDTab {
@@ -207,6 +207,10 @@ public class GUI_EDTab {
         Button right = new Button("->");
         Button clear = new Button("Clear");
         Button all = new Button("All");
+        left.setTooltip(new Tooltip("Remove"));
+        right.setTooltip(new Tooltip("Add"));
+        clear.setTooltip(new Tooltip("Remove all"));
+        all.setTooltip(new Tooltip("Select all"));
 
         box.setMinSize(50, 0);
 
@@ -246,7 +250,7 @@ public class GUI_EDTab {
         return box;
     }
     /**
-     * Method for initializing the Event Driver Master List
+     * Method for initializing the Event Driver Master List.
      */
     private void init_EventDrivers() {
         EventDriverMasterList = new ArrayList<EventDriver>();
@@ -257,7 +261,8 @@ public class GUI_EDTab {
         }
     }
     /**
-     * Method for adding a selected Event Driver
+     * Method for adding a selected Event Driver.
+     * 
      * @param method EventDriver
      */
     private void edSelected(EventDriver obj) {
@@ -300,7 +305,8 @@ public class GUI_EDTab {
         //this.paraBox.getChildren().add(this.paraBoxChild);
     }
     /**
-     * Method for removing selected Event Driver
+     * Method for removing selected Event Driver.
+     * 
      * @param method EventDriver
      */
     private void edDeselected(EventDriver obj) {
@@ -322,7 +328,8 @@ public class GUI_EDTab {
         return this.box;
     }
     /**
-     * Method for applying the bottom buttons to the panel
+     * Method for applying the bottom buttons to the panel.
+     * 
      * @param box HBOX
      */
     public void setBottomButtons(HBox box) {

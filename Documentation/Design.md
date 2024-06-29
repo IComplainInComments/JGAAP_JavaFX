@@ -4,6 +4,7 @@
 
 ```mermaid
 classDiagram
+
     GUI_CanTab -- GUI_MainWindow
     GUI_DocTab -- GUI_MainWindow
     GUI_ECTab -- GUI_MainWindow
@@ -18,6 +19,8 @@ classDiagram
     GUI_NotesWindow -- GUI_EDTab
     GUI_NotesWindow -- GUI_AnalysisTab
     GUI_JGAAPAboutWindow -- GUI_MainWindow
+    GUI_AddAuthor -- GUI_DocTab
+    GUI_ResultsWindow -- GUI_ReviewTab
 
     class GUI_CanTab{
         -GUI_NotesWindow notesBox$
@@ -139,6 +142,12 @@ classDiagram
         +GUI_JGAAPAboutWindow()
         -build_stage()
         +show()
+    }
+    class GUI_AddAuthor{
+
+    }
+    class GUI_ResultsWindow{
+
     }
 ```
 

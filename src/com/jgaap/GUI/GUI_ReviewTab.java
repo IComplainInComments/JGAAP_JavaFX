@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -63,15 +64,7 @@ public class GUI_ReviewTab {
       this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
       this.box = new VBox();
       this.res = new GUI_ResultsWindow();
-      this.res.hideStage();
-      this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
-      JAPI = API.getInstance();
-   }
-   public GUI_ReviewTab(GUI_ResultsWindow grw) {
-      logger = Logger.getLogger(GUI_ReviewTab.class);
-      this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
-      this.box = new VBox();
-      this.res = grw;
+      GUI_ResultsWindow.hideStage();
       this.SelectedCanonicizerList = new ArrayList<Pair<Canonicizer, Object>>();
       JAPI = API.getInstance();
    }
@@ -133,6 +126,7 @@ public class GUI_ReviewTab {
    private HBox init_bottomButtons() {
       HBox box = new HBox(5);
       this.process = new Button("Process");
+      this.process.setTooltip(new Tooltip("Run the Experiment."));
       Region region1 = new Region();
       HBox.setHgrow(region1, Priority.ALWAYS);
       this.process.setOnAction(e -> {
@@ -157,7 +151,7 @@ public class GUI_ReviewTab {
                buffer.append(result);
             }
             this.res.build_resultTab(buffer.toString());
-            this.res.showStage();
+            GUI_ResultsWindow.showStage();
 
          } catch (Exception e1) {
             logger.error(e1.getCause(), e1);
@@ -190,7 +184,7 @@ public class GUI_ReviewTab {
    /**
     * Method for generating the Selected Event Driver Table.
     * 
-    * @return TableView<Object>
+    * @return TableView<String>
     */
    private ListView<String> init_eventDriverTable() {
       this.edList = new ListView<String>();
@@ -210,7 +204,7 @@ public class GUI_ReviewTab {
    /**
     * Method for generating the Selected Event Culling Table.
     * 
-    * @return TableView<Object>
+    * @return TableView<String>
     */
    private ListView<String> init_eventCullingTable() {
       this.ecList = new ListView<String>();
@@ -230,7 +224,7 @@ public class GUI_ReviewTab {
    /**
     * Method for generating the Selected Analysis Method Table.
     * 
-    * @return TableView<Object>
+    * @return TableView<String>
     */
    private ListView<String> init_analysisTable() {
       this.anList = new ListView<String>();
@@ -246,8 +240,8 @@ public class GUI_ReviewTab {
       this.anList.refresh();
       return this.anList;
    }
-      /**
-    * mMethod for refreshing the Canonicizer List view
+   /**
+    * Method for refreshing the Canonicizer List view
     */
    public void refresh_canList() {
       Iterator<String> iter = GUI_CanTab.getSelectedCanList().keySet().iterator();
@@ -259,8 +253,8 @@ public class GUI_ReviewTab {
       this.canItems = FXCollections.observableArrayList(this.canVals);
       this.canList.setItems(this.canItems);
    }
-      /**
-    * mMethod for refreshing the Event Driver List view
+   /**
+    * Method for refreshing the Event Driver List view
     */
    public void refresh_edList() {
       Iterator<EventDriver> iter = JAPI.getEventDrivers().iterator();
@@ -271,8 +265,8 @@ public class GUI_ReviewTab {
       this.edItems = FXCollections.observableArrayList(this.edVals);
       this.edList.setItems(this.edItems);
    }
-      /**
-    * mMethod for refreshing the Event Culler List view
+   /**
+    * Method for refreshing the Event Culler List view
     */
    public void refresh_ecList() {
       Iterator<EventCuller> iter = JAPI.getEventCullers().iterator();
@@ -284,7 +278,7 @@ public class GUI_ReviewTab {
       this.ecList.setItems(this.ecItems);
    }
    /**
-    * mMethod for refreshing the Analysis Driver List view
+    * Method for refreshing the Analysis Driver List view
     */
    public void refresh_anList() {
       Iterator<AnalysisDriver> iter = JAPI.getAnalysisDrivers().iterator();

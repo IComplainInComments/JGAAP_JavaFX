@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -149,7 +150,7 @@ public class GUI_AnalysisTab {
     /**
      * Method for generating the selected list view bow.
      * 
-     * @return ListView<String>
+     * @return ListView<AnalysisDriver>
      */
     private ListView<AnalysisDriver> init_SelectedBox() {
         selItems = FXCollections.observableArrayList(JAPI.getAnalysisDrivers());
@@ -187,7 +188,7 @@ public class GUI_AnalysisTab {
     /**
      * Method for generating the analysis method selection box.
      * 
-     * @return ListView<String>
+     * @return ListView<AnalysisDriver>
      */
     private ListView<AnalysisDriver> init_AnalysisMethodBox() {
         selList = new ListView<AnalysisDriver>();
@@ -227,7 +228,7 @@ public class GUI_AnalysisTab {
     /**
      * Method for generating the distance function selection box.
      * 
-     * @return ListView<String>
+     * @return ListView<DistanceFunction>
      */
     private ListView<DistanceFunction> init_DistanceFunctionBox() {
         dfList = new ListView<DistanceFunction>();
@@ -270,6 +271,11 @@ public class GUI_AnalysisTab {
         Button right = new Button("->");
         Button clear = new Button("Clear");
         Button all = new Button("All");
+
+        left.setTooltip(new Tooltip("Remove"));
+        right.setTooltip(new Tooltip("Add"));
+        clear.setTooltip(new Tooltip("Remove all"));
+        all.setTooltip(new Tooltip("Select all Analysis Drivers"));
 
         box.setMinSize(50, 0);
 
@@ -327,7 +333,7 @@ public class GUI_AnalysisTab {
     }
 
     /**
-     * Method for initializing the Distance Function Master List
+     * Method for initializing the Distance Function Master List.
      */
     private void init_distanceFunctions() {
         DistanceFunctionsMasterList = new ArrayList<DistanceFunction>();
@@ -339,7 +345,7 @@ public class GUI_AnalysisTab {
     }
 
     /**
-     * Method for initializing the Analysis Driver Master List
+     * Method for initializing the Analysis Driver Master List.
      */
     private void init_analysisDrivers() {
         AnalysisDriverMasterList = new ArrayList<AnalysisDriver>();
@@ -351,9 +357,9 @@ public class GUI_AnalysisTab {
     }
 
     /**
-     * Method for adding an analysis driver
+     * Method for adding an analysis driver.
      * 
-     * @param method String
+     * @param obj Analysis Driver
      */
     private void anSelected(AnalysisDriver obj) {
         String method = obj.displayName();
@@ -368,7 +374,9 @@ public class GUI_AnalysisTab {
         selList.setItems(selItems);
         selList.refresh();
     }
-
+    /**
+     * Select all Analysis Drivers.
+     */
     private void allSelected() {
         logger.info("Adding All Analysis Methods");
         for (AnalysisDriver temp : AnalysisDriverMasterList) {
@@ -385,9 +393,9 @@ public class GUI_AnalysisTab {
     }
 
     /**
-     * Method for removing an Analysis Driver
+     * Method for removing an Analysis Driver.
      * 
-     * @param method String
+     * @param obj Analysis Driver.
      */
     private void anDeselected(AnalysisDriver obj) {
         String method = obj.displayName();
@@ -397,6 +405,11 @@ public class GUI_AnalysisTab {
         selList.setItems(selItems);
         selList.refresh();
     }
+    /**
+     * Add a Distance Function to the selected Analysis Function.
+     * @param dis DistanceFunction
+     * @param ana AnalysisDriver
+     */
 
     private void dfAdd(DistanceFunction dis, AnalysisDriver ana) {
         AnalysisDriver and = null;
@@ -444,6 +457,11 @@ public class GUI_AnalysisTab {
         selList.setItems(selItems);
         selList.refresh();
     }
+    /**
+     * Remove a Distance Function and its Analysis Driver.
+     * 
+     * @param obj AnalysisDriver
+     */
 
     private void dfRemove(AnalysisDriver obj) {
         String method = obj.displayName();

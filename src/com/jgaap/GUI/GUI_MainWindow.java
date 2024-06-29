@@ -13,6 +13,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -23,17 +24,18 @@ import javafx.stage.Stage;
 /**
  * Main Window Class.
  * This Class is the heart of the GUI, and controls the GUI as a whole. It is used to intertwine all the other classes.
+ * 
  * @author Edward Polens
  */
 public class GUI_MainWindow extends Application{
 
     private static Logger logger;
     private static BorderPane pane;
-    private static GUI_ResultsWindow grw;
     private static TabPane tabPane;
 
     /**
      * Used for debugging.
+     * 
      * @param args Normal Java Main Args
      */
     public static void main(String[] args) {
@@ -58,6 +60,7 @@ public class GUI_MainWindow extends Application{
     }
     /**
      * Method for constructing the full GUI for JGAAP.
+     * 
      * @return Scene
      */
     private Scene init_mainScene(Stage stage){
@@ -89,7 +92,6 @@ public class GUI_MainWindow extends Application{
         review.setClosable(false);
 
         pane = new BorderPane();
-        grw = new GUI_ResultsWindow();
         
         tabPane.prefHeightProperty().bind(pane.heightProperty());
         tabPane.prefWidthProperty().bind(pane.widthProperty());
@@ -98,7 +100,7 @@ public class GUI_MainWindow extends Application{
         GUI_EDTab edTab = new GUI_EDTab();
         GUI_ECTab ecTab = new GUI_ECTab();
         GUI_AnalysisTab anTab = new GUI_AnalysisTab();
-        GUI_ReviewTab reviewTab = new GUI_ReviewTab(grw);
+        GUI_ReviewTab reviewTab = new GUI_ReviewTab();
 
         docTab.setBottomButtons(init_bottomButtons());
         canTab.setBottomButtons(init_bottomButtons());
@@ -163,6 +165,7 @@ public class GUI_MainWindow extends Application{
     }
     /**
      * Builds the Menu Bar and its containing items/functions.
+     * 
      * @return MenuBar
      */
      private MenuBar init_MenuBar(Stage stage) {
@@ -189,7 +192,7 @@ public class GUI_MainWindow extends Application{
         });
         show.setOnAction(e -> {
             e.consume();
-            grw.showStage();
+            GUI_ResultsWindow.showStage();
         });
         console.setOnAction(e -> {
             e.consume();
@@ -209,6 +212,7 @@ public class GUI_MainWindow extends Application{
      }
      /**
       * Builds the bottom buttons that control the TabView in the main window.
+
       * @return  HBox
       */
     private HBox init_bottomButtons() {
@@ -217,6 +221,8 @@ public class GUI_MainWindow extends Application{
         Button next = new Button("Next");
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
+        next.setTooltip(new Tooltip("Go to the next Tab"));
+        finish.setTooltip(new Tooltip("Go to the Review Tab"));
         finish.setOnAction(e -> {
             tabPane.getSelectionModel().selectLast();
             e.consume();

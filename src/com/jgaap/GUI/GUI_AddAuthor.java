@@ -18,6 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -27,7 +28,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
- * GUI_AddAuthor class is for building a Window to add an Author to the program
+ * GUI_AddAuthor class is for building a Window to add an Author to the program.
+ * 
  * @author Edward Polens
  */
 public class GUI_AddAuthor {
@@ -41,7 +43,7 @@ public class GUI_AddAuthor {
     private Stage stage;
 
     /**
-     * Initial constructor for the class
+     * Initial constructor for the class.
      */
     public GUI_AddAuthor() {
         logger = Logger.getLogger(GUI_AddAuthor.class);
@@ -56,7 +58,8 @@ public class GUI_AddAuthor {
 
     }
     /**
-     * Constructor for the class to edit an author
+     * Constructor for the class to edit an author.
+     * 
      * @param author String
      */
     public GUI_AddAuthor(String author) {
@@ -71,7 +74,8 @@ public class GUI_AddAuthor {
         logger.info("Finished building Edit Author Window.");
     }
     /**
-     * Method to build the Scene for the Stage
+     * Method to build the Scene for the Stage.
+     * 
      * @return Scene
      */
     private Scene init_scene() {
@@ -84,7 +88,8 @@ public class GUI_AddAuthor {
 
     }
     /**
-     * Method to initialize the Author name text box
+     * Method to initialize the Author name text box.
+     * 
      * @return HBox
      */
     private HBox init_authorBox() {
@@ -99,7 +104,8 @@ public class GUI_AddAuthor {
         return box;
     }
     /**
-     * Method to initialize the Documents to be added to the Author
+     * Method to initialize the Documents to be added to the Author.
+     * 
      * @return VBox
      */
     private VBox init_authorTable() {
@@ -167,7 +173,8 @@ public class GUI_AddAuthor {
 
     }
     /**
-     * Build the bottom buttons on the Panel
+     * Build the bottom buttons on the Panel.
+     * 
      * @return HBox
      */
     private HBox init_bottomButtons() {
@@ -176,6 +183,8 @@ public class GUI_AddAuthor {
         Button can = new Button("Cancel");
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
+        ok.setTooltip(new Tooltip("Confirm changes."));
+        can.setTooltip(new Tooltip("Remove all changes."));
         // ===============================================================================
         ok.setOnAction(e -> {
             if (!docs.isEmpty()) {
@@ -204,17 +213,27 @@ public class GUI_AddAuthor {
         return box;
     }
     /**
-     * Update the Document List View box
+     * Update the Document List View box.
      */
     private void updateItemView() {
         table.setItems(FXCollections.observableArrayList(JAPI.getDocumentsByAuthor(auth.getText().trim())));
         table.refresh();
     }
+    /**
+     * Add a document.
+     * 
+     * @param doc ArrayList<Document>
+     */
     private void addDoc(ArrayList<Document> doc){
         for(Document i : doc){
             JAPI.addDocument(i);
         }
     }
+    /**
+     * Updates the author tree.
+     * 
+     * @param doc ArrayList<Document>
+     */
     private void updateAuthor(ArrayList<Document> doc){
         String temp = auth.getText().trim();
         for(Document i : doc){
@@ -224,7 +243,8 @@ public class GUI_AddAuthor {
         }
     }
     /**
-     * Get the constructed stage (Window)
+     * Get the constructed stage (Window).
+     * 
      * @return Stage
      */
     public Stage getStage() {

@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -24,9 +25,9 @@ import java.text.SimpleDateFormat;
  */
 public class GUI_ResultsWindow {
 
-    private Stage stage;
-    private TabPane tabs;
-    private ArrayList<String> resultStorage;
+    private static Stage stage;
+    private static TabPane tabs;
+    private static ArrayList<String> resultStorage;
     private static Logger logger;
 
     public static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
@@ -36,10 +37,10 @@ public class GUI_ResultsWindow {
      */
     public GUI_ResultsWindow(){
         logger = Logger.getLogger(GUI_ResultsWindow.class);
-        this.resultStorage = new ArrayList<String>();
-        this.stage = new Stage();
-        this.stage.setTitle("Results Window");
-        this.stage.setScene(build_scene());
+        resultStorage = new ArrayList<String>();
+        stage = new Stage();
+        stage.setTitle("Results Window");
+        stage.setScene(build_scene());
 
     }
     /**
@@ -49,11 +50,11 @@ public class GUI_ResultsWindow {
     private Scene build_scene(){
         Scene scene;
         VBox box = new VBox(5);
-        this.tabs = new TabPane();
-        this.tabs.prefHeightProperty().bind(box.prefHeightProperty());
-        this.tabs.prefWidthProperty().bind(box.prefWidthProperty());
-        VBox.setVgrow(this.tabs, Priority.ALWAYS);
-        box.getChildren().addAll(this.tabs);
+        tabs = new TabPane();
+        VBox.setVgrow(tabs, Priority.ALWAYS);
+        tabs.prefHeightProperty().bind(box.prefHeightProperty());
+        tabs.prefWidthProperty().bind(box.prefWidthProperty());
+        box.getChildren().addAll(tabs);
         box.setMinSize(stage.getHeight(), stage.getWidth());
 
         scene = new Scene(box, 700, 900);
@@ -67,13 +68,14 @@ public class GUI_ResultsWindow {
         HBox buttonBox = new HBox(5);
         Region region1 = new Region();
         Button clear = new Button("Clear");
+        HBox.setHgrow(region1, Priority.ALWAYS);
+        clear.setTooltip(new Tooltip("Remove all results."));
         clear.setOnAction(e -> {
-            this.resultStorage.clear();
-            this.tabs.getTabs().clear();
+            resultStorage.clear();
+            tabs.getTabs().clear();
             stage.close();
             e.consume();
         });
-        HBox.setHgrow(region1, Priority.ALWAYS);
         buttonBox.getChildren().addAll(region1,clear);
         buttonBox.autosize();
         return buttonBox;
@@ -87,13 +89,13 @@ public class GUI_ResultsWindow {
         VBox box = build_tab(results);
         Tab resultTab = new Tab(now);
         logger.info("Adding "+now);
-        this.resultStorage.add(results);
-        box.prefHeightProperty().bind(this.tabs.heightProperty());
-        box.prefWidthProperty().bind(this.tabs.widthProperty());
+        resultStorage.add(results);
+        box.prefHeightProperty().bind(tabs.heightProperty());
+        box.prefWidthProperty().bind(tabs.widthProperty());
         box.setPadding(new Insets(5));
         resultTab.setContent(box);
 
-        this.tabs.getTabs().add(resultTab);
+        tabs.getTabs().add(resultTab);
         
     }
     /**
@@ -122,14 +124,14 @@ public class GUI_ResultsWindow {
     /**
      * Show the window.
      */
-    public void showStage(){
-        this.stage.show();
+    public static void showStage(){
+        stage.show();
     }
     /**
      * Close (Hide) the Window.
      */
-    public void hideStage(){
-        this.stage.hide();
+    public static void hideStage(){
+        stage.hide();
     }
     
 }

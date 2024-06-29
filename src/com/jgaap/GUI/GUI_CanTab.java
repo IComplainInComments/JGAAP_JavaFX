@@ -21,6 +21,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -109,7 +110,7 @@ public class GUI_CanTab {
     /**
      * Method for building the 'Second Row' of GUI elements.
      * 
-     * @return HBox
+     * @return VBox
      */
     private VBox init_rowTwo() {
         VBox box = new VBox(5);
@@ -203,7 +204,9 @@ public class GUI_CanTab {
         Region region2 = new Region();
         VBox.setVgrow(region1, Priority.ALWAYS);
         VBox.setVgrow(region2, Priority.ALWAYS);
-
+        left.setTooltip(new Tooltip("Remove"));
+        right.setTooltip(new Tooltip("Add"));
+        clear.setTooltip(new Tooltip("Remove all"));
         left.setOnAction(e -> {
             if(!SelectedCanonicizerMap.isEmpty()){
                 Iterator<String> iter = SelectedCanonicizerMap.keySet().iterator();
@@ -260,7 +263,7 @@ public class GUI_CanTab {
         return comboBox;
     }
     /**
-     * Method for building the Canonicizer Master List
+     * Method for building the Canonicizer Master List.
      */
     private void init_canonicizers() {
         CanonicizerMasterList = new ArrayList<Canonicizer>();
@@ -271,7 +274,8 @@ public class GUI_CanTab {
         }
     }
     /**
-     * Method for Adding a Canonicizer
+     * Method for Adding a Canonicizer.
+     * 
      * @param method Canonicizer
      * @param doc Document or String
      */
@@ -287,7 +291,8 @@ public class GUI_CanTab {
         selList.getSelectionModel().select(this.selItems.getLast());
     }
     /**
-     * Method for removing a selected Canonicizer
+     * Method for removing a selected Canonicizer.
+     * 
      * @param key String
      */
   private void canonDeselected(String key) {
@@ -299,7 +304,7 @@ public class GUI_CanTab {
         selList.setItems(this.selItems);
     }
     /**
-     * Method for updating the ComboBox Element for the Canonicizer
+     * Method for updating the ComboBox Element for the Canonicizer.
      */
     public static void UpdateCanonicizerDocTypeComboBox() {
         logger.info("Updating Canonicizer ComboBox");
@@ -332,14 +337,16 @@ public class GUI_CanTab {
         return this.box;
     }
     /**
-     * Sets the bottom row buttons
+     * Sets the bottom row buttons.
+     * 
      * @param box HBox
      */
     public void setBottomButtons(HBox box){
         bottomButtons = box;
     }
     /**
-     * Gives the current selected Canonicizers
+     * Gives the current selected Canonicizers.
+     * 
      * @return HashMap<String,Pair<Canonicizer, Object>>
      */
     public static HashMap<String,Pair<Canonicizer, Object>> getSelectedCanList(){

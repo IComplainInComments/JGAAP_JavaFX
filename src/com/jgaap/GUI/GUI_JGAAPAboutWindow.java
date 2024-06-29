@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 /**
  * About Window Class.
  * This Class creates the Stage for the About Window and it's GUI elements.
+ * 
  * @author Edward Polens
  */
 public class GUI_JGAAPAboutWindow {
@@ -67,6 +68,7 @@ public class GUI_JGAAPAboutWindow {
 
     /**
      * Method for building the first row of elements.
+     * 
      * @return HBox
      */
     private static HBox init_rowOne(){
@@ -95,6 +97,7 @@ public class GUI_JGAAPAboutWindow {
 
     /**
      * Method for building the second row of elements.
+     * 
      * @return VBox
      */
     private static VBox init_rowTwo(){
@@ -145,6 +148,7 @@ public class GUI_JGAAPAboutWindow {
 
     /**
      * Method to open a browser to the given URL
+     * 
      * @param url String
      * @return boolean
      */

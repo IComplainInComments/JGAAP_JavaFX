@@ -2,6 +2,7 @@ package com.jgaap.GUI;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -41,6 +42,7 @@ public class GUI_NotesWindow{
         VBox box = new VBox(5);
         area = new TextArea();
         notes = new Button("Notes");
+        notes.setTooltip(new Tooltip("Bring up the Notes Window."));
         text = "";
 
         scene = new Scene(box, 600, 600);
@@ -65,6 +67,7 @@ public class GUI_NotesWindow{
     }
     /**
      * Builds the bottom row buttons.
+     * 
      * @return HBox
      */
     private HBox init_bottomButtons(){
@@ -74,6 +77,8 @@ public class GUI_NotesWindow{
         Region region = new Region();
         HBox.setHgrow(region, Priority.ALWAYS);
 
+        ok.setTooltip(new Tooltip("Save Changes."));
+        cancel.setTooltip(new Tooltip("Remove changes."));
         ok.setOnAction(e -> {
             if(e.getTarget().toString().contains("OK")){
                 text = area.getText();
@@ -113,6 +118,7 @@ public class GUI_NotesWindow{
     }
     /**
      * Getter for getting the notes typed in the Text Area.
+     * 
      * @return String
      */
     public String getNotes(){
@@ -120,6 +126,7 @@ public class GUI_NotesWindow{
     }
     /**
      * Getter for getting the "Notes" button for the GUI windows.
+     * 
      * @return Button
      */
     public Button getButton(){
