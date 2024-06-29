@@ -20,9 +20,7 @@ import com.jgaap.backend.DistanceFunctions;
 import com.jgaap.generics.DistanceFunction;
 import com.jgaap.generics.NeighborAnalysisDriver;
 import com.jgaap.generics.NonDistanceDependentAnalysisDriver;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 
@@ -48,17 +46,12 @@ public class GUI_AnalysisTab {
     private static ListView<AnalysisDriver> selList;
     private static GUI_NotesWindow notesBox;
     private static ObservableList<AnalysisDriver> selItems;
-    private VBox box;
-    private VBox param;
-    private VBox paraBoxChildOne;
-    // private VBox paraBoxChildTwo;
+    private VBox box, param, paraBoxChildOne;
 
     /**
      * Constructor for the class.
      */
     public GUI_AnalysisTab() {
-        // distanceFunctions = new HashMap<String, Pair<DistanceFunction,
-        // AnalysisDriver>>();
         logger = Logger.getLogger(GUI_AnalysisTab.class);
         JAPI = API.getInstance();
         notesBox = new GUI_NotesWindow();
@@ -89,7 +82,6 @@ public class GUI_AnalysisTab {
         VBox sel = new VBox();
         this.param = new VBox();
         this.paraBoxChildOne = new VBox();
-        // this.paraBoxChildTwo = new VBox();
         Region region1 = new Region();
         HBox.setHgrow(region1, Priority.ALWAYS);
         Button notes = notesBox.getButton();
@@ -97,21 +89,16 @@ public class GUI_AnalysisTab {
         Label df = new Label("Distance Function");
         Label se = new Label("Selected");
         Label am = new Label("Parameters");
-        // Label dfp = new Label("DF Parameters");
 
         an.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         df.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         se.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
         am.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
-        // dfp.setFont(Font.font("Microsoft Sans Serif", FontWeight.BOLD, 24));
 
-        paraBoxChildOne.setStyle("-fx-border-color: black");
-        // paraBoxChildTwo.setStyle("-fx-border-color: black");
+        paraBoxChildOne.setStyle("-fx-border-color: black"); 
 
         paraBoxChildOne.prefHeightProperty().bind(this.box.heightProperty());
         paraBoxChildOne.prefWidthProperty().bind(this.box.widthProperty());
-        // paraBoxChildTwo.prefHeightProperty().bind(this.box.heightProperty());
-        // paraBoxChildTwo.prefWidthProperty().bind(this.box.widthProperty());
 
         noteBox.getChildren().addAll(am, region1, notes);
         meth.getChildren().addAll(an, init_AnalysisMethodBox(), df, init_DistanceFunctionBox());
@@ -203,17 +190,9 @@ public class GUI_AnalysisTab {
      * @return ListView<String>
      */
     private ListView<AnalysisDriver> init_AnalysisMethodBox() {
-        // anSel = new ArrayList<AnalysisDriver>();
         selList = new ListView<AnalysisDriver>();
-        // anName = new ArrayList<String>();
-        // dfName = new ArrayList<String>();
-        // selName = new ArrayList<String>();
         anList = new ListView<AnalysisDriver>();
-        /*
-         * for (AnalysisDriver i : AnalysisDriverMasterList) {
-         * anName.add(i.displayName());
-         * }
-         */
+
         ObservableList<AnalysisDriver> anItems = FXCollections.observableArrayList(AnalysisDriverMasterList);
 
         anList.setItems(anItems);
@@ -252,11 +231,7 @@ public class GUI_AnalysisTab {
      */
     private ListView<DistanceFunction> init_DistanceFunctionBox() {
         dfList = new ListView<DistanceFunction>();
-        /*
-         * for (DistanceFunction i : DistanceFunctionsMasterList) {
-         * dfName.add(i.displayName());
-         * }
-         */
+
         ObservableList<DistanceFunction> dfItems = FXCollections.observableArrayList(DistanceFunctionsMasterList);
 
         dfList.setItems(dfItems);
@@ -386,7 +361,7 @@ public class GUI_AnalysisTab {
         try {
             JAPI.addAnalysisDriver(method);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
+            logger.info(e.getCause());
             e.printStackTrace();
         }
         selItems = FXCollections.observableArrayList(JAPI.getAnalysisDrivers());
@@ -400,7 +375,7 @@ public class GUI_AnalysisTab {
             try {
                 JAPI.addAnalysisDriver(temp.displayName());
             } catch (Exception e) {
-                // TODO Auto-generated catch block
+                logger.info(e.getCause());
                 e.printStackTrace();
             }
         }
@@ -432,14 +407,14 @@ public class GUI_AnalysisTab {
             try {
                 and = JAPI.addAnalysisDriver(temp[0]);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
+                logger.info(e.getCause());
                 e.printStackTrace();
             }
         } else {
             try {
                 and = JAPI.addAnalysisDriver(ana.displayName());
             } catch (Exception e) {
-                // TODO Auto-generated catch block
+                logger.info(e.getCause());
                 e.printStackTrace();
             }
         }
@@ -450,7 +425,7 @@ public class GUI_AnalysisTab {
             try {
                 JAPI.addDistanceFunction(dis.displayName(), and);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
+                logger.info(e.getCause());
                 e.printStackTrace();
             }
         } else if (and instanceof NonDistanceDependentAnalysisDriver) {
@@ -461,7 +436,7 @@ public class GUI_AnalysisTab {
                 JAPI.addAnalysisDriverAsParamToOther(method,
                         (NonDistanceDependentAnalysisDriver) and);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
+                logger.info(e.getCause());
                 e.printStackTrace();
             }
         }
