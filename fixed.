@@ -1,0 +1,116 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree(dir: '../lib/external', include: ['*.jar'], exclude: ['junit.jar'])
+    testImplementation fileTree(dir: '../lib/external', include: ['junit.jar'])
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['.']
+            include '**/*.java'
+        }
+        resources {
+            srcDirs = ['../src']
+            include '**/resources/**'
+        }
+    }
+    test {
+        java {
+            srcDirs = ['../unittests']
+            include '**/*.java'
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete 'unittest_logs', '../bin/com', '../JGGAP.jar'
+}
+
+task init {
+    doLast {
+        mkdir '../bin'
+    }
+}
+
+task build(dependsOn: init) {
+    doLast {
+        copy {
+            from '../src'
+            into '../bin'
+            include '**/resources/**'
+        }
+    }
+}
+
+task compileTests {
+    doLast {
+        ant.javac(srcdir: '../unittests', destdir: '../bin', debug: true, includeantruntime: false) {
+            classpath {
+                pathElement location: '../lib/external/junit.jar'
+                pathElement location: '../bin'
+            }
+        }
+    }
+}
+
+task test(dependsOn: ['build', 'compileTests']) {
+    doLast {
+        mkdir 'unittest_logs'
+        ant.junit(printsummary: 'off', fork: 'false', haltonfailure: 'false', failureproperty: 'tests.failed', showoutput: 'false') {
+            classpath {
+                pathElement location: '../lib/external/junit.jar'
+                pathElement location: '../bin'
+            }
+            formatter(type: 'plain', usefile: 'true')
+            batchtest(todir: 'unittest_logs') {
+                fileset(dir: '../bin') {
+                    include name: '**/*Test.class'
+                }
+            }
+        }
+    }
+}
+
+task runGui(dependsOn: build) {
+    doLast {
+        javaexec {
+            main = 'com.jgaap.JGAAP'
+            classpath = files('../bin', configurations.runtimeClasspath)
+            jvmArgs = ['-XX:+UseG1GC']
+            maxHeapSize = '4g'
+        }
+    }
+}
+
+task jar(dependsOn: build, type: Jar) {
+    archiveFileName = '../JGGAP.jar'
+    from '../bin'
+    exclude 'unittest_logs/**'
+    manifest {
+        attributes 'Main-Class': 'com.jgaap.JGAAP',
+                   'Class-Path': '.'
+    }
+}
+
+task cli(dependsOn: build) {
+    doLast {
+        javaexec {
+            main = 'com.jgaap.JGAAP'
+            classpath = files('../bin', configurations.runtimeClasspath)
+            jvmArgs = ['-XX:+UseG1GC']
+            args System.getProperty('cli').split(' ')
+            maxHeapSize = '10g'
+        }
+    }
+}
