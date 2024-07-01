@@ -49,67 +49,42 @@
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/junit.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/guava-17.0.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/stanford-ner-2012-07-09.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/junit.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/weka.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/weka.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/log4j-iostreams-2.23.1.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/reflections-0.9.8.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/guava-17.0.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/tika-app-1.5.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/WordSegment.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/stanford-postagger-2012-07-09.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/reflections-0.9.8.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/log4j-api-2.23.1.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/jscience-4.3.1.jar">
-		<attributes>
-			<attribute name="gradle.buildServer" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/javassist-3.17.1.jar">
-		<attributes>
-			<attribute name="gradle.buildServer" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/tika-app-1.5.jar">
-		<attributes>
-			<attribute name="gradle.buildServer" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/log4j-core-2.23.1.jar">
-		<attributes>
-			<attribute name="gradle.buildServer" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/commons-cli-1.2.jar">
-		<attributes>
-			<attribute name="gradle.buildServer" value="true"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/log4j-api-2.23.1.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/log4j-iostreams-2.23.1.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
@@ -119,17 +94,42 @@
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/stanford-ner-2012-07-09.jar">
+		<attributes>
+			<attribute name="gradle.buildServer" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/edu.mit.jwi_2.2.3.jar">
+		<attributes>
+			<attribute name="gradle.buildServer" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/WordSegment.jar">
+		<attributes>
+			<attribute name="gradle.buildServer" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/jscience-4.3.1.jar">
+		<attributes>
+			<attribute name="gradle.buildServer" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/Users/edward/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-base/21.0.3/d3aeec5764138999199a18a36745ea3dc85f7274/javafx-base-21.0.3-mac-aarch64.jar" sourcepath="/Users/edward/.gradle/caches/modules-2/files-2.1/org.openjfx/javafx-base/21.0.3/2a2811c40f7682766c0a69a9a20d895297d3e78f/javafx-base-21.0.3-sources.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/edu.mit.jwi_2.2.3.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/commons-cli-1.2.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/lib/stanford-postagger-2012-07-09.jar">
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/log4j-core-2.23.1.jar">
+		<attributes>
+			<attribute name="gradle.buildServer" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Users/edward/JGAAP_JavaFX/jgaap/src/main/java/com/jgaap/lib/javassist-3.17.1.jar">
 		<attributes>
 			<attribute name="gradle.buildServer" value="true"/>
 		</attributes>
