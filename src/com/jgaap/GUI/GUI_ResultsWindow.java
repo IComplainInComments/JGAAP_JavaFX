@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 
 /**
  * GUI_ResultsWindow class is the class responsible for Building and Managing the window that displays the results.
+ * 
  * @author Edward Polens
  */
 public class GUI_ResultsWindow {

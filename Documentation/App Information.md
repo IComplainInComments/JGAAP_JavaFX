@@ -1,8 +1,10 @@
-# Current Issues
+# Application information
 
-## Bugs
+## Known Bugs
 
-- author tree list likes to get stuck.
+- none
+
+---
 
 ## Future features
 

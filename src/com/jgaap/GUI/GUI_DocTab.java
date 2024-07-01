@@ -39,6 +39,7 @@ import java.util.Collections;
 /**
  * Document Tab Class.
  * This Class creates the scene for the Document Tab and it's GUI elements.
+ * 
  * @author Edward Polens
  */
 public class GUI_DocTab {

@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 /**
  * Notes Window Class.
  * This Class creates the Stage for the Notes Window and it's GUI elements.
+ * 
  * @author Edward Polens
  */
 public class GUI_NotesWindow{
