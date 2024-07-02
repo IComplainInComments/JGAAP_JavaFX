@@ -44,6 +44,7 @@ compileJava {
     options.release = 21
     options.fork = true
 }
+
 sourceSets {
   main {
     output.resourcesDir = "build/classes/java/main/com/jgaap/resources"
@@ -52,6 +53,7 @@ sourceSets {
     output.resourcesDir = "build/classes/java/main/com/jgaap/resources"
   }
 }
+
 javafx {
     version = '21.0.3'
     modules = [ 'javafx.controls', 'javafx.graphics' ]
@@ -61,6 +63,7 @@ application {
     applicationDefaultJvmArgs = ['-XX:+UseG1GC', '-Xmx4096m']
     mainClass = 'com.jgaap.JGAAP'
 }
+
 jar {
     from("build/classes/java/main/com/jgaap/")
     manifest {
