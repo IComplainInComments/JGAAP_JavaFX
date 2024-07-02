@@ -62,9 +62,10 @@ application {
     mainClass = 'com.jgaap.JGAAP'
 }
 jar {
-    from("$buildDir/classes/java/main/com/jgaap/")
+    from("build/classes/java/main/com/jgaap/")
     manifest {
         attributes(
+            "Application-Name": "JGAAP",
             "Main-Class": 'com.jgaap.JGAAP',
             "Class-Path": '.'
             )
