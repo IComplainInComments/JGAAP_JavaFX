@@ -34,22 +34,41 @@ dependencies {
     implementation files('src/main/resources/lib/WordSegment.jar')
 }
 
-
-// Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
+compileJava {
+    options.release = 21
+    options.fork = true
+}
+sourceSets {
+  main {
+    output.resourcesDir = "build/classes/java/main/com/jgaap/resources"
+  }
+  test {
+    output.resourcesDir = "build/classes/java/main/com/jgaap/resources"
+  }
+}
 javafx {
-    version = "21.0.3"
+    version = '21.0.3'
     modules = [ 'javafx.controls', 'javafx.graphics' ]
 }
 
 application {
-    // Define the main class for the application.
+    applicationDefaultJvmArgs = ['-XX:+UseG1GC', '-Xmx4096m']
     mainClass = 'com.jgaap.JGAAP'
+}
+jar {
+    from("$buildDir/classes/java/main/com/jgaap/")
+    manifest {
+        attributes(
+            "Main-Class": 'com.jgaap.JGAAP',
+            "Class-Path": '.'
+            )
+        }
 }
 
 tasks.named('test') {

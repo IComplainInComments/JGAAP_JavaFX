@@ -52,7 +52,7 @@ public class GUI_MainWindow extends Application{
             System.exit(0);
         });
         mainStage.setTitle(JGAAPConstants.VERSION+" BETA");
-        mainStage.getIcons().add(new Image("/Users/edward/jgaap/jgaap/src/main/java/com/jgaap/resources/ui/jgaap-icon.png"));
+        mainStage.getIcons().add(new Image("/ui/jgaap-icon.png"));
         mainStage.setScene(init_mainScene(mainStage));
         mainStage.minHeightProperty().set(600);
         mainStage.minWidthProperty().set(1000);
