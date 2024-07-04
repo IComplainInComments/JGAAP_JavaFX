@@ -112,13 +112,13 @@ jobs:
 
 # DOWNLOAD INSTALLERS
     - id: download-macos-intel-installer
-      name: Download Linux installer
+      name: Download macOS Intel Installer
       uses: actions/download-artifact@v4
       with:
         name: macOS-dmg-Intel
 
     - id: download-macos-arm-installer
-      name: Download Linux installer
+      name: Download macOS Apple Silicon Installer
       uses: actions/download-artifact@v4
       with:
         name: macOS-dmg-AS
@@ -130,53 +130,49 @@ jobs:
         name: windows-installer
 
 # CREATE GITHUB RELEASE AND ADD ASSETS
-    - id: tag
-      name: Move example-release tag
-      shell: bash
-      if: false
-      run: |
-        # Move tag
-        git tag -d example-release
-        git push --delete origin example-release
-        git tag -a example-release -m "Example of a Release"
-        git push --follow-tags
-    - id: create-release
-      name: Create GitHub release
-      uses: actions/create-release@latest
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: example-release
-        release_name: example-release
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Changes in this Release
+          - Modernized for Java Versions 9+
+          - JavaFX Based UI
+          - Gradle build support
+          - Native Application Images
         draft: false
         prerelease: false
-    - id: release-macOS-Intel
-      name: Release macOS Intel installer
-      uses: actions/upload-release-asset@latest
+    - name: Upload macOS Apple Silicon Binary
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: JGAAP-x86_64-9.0.0.dmg
-        asset_name: JGAAP-x86_64-9.0.0.dmg
-        asset_content_type: application/x-binary
-    - id: release-macOS-AS
-      name: Release macOS AS installer
-      uses: actions/upload-release-asset@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: JGAAP-aarch64-9.0.0.dmg
         asset_name: JGAAP-aarch64-9.0.0.dmg
         asset_content_type: application/x-binary
-    - id: release-windows-installer
-      name: Release Windows installer
-      uses: actions/upload-release-asset@latest
+    - name: Upload macOS Intel Binary
+      uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: JGAAP-x86_64-9.0.0.dmg
+        asset_name: JGAAP-x86_64-9.0.0.dmg
+        asset_content_type: application/x-binary
+    - name: Upload Windows Binary
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
         asset_path: JGAAP-9.0.0.msi
         asset_name: JGAAP-9.0.0.msi
         asset_content_type: application/x-binary
+      
+
+
