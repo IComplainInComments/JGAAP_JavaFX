@@ -24,7 +24,7 @@ jobs:
         java-package: jdk+fx
         architecture: x64
         distribution: 'temurin'
-        java-version: 21
+        java-version: '21'
 
 # BUILD FOR DISTRIBUTION
     - id: build
@@ -56,7 +56,7 @@ jobs:
         java-package: jdk+fx
         architecture: x64
         distribution: 'temurin'
-        java-version: 21
+        java-version: '21'
 
 # BUILD FOR DISTRIBUTION
     - id: build
@@ -88,7 +88,7 @@ jobs:
         java-package: jdk+fx
         architecture: aarch64
         distribution: 'temurin'
-        java-version: 21
+        java-version: '21'
 
 # BUILD FOR DISTRIBUTION
     - id: build
