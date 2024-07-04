@@ -99,12 +99,13 @@ runtime {
         // targetPlatformName = "mac"
 
         def currentOs = org.gradle.internal.os.OperatingSystem.current()
+        def arch = System.getProperty("os.arch")
         def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
         resourceDir = file("$buildDir/classes/java/main/com/jgaap/resources")
         imageOptions += ['--icon', "src/main/resources/ui/icon.$imgType"]
         installerOptions += ['--resource-dir', "src/main/resources"]
         installerOptions += ['--vendor', 'EVLLabs']
-        installerName = "JGAAP"
+        installerName = "JGAAP-" + arch
         appVersion = '9.0.0'
 
         if(currentOs.windows) {
