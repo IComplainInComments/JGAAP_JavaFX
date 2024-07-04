@@ -130,56 +130,9 @@ jobs:
       with:
         name: windows-installer
 
-# CREATE GITHUB RELEASE AND ADD ASSETS
-
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-      with:
-        tag_name: '9.0.0'
-        release_name: Release 1
-        body: |
-          Changes in this Release
-          - Modernized for Java Versions 9+
-          - JavaFX Based UI
-          - Gradle build support
-          - Native Application Images
-        draft: false
-        prerelease: false
-    - id: release-macOS-Intel
-      name: Release macOS Intel installer
-      uses: actions/upload-release-asset@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: JGAAP-x86_64-9.0.0.dmg
-        asset_name: JGAAP-x86_64-9.0.0.dmg
-        asset_content_type: application/x-binary
-    - id: release-macOS-AS
-      name: Release macOS AS installer
-      uses: actions/upload-release-asset@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: JGAAP-aarch64-9.0.0.dmg
-        asset_name: JGAAP-aarch64-9.0.0.dmg
-        asset_content_type: application/x-binary
-    - id: release-windows-installer
-      name: Release Windows installer
-      uses: actions/upload-release-asset@latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create-release.outputs.upload_url }}
-        asset_path: JGAAP-9.0.0.msi
-        asset_name: JGAAP-9.0.0.msi
-        asset_content_type: application/x-binary
+    - uses: actions/download-artifact@v4
+    - name: Display structure of downloaded files
+      run: ls -R
       
 
 
