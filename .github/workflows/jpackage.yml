@@ -150,27 +150,33 @@ jobs:
           - Native Application Images
         draft: false
         prerelease: false
-    - name: Upload macOS Apple Silicon Binary
-      uses: actions/upload-release-asset@v1
+    - id: release-macOS-Intel
+      name: Release macOS Intel installer
+      uses: actions/upload-release-asset@latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        asset_path: JGAAP-aarch64-9.0.0.dmg
-        asset_name: JGAAP-aarch64-9.0.0.dmg
-        asset_content_type: application/x-binary
-    - name: Upload macOS Intel Binary
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: JGAAP-x86_64-9.0.0.dmg
         asset_name: JGAAP-x86_64-9.0.0.dmg
         asset_content_type: application/x-binary
-    - name: Upload Windows Binary
-      uses: actions/upload-release-asset@v1
+    - id: release-macOS-AS
+      name: Release macOS AS installer
+      uses: actions/upload-release-asset@latest
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
+        asset_path: JGAAP-aarch64-9.0.0.dmg
+        asset_name: JGAAP-aarch64-9.0.0.dmg
+        asset_content_type: application/x-binary
+    - id: release-windows-installer
+      name: Release Windows installer
+      uses: actions/upload-release-asset@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create-release.outputs.upload_url }}
         asset_path: JGAAP-9.0.0.msi
         asset_name: JGAAP-9.0.0.msi
         asset_content_type: application/x-binary
