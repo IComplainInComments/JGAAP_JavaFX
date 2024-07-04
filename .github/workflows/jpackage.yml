@@ -21,7 +21,9 @@ jobs:
       name: Setup JDK
       uses: actions/setup-java@v4
       with:
-        distribution: 'openjdk'
+        java-package: jdk+fx
+        architecture: x64
+        distribution: 'oracle'
         java-version: 21
 
 # BUILD FOR DISTRIBUTION
@@ -51,7 +53,9 @@ jobs:
       name: Setup JDK
       uses: actions/setup-java@v4
       with:
-        distribution: 'openjdk'
+        java-package: jdk+fx
+        architecture: x64
+        distribution: 'oracle'
         java-version: 21
 
 # BUILD FOR DISTRIBUTION
@@ -81,7 +85,9 @@ jobs:
       name: Setup JDK
       uses: actions/setup-java@v4
       with:
-        distribution: 'openjdk'
+        java-package: jdk+fx
+        architecture: aarch64
+        distribution: 'oracle'
         java-version: 21
 
 # BUILD FOR DISTRIBUTION
