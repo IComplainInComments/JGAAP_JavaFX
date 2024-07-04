@@ -103,36 +103,3 @@ jobs:
         path: ./jgaap/build/jpackage/JGAAP-aarch64-9.0.0.dmg
         name: macOS-dmg-AS
         retention-days: 1
-
-  create-release:
-    permissions: write-all
-    name: Create Release
-    runs-on: ubuntu-latest
-    needs: [build-windows-installer,  build-macos-AS-installer,  build-macos-intel-installer]
-    steps:
-
-# DOWNLOAD INSTALLERS
-    - id: download-macos-intel-installer
-      name: Download macOS Intel Installer
-      uses: actions/download-artifact@v4
-      with:
-        name: macOS-dmg-Intel
-
-    - id: download-macos-arm-installer
-      name: Download macOS Apple Silicon Installer
-      uses: actions/download-artifact@v4
-      with:
-        name: macOS-dmg-AS
-
-    - id: download-windows-installer
-      name: Download Windows installer
-      uses: actions/download-artifact@v4
-      with:
-        name: windows-installer
-
-    - uses: actions/download-artifact@v4
-    - name: Display structure of downloaded files
-      run: ls -R
-      
-
-
