@@ -23,7 +23,7 @@ jobs:
       with:
         java-package: jdk+fx
         architecture: x64
-        distribution: 'oracle'
+        distribution: 'temurin'
         java-version: 21
 
 # BUILD FOR DISTRIBUTION
@@ -55,7 +55,7 @@ jobs:
       with:
         java-package: jdk+fx
         architecture: x64
-        distribution: 'oracle'
+        distribution: 'temurin'
         java-version: 21
 
 # BUILD FOR DISTRIBUTION
@@ -87,7 +87,7 @@ jobs:
       with:
         java-package: jdk+fx
         architecture: aarch64
-        distribution: 'oracle'
+        distribution: 'temurin'
         java-version: 21
 
 # BUILD FOR DISTRIBUTION
