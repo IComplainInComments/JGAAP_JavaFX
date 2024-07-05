@@ -1,13 +1,28 @@
-# JGAAP UI Modernization repository
+# ![JGAAP](logo.png)
 
-## Repository Operations
+## Java Graphical Authorship Attribution Program
 
-All development should be done using the "dev" branch.
+JGAAP is a tool to allow nonexperts to use cutting edge machine learning techniques on text attribution problems. 
 
-Please fork dev, make your changes, then submit a pull request.
+JGAAP is developed by the [Evaluating Variation in Language (EVL) Lab](http://evllabs.com) at Duquesne University.
 
-After enough of a milestone is met, merges will be made to main.
+## Getting Started
 
-## Non-JGAAP contributors
+* [Understanding Authorship Attribution](docs/authorship_attribution.md)
+* [Running your First Experiment](docs/running_jgaap.md)
+* [Running Large Experiments](docs/Experiment_Engine.pdf)
+* [Extending JGAAP](docs/modules.md)
 
-Unless your work is good, and its actual code with documentation in the code. Consider your pull request auto-closed with the tenacity of the gravity in a black hole.
+## Download
+
+Head over to our [releases page](https://github.com/evllabs/JGAAP/releases) to get the latest version of JGAAP.
+
+## Support
+
+If you need help with JGAAP, please review our forum of past help requests [here](https://groups.google.com/forum/#!forum/jgaap-support).
+
+You should always feel free to reach out to us at any time with questions or suggestions at [jgaap-support@googlegroups.com](mailto:jgaap-support@googlegroups.com).
+
+## License
+
+JGAAP has been released under the **AGPLv3.0** and a copy should be included with the source. If it has not been included, a copy can be found at <http://www.gnu.org/licenses/agpl.html>
